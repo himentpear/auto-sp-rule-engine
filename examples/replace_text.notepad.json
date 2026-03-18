@@ -1,0 +1,31 @@
+{
+  "target": {
+    "window_title_substring": "ahk-ocr-validation-target.txt",
+    "window_title": "ahk-ocr-validation-target.txt - Notepad",
+    "process_name": "Notepad"
+  },
+  "control": {
+    "name": "RichEditD2DPT1",
+    "type": "NotepadRichEdit"
+  },
+  "automation": {
+    "ahk_exe": "vendor/autohotkey/2.0.19/AutoHotkey64.exe"
+  },
+  "engine": {
+    "stop_after_first_match": true,
+    "recent_rule_hit_cooldown_seconds": 0
+  },
+  "rules": [
+    {
+      "name": "replace-on-regex",
+      "match": {
+        "type": "regex",
+        "pattern": "REPLACE\\s+TOKEN"
+      },
+      "action": {
+        "type": "replace_text",
+        "text": "EXAMPLE_REPLACE_TEXT"
+      }
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "timestamp": "20260318-184648",
+  "target_window": "ahk-ocr-validation-target.txt - Notepad",
+  "target_control": "RichEditD2DPT1",
+  "screenshot_path": "C:\\Users\\jisub\\Documents\\GitHub\\auto sp rule engine\\screenshots\\phase3-20260318-184648-capture.png",
+  "ocr_text": "ahk-ocr-validation-target.txt REPLACE TOKEN REPLACE BODY LINE",
+  "evaluated_rules": [
+    {
+      "name": "regex-replace-document",
+      "match": {
+        "type": "regex",
+        "matched": true,
+        "reason": "regex('REPLACE\\s+TOKEN')=true"
+      },
+      "eligible_for_action": true,
+      "duplicate_prevented": false,
+      "duplicate_reason": null
+    }
+  ],
+  "matched_rule": "regex-replace-document",
+  "action_type": "replace_text",
+  "action_payload": "PHASE3_REPLACED_EXACT",
+  "ahk_exit_code": 0,
+  "validation_result": {
+    "readback_exit_code": 0,
+    "pre_action_control_text": "\ufeffREPLACE TOKEN\nREPLACE BODY LINE\n",
+    "action_applied": true,
+    "duplicate_prevented": false,
+    "duplicate_reason": null,
+    "post_action_control_text": "\ufeffPHASE3_REPLACED_EXACT"
+  },
+  "dry_run": false
+}

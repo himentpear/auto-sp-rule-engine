@@ -1,0 +1,33 @@
+{
+  "timestamp": "20260318-181438",
+  "target_window": "ahk-ocr-validation-target.txt - Notepad",
+  "target_control": "RichEditD2DPT1",
+  "screenshot_path": "C:\\Users\\jisub\\Documents\\GitHub\\auto sp rule engine\\screenshots\\phase3-20260318-181438-capture.png",
+  "ocr_text": "ahk-ocr-validation-target.txt AHK OCR validation target. TRIGGER TOKEN: RULE 0K",
+  "evaluated_rules": [
+    {
+      "name": "contains-trigger-token-dry-run",
+      "match": {
+        "type": "contains",
+        "matched": true,
+        "reason": "contains('TRIGGER TOKEN')=true"
+      },
+      "eligible_for_action": true,
+      "duplicate_prevented": false,
+      "duplicate_reason": null
+    }
+  ],
+  "matched_rule": "contains-trigger-token-dry-run",
+  "action_type": "append_text",
+  "action_payload": "PHASE3_DRY_RUN_SHOULD_NOT_APPEAR",
+  "ahk_exit_code": null,
+  "validation_result": {
+    "readback_exit_code": 0,
+    "pre_action_control_text": "\ufeffAHK OCR validation target.\nTRIGGER TOKEN: RULE_OK\n",
+    "action_applied": false,
+    "duplicate_prevented": false,
+    "duplicate_reason": null,
+    "post_action_control_text": "\ufeffAHK OCR validation target.\nTRIGGER TOKEN: RULE_OK\n"
+  },
+  "dry_run": true
+}

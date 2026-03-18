@@ -1,0 +1,75 @@
+{
+  "target": {
+    "window_title_substring": "ahk-ocr-validation-target.txt",
+    "window_title": "ahk-ocr-validation-target.txt - Notepad",
+    "process_name": "Notepad"
+  },
+  "control": {
+    "name": "RichEditD2DPT1",
+    "type": "NotepadRichEdit"
+  },
+  "automation": {
+    "ahk_exe": "vendor/autohotkey/2.0.19/AutoHotkey64.exe"
+  },
+  "engine": {
+    "stop_after_first_match": true,
+    "recent_rule_hit_cooldown_seconds": 0
+  },
+  "rules": [
+    {
+      "name": "contains-trigger-token",
+      "match": {
+        "type": "contains",
+        "value": "TRIGGER TOKEN"
+      },
+      "action": {
+        "type": "append_text",
+        "text": "PHASE3_CONTAINS_APPEND"
+      }
+    },
+    {
+      "name": "contains-any-prepend-header",
+      "match": {
+        "type": "contains_any",
+        "values": ["PREPEND TOKEN", "ALT PREPEND TOKEN"]
+      },
+      "action": {
+        "type": "prepend_text",
+        "text": "PHASE3_PREPEND_HEADER"
+      }
+    },
+    {
+      "name": "contains-all-timestamp-note",
+      "match": {
+        "type": "contains_all",
+        "values": ["TRIGGER TOKEN", "TIMESTAMP TOKEN"]
+      },
+      "action": {
+        "type": "append_timestamped_note",
+        "text": "PHASE3_TIMESTAMPED_NOTE"
+      }
+    },
+    {
+      "name": "not-contains-demo",
+      "match": {
+        "type": "not_contains",
+        "value": "NEVER_SEEN_MARKER"
+      },
+      "action": {
+        "type": "write_if_missing",
+        "text": "NEVER_SEEN_MARKER"
+      }
+    },
+    {
+      "name": "regex-replace-document",
+      "match": {
+        "type": "regex",
+        "pattern": "REPLACE\\s+TOKEN"
+      },
+      "action": {
+        "type": "replace_text",
+        "text": "PHASE3_REGEX_REPLACE"
+      }
+    }
+  ]
+}

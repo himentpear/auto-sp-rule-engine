@@ -1,0 +1,31 @@
+{
+  "timestamp": "20260318-174204",
+  "target_window": "ahk-ocr-validation-target.txt - Notepad",
+  "capture": {
+    "WindowTitle": "ahk-ocr-validation-target.txt - Notepad",
+    "ProcessName": "Notepad",
+    "ProcessId": 18648,
+    "OutFile": "C:\\Users\\jisub\\Desktop\\TOOLS\\AUTO SP\\screenshots\\phase2-20260318-174204-capture.png",
+    "Bounds": {
+      "Left": 120,
+      "Right": 1320,
+      "Bottom": 900,
+      "Top": 80
+    }
+  },
+  "ocr": {
+    "ImagePath": "C:\\Users\\jisub\\Desktop\\TOOLS\\AUTO SP\\screenshots\\phase2-20260318-174204-capture.png",
+    "Language": "en-US",
+    "LineCount": 3,
+    "Text": "ahk-ocr-validation-target.txt AHK OCR validation target. TRIGGER TOKEN: RULE 0K"
+  },
+  "matched_rule": "append-on-trigger-token",
+  "action": {
+    "exit_code": 0,
+    "text_file": "C:\\Users\\jisub\\Desktop\\TOOLS\\AUTO SP\\logs\\phase2-20260318-174204-action.txt",
+    "mode": "append",
+    "text": "PHASE2_RULE_APPEND",
+    "readback_exit_code": 0
+  },
+  "readback_text": "\ufeffAHK OCR validation target.\nTRIGGER TOKEN: RULE_OK\n\nPHASE2_RULE_APPEND"
+}

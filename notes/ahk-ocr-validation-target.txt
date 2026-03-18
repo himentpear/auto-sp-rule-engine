@@ -1,0 +1,2 @@
+AHK OCR validation target.
+TRIGGER TOKEN: RULE_OK

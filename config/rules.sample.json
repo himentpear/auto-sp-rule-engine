@@ -1,0 +1,23 @@
+{
+  "target": {
+    "window_title_substring": "ahk-ocr-validation-target.txt",
+    "window_title": "ahk-ocr-validation-target.txt - Notepad",
+    "process_name": "Notepad",
+    "control": "RichEditD2DPT1"
+  },
+  "automation": {
+    "ahk_exe": "vendor/autohotkey/2.0.19/AutoHotkey64.exe"
+  },
+  "rules": [
+    {
+      "name": "append-on-trigger-token",
+      "match": {
+        "contains": "TRIGGER TOKEN"
+      },
+      "action": {
+        "mode": "append",
+        "text": "PHASE2_RULE_APPEND"
+      }
+    }
+  ]
+}

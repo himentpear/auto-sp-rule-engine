@@ -1,0 +1,33 @@
+{
+  "timestamp": "20260318-184617",
+  "target_window": "ahk-ocr-validation-target.txt - Notepad",
+  "target_control": "RichEditD2DPT1",
+  "screenshot_path": "C:\\Users\\jisub\\Documents\\GitHub\\auto sp rule engine\\screenshots\\phase3-20260318-184617-capture.png",
+  "ocr_text": "ahk-ocr-validation-target.txt PREPEND TOKEN PREPEND BODY LINE",
+  "evaluated_rules": [
+    {
+      "name": "contains-any-prepend-header",
+      "match": {
+        "type": "contains_any",
+        "matched": true,
+        "reason": "contains_any hits=['PREPEND TOKEN']"
+      },
+      "eligible_for_action": true,
+      "duplicate_prevented": false,
+      "duplicate_reason": null
+    }
+  ],
+  "matched_rule": "contains-any-prepend-header",
+  "action_type": "prepend_text",
+  "action_payload": "PHASE3_PREPEND_HEADER",
+  "ahk_exit_code": 0,
+  "validation_result": {
+    "readback_exit_code": 0,
+    "pre_action_control_text": "\ufeffPREPEND TOKEN\nPREPEND BODY LINE\n",
+    "action_applied": true,
+    "duplicate_prevented": false,
+    "duplicate_reason": null,
+    "post_action_control_text": "\ufeffPHASE3_PREPEND_HEADER\nPREPEND TOKEN\nPREPEND BODY LINE\n"
+  },
+  "dry_run": false
+}
