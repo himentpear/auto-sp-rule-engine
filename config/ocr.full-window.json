@@ -1,0 +1,60 @@
+{
+  "target": {
+    "window_title_substring": "ahk-ocr-validation-target.txt",
+    "window_title": "ahk-ocr-validation-target.txt - Notepad",
+    "process_name": "Notepad"
+  },
+  "control": {
+    "name": "RichEditD2DPT1",
+    "type": "NotepadRichEdit"
+  },
+  "automation": {
+    "ahk_exe": "vendor/autohotkey/2.0.19/AutoHotkey64.exe"
+  },
+  "ocr": {
+    "preprocessing": {
+      "grayscale": true,
+      "scale": 2.0,
+      "threshold": {
+        "enabled": false,
+        "value": 180
+      },
+      "trim_border": {
+        "enabled": false,
+        "margin": 0
+      }
+    },
+    "normalization": {
+      "collapse_whitespace": true,
+      "preserve_line_breaks": false,
+      "case": "lower",
+      "simple_noise_cleanup": true
+    },
+    "watch": {
+      "enabled": false,
+      "polling_interval_seconds": 0.5,
+      "max_checks": 1,
+      "change_threshold": 0.005,
+      "forced_ocr_interval_seconds": 5.0,
+      "consecutive_match_count": 1
+    }
+  },
+  "engine": {
+    "stop_after_first_match": true,
+    "recent_rule_hit_cooldown_seconds": 0,
+    "log_prefix": "ocr-phase-full"
+  },
+  "rules": [
+    {
+      "name": "full-window-trigger-token",
+      "match": {
+        "type": "contains",
+        "value": "trigger token"
+      },
+      "action": {
+        "type": "append_text",
+        "text": "OCR_FULL_WINDOW"
+      }
+    }
+  ]
+}

@@ -1,2 +1,1 @@
-# No third-party Python packages are required for the validated v0.1.0 pipeline.
-# The current Python entrypoints use only the standard library.
+Pillow==12.1.1

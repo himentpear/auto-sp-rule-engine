@@ -1,0 +1,91 @@
+{
+  "timestamp": "20260318-202203",
+  "target_window": "ahk-ocr-validation-target.txt - Notepad",
+  "target_control": "RichEditD2DPT1",
+  "screenshot_path": "C:\\Users\\jisub\\Documents\\GitHub\\auto sp rule engine\\screenshots\\ocr-phase-full-20260318-202203-check1.png",
+  "roi_used": null,
+  "preprocessing_settings": {
+    "grayscale": true,
+    "scale": 2.0,
+    "threshold": {
+      "enabled": false,
+      "value": 180
+    },
+    "trim_border": {
+      "enabled": false,
+      "margin": 0
+    }
+  },
+  "normalization_settings": {
+    "collapse_whitespace": true,
+    "preserve_line_breaks": false,
+    "case": "lower",
+    "simple_noise_cleanup": true
+  },
+  "raw_ocr_output": "ahk-ocr-validation-target.txt OCR PHASE VALIDATION TRIGGER TOKEN TIMESTAMP TOKEN FULL WINDOW BASE HI B 1 S",
+  "normalized_ocr_output": "ahk-ocr-validation-target.txt ocr phase validation trigger token timestamp token full window base hi b 1 s",
+  "ocr_text": "ahk-ocr-validation-target.txt ocr phase validation trigger token timestamp token full window base hi b 1 s",
+  "ocr_skipped_no_change": false,
+  "multi_frame_confirmation_required": 1,
+  "multi_frame_confirmation_satisfied": true,
+  "evaluated_rules": [
+    {
+      "name": "full-window-trigger-token",
+      "match": {
+        "type": "contains",
+        "matched": true,
+        "reason": "contains('trigger token')=true"
+      },
+      "eligible_for_action": true,
+      "duplicate_prevented": false,
+      "duplicate_reason": null
+    }
+  ],
+  "matched_rule": "full-window-trigger-token",
+  "action_type": "append_text",
+  "action_payload": "OCR_FULL_WINDOW",
+  "ahk_exit_code": null,
+  "validation_result": {
+    "action_applied": false,
+    "duplicate_prevented": false,
+    "duplicate_reason": null,
+    "post_action_control_text": "\ufeffOCR PHASE VALIDATION\nTRIGGER TOKEN\nTIMESTAMP TOKEN\nFULL WINDOW BASE\n",
+    "readback_exit_code": 0,
+    "pre_action_control_text": "\ufeffOCR PHASE VALIDATION\nTRIGGER TOKEN\nTIMESTAMP TOKEN\nFULL WINDOW BASE\n"
+  },
+  "dry_run": true,
+  "frames": [
+    {
+      "check_index": 1,
+      "screenshot_path": "C:\\Users\\jisub\\Documents\\GitHub\\auto sp rule engine\\screenshots\\ocr-phase-full-20260318-202203-check1.png",
+      "processed_image_path": "C:\\Users\\jisub\\Documents\\GitHub\\auto sp rule engine\\screenshots\\ocr-phase-full-20260318-202203-check1-processed.png",
+      "change_ratio": null,
+      "ocr_skipped_no_change": false,
+      "forced_ocr": true,
+      "raw_ocr_output": "ahk-ocr-validation-target.txt OCR PHASE VALIDATION TRIGGER TOKEN TIMESTAMP TOKEN FULL WINDOW BASE HI B 1 S",
+      "normalized_ocr_output": "ahk-ocr-validation-target.txt ocr phase validation trigger token timestamp token full window base hi b 1 s",
+      "roi_used": null,
+      "preprocessing_settings": {
+        "grayscale": true,
+        "scale": 2.0,
+        "threshold": {
+          "enabled": false,
+          "value": 180
+        },
+        "trim_border": {
+          "enabled": false,
+          "margin": 0
+        }
+      },
+      "normalization_settings": {
+        "collapse_whitespace": true,
+        "preserve_line_breaks": false,
+        "case": "lower",
+        "simple_noise_cleanup": true
+      },
+      "multi_frame_confirmation_count": 1,
+      "multi_frame_confirmation_satisfied": true,
+      "rule_evaluation_skipped_reason": null
+    }
+  ]
+}

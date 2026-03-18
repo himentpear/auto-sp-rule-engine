@@ -1,0 +1,170 @@
+{
+  "target": {
+    "window_title_substring": "phase4-primary-target.txt",
+    "window_title": "phase4-primary-target.txt - Notepad",
+    "process_name": "Notepad"
+  },
+  "control": {
+    "name": "RichEditD2DPT1",
+    "type": "NotepadRichEdit"
+  },
+  "targets": {
+    "secondary_notepad": {
+      "target": {
+        "window_title_substring": "phase4-secondary-target.txt",
+        "window_title": "phase4-secondary-target.txt - Notepad",
+        "process_name": "Notepad"
+      },
+      "control": {
+        "name": "RichEditD2DPT1",
+        "type": "NotepadRichEdit"
+      }
+    }
+  },
+  "automation": {
+    "ahk_exe": "vendor/autohotkey/2.0.19/AutoHotkey64.exe"
+  },
+  "ocr_profile": "primary_full_window",
+  "ocr_profiles": {
+    "primary_full_window": {
+      "preprocessing": {
+        "grayscale": true,
+        "scale": 2.0,
+        "threshold": {
+          "enabled": false,
+          "value": 180
+        },
+        "trim_border": {
+          "enabled": false,
+          "margin": 0
+        }
+      },
+      "normalization": {
+        "collapse_whitespace": true,
+        "preserve_line_breaks": false,
+        "case": "lower",
+        "simple_noise_cleanup": true
+      },
+      "watch": {
+        "enabled": false,
+        "polling_interval_seconds": 0.5,
+        "max_checks": 1,
+        "change_threshold": 0.005,
+        "forced_ocr_interval_seconds": 5.0,
+        "consecutive_match_count": 1
+      }
+    },
+    "secondary_roi": {
+      "roi": {
+        "x": 24,
+        "y": 96,
+        "width": 1100,
+        "height": 280
+      },
+      "preprocessing": {
+        "grayscale": true,
+        "scale": 2.5,
+        "threshold": {
+          "enabled": true,
+          "value": 190
+        },
+        "trim_border": {
+          "enabled": true,
+          "margin": 2
+        }
+      },
+      "normalization": {
+        "collapse_whitespace": true,
+        "preserve_line_breaks": false,
+        "case": "lower",
+        "simple_noise_cleanup": true
+      },
+      "watch": {
+        "enabled": false,
+        "polling_interval_seconds": 0.5,
+        "max_checks": 1,
+        "change_threshold": 0.005,
+        "forced_ocr_interval_seconds": 5.0,
+        "consecutive_match_count": 1
+      }
+    },
+    "secondary_confirmed": {
+      "roi": {
+        "x": 24,
+        "y": 96,
+        "width": 1100,
+        "height": 280
+      },
+      "preprocessing": {
+        "grayscale": true,
+        "scale": 2.5,
+        "threshold": {
+          "enabled": true,
+          "value": 190
+        },
+        "trim_border": {
+          "enabled": true,
+          "margin": 2
+        }
+      },
+      "normalization": {
+        "collapse_whitespace": true,
+        "preserve_line_breaks": false,
+        "case": "lower",
+        "simple_noise_cleanup": true
+      },
+      "watch": {
+        "enabled": true,
+        "polling_interval_seconds": 0.4,
+        "max_checks": 2,
+        "change_threshold": 0.003,
+        "forced_ocr_interval_seconds": 0.0,
+        "consecutive_match_count": 2
+      }
+    }
+  },
+  "engine": {
+    "stop_after_first_match": false,
+    "recent_rule_hit_cooldown_seconds": 0,
+    "log_prefix": "phase4"
+  },
+  "rules": [
+    {
+      "name": "primary-default-full-window",
+      "match": {
+        "type": "contains",
+        "value": "primary trigger token"
+      },
+      "action": {
+        "type": "append_text",
+        "text": "PHASE4_PRIMARY_APPEND"
+      }
+    },
+    {
+      "name": "secondary-roi-append",
+      "target": "secondary_notepad",
+      "ocr_profile": "secondary_roi",
+      "match": {
+        "type": "contains",
+        "value": "secondary token"
+      },
+      "action": {
+        "type": "append_text",
+        "text": "PHASE4_SECONDARY_APPEND"
+      }
+    },
+    {
+      "name": "secondary-confirm-write-if-missing",
+      "target": "secondary_notepad",
+      "ocr_profile": "secondary_confirmed",
+      "match": {
+        "type": "contains_all",
+        "values": ["secondary token", "confirm token"]
+      },
+      "action": {
+        "type": "write_if_missing",
+        "text": "PHASE4_CONFIRM_MARKER"
+      }
+    }
+  ]
+}

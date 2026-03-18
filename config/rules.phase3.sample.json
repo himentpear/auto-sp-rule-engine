@@ -11,9 +11,44 @@
   "automation": {
     "ahk_exe": "vendor/autohotkey/2.0.19/AutoHotkey64.exe"
   },
+  "ocr": {
+    "roi": {
+      "x": 24,
+      "y": 96,
+      "width": 1100,
+      "height": 280
+    },
+    "preprocessing": {
+      "grayscale": true,
+      "scale": 2.0,
+      "threshold": {
+        "enabled": false,
+        "value": 180
+      },
+      "trim_border": {
+        "enabled": false,
+        "margin": 2
+      }
+    },
+    "normalization": {
+      "collapse_whitespace": true,
+      "preserve_line_breaks": false,
+      "case": "none",
+      "simple_noise_cleanup": true
+    },
+    "watch": {
+      "enabled": false,
+      "polling_interval_seconds": 1.0,
+      "max_checks": 1,
+      "change_threshold": 0.005,
+      "forced_ocr_interval_seconds": 5.0,
+      "consecutive_match_count": 1
+    }
+  },
   "engine": {
     "stop_after_first_match": true,
-    "recent_rule_hit_cooldown_seconds": 0
+    "recent_rule_hit_cooldown_seconds": 0,
+    "log_prefix": "phase3"
   },
   "rules": [
     {

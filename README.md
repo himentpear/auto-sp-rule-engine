@@ -74,8 +74,15 @@ All validated writes still go through a known window title and a known control p
 - Python 3 available as `py -3`
 - modern Notepad installed
 - WinRT OCR available through Windows
+- `Pillow` for ROI cropping and OCR preprocessing
 
-Python dependencies for the validated pipeline are standard-library only. See [requirements.txt](/C:/Users/jisub/Documents/GitHub/auto%20sp%20rule%20engine/requirements.txt).
+Python dependencies for the current OCR-refined pipeline are listed in [requirements.txt](/C:/Users/jisub/Documents/GitHub/auto%20sp%20rule%20engine/requirements.txt).
+
+OCR-specific config examples are available in:
+
+- [rules.ocr.sample.json](/C:/Users/jisub/Documents/GitHub/auto%20sp%20rule%20engine/config/rules.ocr.sample.json)
+- [ocr.full-window.json](/C:/Users/jisub/Documents/GitHub/auto%20sp%20rule%20engine/config/ocr.full-window.json)
+- [ocr.roi.json](/C:/Users/jisub/Documents/GitHub/auto%20sp%20rule%20engine/config/ocr.roi.json)
 
 ## Quick Start
 

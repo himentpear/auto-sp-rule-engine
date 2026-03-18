@@ -1,0 +1,165 @@
+{
+  "timestamp": "20260318-202232",
+  "target_window": "ahk-ocr-validation-target.txt - Notepad",
+  "target_control": "RichEditD2DPT1",
+  "screenshot_path": "C:\\Users\\jisub\\Documents\\GitHub\\auto sp rule engine\\screenshots\\ocr-phase-skip-20260318-202232-check1.png",
+  "roi_used": {
+    "x": 24,
+    "y": 96,
+    "width": 1100,
+    "height": 280
+  },
+  "preprocessing_settings": {
+    "grayscale": true,
+    "scale": 2.0,
+    "threshold": {
+      "enabled": false,
+      "value": 180
+    },
+    "trim_border": {
+      "enabled": false,
+      "margin": 0
+    }
+  },
+  "normalization_settings": {
+    "collapse_whitespace": true,
+    "preserve_line_breaks": false,
+    "case": "lower",
+    "simple_noise_cleanup": true
+  },
+  "raw_ocr_output": "OCR PHASE VALIDATION TRIGGER TOKEN TIMESTAMP TOKEN STATIC CONTENT",
+  "normalized_ocr_output": "ocr phase validation trigger token timestamp token static content",
+  "ocr_text": "ocr phase validation trigger token timestamp token static content",
+  "ocr_skipped_no_change": true,
+  "multi_frame_confirmation_required": 1,
+  "multi_frame_confirmation_satisfied": true,
+  "evaluated_rules": [
+    {
+      "name": "skip-demo-non-match",
+      "match": {
+        "type": "contains",
+        "matched": false,
+        "reason": "contains('never seen token')=false"
+      },
+      "eligible_for_action": false,
+      "duplicate_prevented": false,
+      "duplicate_reason": null
+    }
+  ],
+  "matched_rule": null,
+  "action_type": null,
+  "action_payload": null,
+  "ahk_exit_code": null,
+  "validation_result": {
+    "action_applied": false,
+    "duplicate_prevented": false,
+    "duplicate_reason": null,
+    "post_action_control_text": "\ufeffOCR PHASE VALIDATION\nTRIGGER TOKEN\nTIMESTAMP TOKEN\nSTATIC CONTENT\n",
+    "readback_exit_code": 0,
+    "pre_action_control_text": "\ufeffOCR PHASE VALIDATION\nTRIGGER TOKEN\nTIMESTAMP TOKEN\nSTATIC CONTENT\n"
+  },
+  "dry_run": true,
+  "frames": [
+    {
+      "check_index": 1,
+      "screenshot_path": "C:\\Users\\jisub\\Documents\\GitHub\\auto sp rule engine\\screenshots\\ocr-phase-skip-20260318-202232-check1.png",
+      "processed_image_path": "C:\\Users\\jisub\\Documents\\GitHub\\auto sp rule engine\\screenshots\\ocr-phase-skip-20260318-202232-check1-processed.png",
+      "change_ratio": null,
+      "ocr_skipped_no_change": false,
+      "forced_ocr": true,
+      "raw_ocr_output": "OCR PHASE VALIDATION TRIGGER TOKEN TIMESTAMP TOKEN STATIC CONTENT",
+      "normalized_ocr_output": "ocr phase validation trigger token timestamp token static content",
+      "roi_used": {
+        "x": 24,
+        "y": 96,
+        "width": 1100,
+        "height": 280
+      },
+      "preprocessing_settings": {
+        "grayscale": true,
+        "scale": 2.0,
+        "threshold": {
+          "enabled": false,
+          "value": 180
+        },
+        "trim_border": {
+          "enabled": false,
+          "margin": 0
+        }
+      },
+      "normalization_settings": {
+        "collapse_whitespace": true,
+        "preserve_line_breaks": false,
+        "case": "lower",
+        "simple_noise_cleanup": true
+      },
+      "multi_frame_confirmation_count": 1,
+      "multi_frame_confirmation_satisfied": true,
+      "rule_evaluation_skipped_reason": null
+    },
+    {
+      "check_index": 2,
+      "screenshot_path": "C:\\Users\\jisub\\Documents\\GitHub\\auto sp rule engine\\screenshots\\ocr-phase-skip-20260318-202232-check2.png",
+      "processed_image_path": null,
+      "change_ratio": 0.0,
+      "ocr_skipped_no_change": true,
+      "forced_ocr": false,
+      "raw_ocr_output": null,
+      "normalized_ocr_output": null,
+      "roi_used": null,
+      "preprocessing_settings": {
+        "grayscale": true,
+        "scale": 2.0,
+        "threshold": {
+          "enabled": false,
+          "value": 180
+        },
+        "trim_border": {
+          "enabled": false,
+          "margin": 0
+        }
+      },
+      "normalization_settings": {
+        "collapse_whitespace": true,
+        "preserve_line_breaks": false,
+        "case": "lower",
+        "simple_noise_cleanup": true
+      },
+      "multi_frame_confirmation_count": 1,
+      "multi_frame_confirmation_satisfied": false,
+      "rule_evaluation_skipped_reason": "ocr_skipped_no_change"
+    },
+    {
+      "check_index": 3,
+      "screenshot_path": "C:\\Users\\jisub\\Documents\\GitHub\\auto sp rule engine\\screenshots\\ocr-phase-skip-20260318-202232-check3.png",
+      "processed_image_path": null,
+      "change_ratio": 0.0,
+      "ocr_skipped_no_change": true,
+      "forced_ocr": false,
+      "raw_ocr_output": null,
+      "normalized_ocr_output": null,
+      "roi_used": null,
+      "preprocessing_settings": {
+        "grayscale": true,
+        "scale": 2.0,
+        "threshold": {
+          "enabled": false,
+          "value": 180
+        },
+        "trim_border": {
+          "enabled": false,
+          "margin": 0
+        }
+      },
+      "normalization_settings": {
+        "collapse_whitespace": true,
+        "preserve_line_breaks": false,
+        "case": "lower",
+        "simple_noise_cleanup": true
+      },
+      "multi_frame_confirmation_count": 1,
+      "multi_frame_confirmation_satisfied": false,
+      "rule_evaluation_skipped_reason": "ocr_skipped_no_change"
+    }
+  ]
+}
