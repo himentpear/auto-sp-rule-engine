@@ -1,0 +1,16 @@
+{
+  "name": "primary_notepad",
+  "target": {
+    "window_title_substring": "phase4-primary-target.txt",
+    "window_title": "phase4-primary-target.txt - Notepad",
+    "process_name": "Notepad"
+  },
+  "control": {
+    "name": "RichEditD2DPT1",
+    "type": "NotepadRichEdit"
+  },
+  "notes": {
+    "target_file": "notes/phase4-primary-target.txt",
+    "validated_use": "Primary Notepad target used in the Phase 4 multi-target validation."
+  }
+}

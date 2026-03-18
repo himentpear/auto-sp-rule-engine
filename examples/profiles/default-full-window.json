@@ -1,0 +1,30 @@
+{
+  "name": "primary_full_window",
+  "roi": null,
+  "preprocessing": {
+    "grayscale": true,
+    "scale": 2.0,
+    "threshold": {
+      "enabled": false,
+      "value": 180
+    },
+    "trim_border": {
+      "enabled": false,
+      "margin": 0
+    }
+  },
+  "normalization": {
+    "collapse_whitespace": true,
+    "preserve_line_breaks": false,
+    "case": "lower",
+    "simple_noise_cleanup": true
+  },
+  "watch": {
+    "enabled": false,
+    "polling_interval_seconds": 0.5,
+    "max_checks": 1,
+    "change_threshold": 0.005,
+    "forced_ocr_interval_seconds": 5.0,
+    "consecutive_match_count": 1
+  }
+}

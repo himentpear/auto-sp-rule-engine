@@ -1,0 +1,16 @@
+{
+  "name": "secondary_notepad",
+  "target": {
+    "window_title_substring": "phase4-secondary-target.txt",
+    "window_title": "phase4-secondary-target.txt - Notepad",
+    "process_name": "Notepad"
+  },
+  "control": {
+    "name": "RichEditD2DPT1",
+    "type": "NotepadRichEdit"
+  },
+  "notes": {
+    "target_file": "notes/phase4-secondary-target.txt",
+    "validated_use": "Secondary Notepad target used with ROI and multi-frame OCR profiles."
+  }
+}
