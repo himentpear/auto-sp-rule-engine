@@ -8,6 +8,16 @@ const explorerTabs = [
   { id: 'runs', label: 'Runs' },
 ];
 
+const appModes = [
+  { id: 'explorer', label: 'Repository Explorer' },
+  { id: 'designer', label: 'Visual Target Designer' },
+];
+
+const designerSchemaVersion = 'designer-draft/v1';
+const designerSafeBoundary = 'capture -> OCR -> rule match -> control-targeted write';
+const designerMatchTypes = ['contains', 'contains_any', 'contains_all', 'not_contains', 'regex'];
+const designerActionTypes = ['append_text', 'prepend_text', 'replace_text', 'write_if_missing', 'append_timestamped_note'];
+
 const defaultFilters = {
   objectType: 'all',
   target: 'all',
@@ -90,6 +100,7 @@ function readUrlState() {
   if (typeof window === 'undefined') return {};
   const params = new URLSearchParams(window.location.search);
   return {
+    uiMode: params.get('mode') || null,
     activeTab: params.get('tab') || null,
     savedViewId: params.get('view') || null,
     search: params.get('q') || '',
@@ -255,6 +266,55 @@ function profileSummary(profile) {
   };
 }
 
+function targetBundleSummary(target) {
+  const bundle = target?.target_bundle || {};
+  const matcher = bundle.window_matcher || {};
+  const control = bundle.control_strategy || {};
+  const readback = bundle.readback_strategy || {};
+  const focus = bundle.focus_strategy || {};
+  const roiPresetNames = Object.keys(bundle.roi_presets || {});
+  return {
+    matcher: matcher.window_title_substring || target?.target?.window_title || 'n/a',
+    focus: focus.type || 'n/a',
+    control: control.control_name || target?.control?.name || 'n/a',
+    readback: readback.type || 'n/a',
+    defaultProfile: bundle.default_ocr_profile || 'default',
+    roiPresets: roiPresetNames.join(', ') || 'none',
+  };
+}
+
+function parseDesignerList(value) {
+  return String(value || '')
+    .split(/\r?\n|,/)
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
+function formatJson(value) {
+  return JSON.stringify(value, null, 2);
+}
+
+function triggerDraftDownload(filename, text) {
+  if (typeof window === 'undefined') return;
+  const blob = new Blob([text], { type: 'application/json;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
+}
+
+function RuleModeButton({ active, children, onClick }) {
+  return (
+    <button type="button" className={active ? 'preset-button active' : 'preset-button'} onClick={onClick}>
+      {children}
+    </button>
+  );
+}
+
 function hasDocsLink(objectType, object) {
   return relatedDocsFor(objectType, object).length > 0;
 }
@@ -262,6 +322,7 @@ function hasDocsLink(objectType, object) {
 function buildShareUrl(state) {
   if (typeof window === 'undefined') return '';
   const params = new URLSearchParams();
+  params.set('mode', state.uiMode || 'explorer');
   params.set('view', state.savedViewId || 'custom');
   params.set('tab', state.activeTab);
   if (state.search) params.set('q', state.search);
@@ -485,6 +546,7 @@ export default function App() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [uiMode, setUiMode] = useState(initialUrlState.uiMode || 'explorer');
   const [activeTab, setActiveTab] = useState(initialUrlState.activeTab || 'rules');
   const [search, setSearch] = useState(initialUrlState.search || '');
   const [selectedRuleName, setSelectedRuleName] = useState(initialUrlState.selectedRuleName || null);
@@ -496,6 +558,23 @@ export default function App() {
   const [savedViewId, setSavedViewId] = useState(initialUrlState.savedViewId || 'overview');
   const [evidenceFilters, setEvidenceFilters] = useState({ ...defaultEvidenceFilters, ...(initialUrlState.evidenceFilters || {}) });
   const [shareCopied, setShareCopied] = useState(false);
+  const [designerTargetName, setDesignerTargetName] = useState(null);
+  const [designerProfileName, setDesignerProfileName] = useState(null);
+  const [designerScenarioName, setDesignerScenarioName] = useState('none');
+  const [designerRoiPresetName, setDesignerRoiPresetName] = useState('none');
+  const [designerUseCustomRoi, setDesignerUseCustomRoi] = useState(false);
+  const [designerRoi, setDesignerRoi] = useState({ x: '24', y: '96', width: '1100', height: '280' });
+  const [designerScale, setDesignerScale] = useState('');
+  const [designerThresholdEnabled, setDesignerThresholdEnabled] = useState(false);
+  const [designerThresholdValue, setDesignerThresholdValue] = useState('180');
+  const [designerConfirmFrames, setDesignerConfirmFrames] = useState('1');
+  const [designerRuleName, setDesignerRuleName] = useState('draft-rule');
+  const [designerMatchType, setDesignerMatchType] = useState('contains');
+  const [designerMatchValue, setDesignerMatchValue] = useState('');
+  const [designerMatchValuesText, setDesignerMatchValuesText] = useState('');
+  const [designerActionType, setDesignerActionType] = useState('append_text');
+  const [designerActionText, setDesignerActionText] = useState('');
+  const [designerJsonCopied, setDesignerJsonCopied] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -513,6 +592,10 @@ export default function App() {
           setSelectedTargetName((current) => current || payload.targets?.[0]?.name || null);
           setSelectedScenarioName((current) => current || payload.scenarios?.[0]?.name || null);
           setSelectedRunId((current) => current || payload.recentRuns?.[0]?.id || null);
+          setDesignerTargetName((current) => current || payload.targets?.[0]?.name || null);
+          setDesignerProfileName((current) => current || payload.ocrProfiles?.[0]?.name || null);
+          setDesignerScenarioName((current) => current || 'none');
+          setDesignerActionType((current) => current || payload.validatedActionTypes?.[0] || 'append_text');
         }
       } catch (err) {
         if (!cancelled) setError(err.message);
@@ -651,6 +734,111 @@ export default function App() {
   const selectedRunProfile = profiles.find((profile) => profile.name === selectedRun?.ocrProfileUsed) || profiles.find((profile) => profile.name === selectedRunRule?.ocrProfileRef) || null;
   const selectedRunScenarios = scenarios.filter((scenario) => (selectedRun?.scenarioNames || []).includes(scenario.name));
 
+  const designerTarget = targets.find((target) => target.name === designerTargetName) || targets[0] || null;
+  const designerTargetBundle = designerTarget?.target_bundle || {};
+  const designerTargetSummary = targetBundleSummary(designerTarget);
+  const designerRoiPresetEntries = Object.entries(designerTargetBundle.roi_presets || {});
+  const designerSelectedScenario = scenarios.find((scenario) => scenario.name === designerScenarioName) || null;
+  const designerResolvedProfileName = designerProfileName || designerTargetBundle.default_ocr_profile || profiles[0]?.name || null;
+  const designerProfile = profiles.find((profile) => profile.name === designerResolvedProfileName) || profiles[0] || null;
+  const designerSelectedRoiPreset = designerRoiPresetName !== 'none'
+    ? (designerTargetBundle.roi_presets || {})[designerRoiPresetName] || null
+    : null;
+  const designerResolvedRoi = designerUseCustomRoi
+    ? {
+        x: Number(designerRoi.x || 0),
+        y: Number(designerRoi.y || 0),
+        width: Number(designerRoi.width || 0),
+        height: Number(designerRoi.height || 0),
+      }
+    : designerSelectedRoiPreset || designerProfile?.roi || null;
+  const designerResolvedProfile = useMemo(() => {
+    if (!designerProfile) return null;
+    const nextProfile = JSON.parse(JSON.stringify(designerProfile));
+    if (designerResolvedRoi && designerResolvedRoi.width > 0 && designerResolvedRoi.height > 0) {
+      nextProfile.roi = designerResolvedRoi;
+    }
+    if (designerScale) {
+      nextProfile.preprocessing = { ...(nextProfile.preprocessing || {}), scale: Number(designerScale) };
+    }
+    if (designerThresholdEnabled) {
+      nextProfile.preprocessing = {
+        ...(nextProfile.preprocessing || {}),
+        threshold: {
+          enabled: true,
+          value: Number(designerThresholdValue || 180),
+        },
+      };
+    }
+    nextProfile.watch = {
+      ...(nextProfile.watch || {}),
+      consecutive_match_count: Number(designerConfirmFrames || 1),
+    };
+    return nextProfile;
+  }, [designerProfile, designerResolvedRoi, designerScale, designerThresholdEnabled, designerThresholdValue, designerConfirmFrames]);
+  const designerMatchPayload = useMemo(() => {
+    if (designerMatchType === 'contains' || designerMatchType === 'not_contains') {
+      return { type: designerMatchType, value: designerMatchValue };
+    }
+    if (designerMatchType === 'regex') {
+      return { type: designerMatchType, pattern: designerMatchValue };
+    }
+    return { type: designerMatchType, values: parseDesignerList(designerMatchValuesText) };
+  }, [designerMatchType, designerMatchValue, designerMatchValuesText]);
+  const designerRuleDraft = useMemo(() => ({
+    name: designerRuleName || 'draft-rule',
+    target: designerTarget?.name || 'default',
+    ocr_profile: designerResolvedProfileName || 'draft_profile',
+    match: designerMatchPayload,
+    action: {
+      type: designerActionType,
+      text: designerActionType === 'append_timestamped_note' ? (designerActionText || 'Draft timestamped note') : designerActionText,
+    },
+  }), [designerRuleName, designerTarget, designerResolvedProfileName, designerMatchPayload, designerActionType, designerActionText]);
+  const designerDraftJson = useMemo(() => {
+    const targetSource = designerTarget ? {
+      name: designerTarget.name,
+      sourceFile: designerTarget.sourceFile,
+      target_bundle: designerTarget.target_bundle,
+      target: designerTarget.target,
+      control: designerTarget.control,
+    } : null;
+    const scenarioContext = designerSelectedScenario ? {
+      name: designerSelectedScenario.name,
+      sourceFile: designerSelectedScenario.sourceFile,
+      ruleCount: designerSelectedScenario.ruleCount,
+      targetNames: designerSelectedScenario.targetNames,
+      profileNames: designerSelectedScenario.profileNames,
+    } : null;
+    return {
+      schema_version: designerSchemaVersion,
+      draft_only: true,
+      export_only: true,
+      non_executing: true,
+      generated_from: 'visual-target-designer',
+      exported_at: new Date().toISOString(),
+      safe_boundary: designerSafeBoundary,
+      target_bundle_ref: designerTarget?.name || null,
+      target_bundle: designerTarget?.target_bundle || null,
+      target: designerTarget?.target || null,
+      control: designerTarget?.control || null,
+      selected_ocr_profile_ref: designerResolvedProfileName || null,
+      resolved_ocr_profile: designerResolvedProfile || null,
+      applied_roi_preset: designerRoiPresetName !== 'none' ? designerRoiPresetName : null,
+      rule_draft: designerRuleDraft,
+      scenario_context: scenarioContext,
+      notes: {
+        browser_designer_only: true,
+        repository_writeback: false,
+        frontend_execution_controls: false,
+        source_target_bundle: targetSource?.sourceFile || null,
+        source_ocr_profile: designerProfile?.sourceFile || null,
+        source_scenario: designerSelectedScenario?.sourceFile || null,
+      },
+    };
+  }, [designerTarget, designerResolvedProfileName, designerResolvedProfile, designerRoiPresetName, designerRuleDraft, designerSelectedScenario, designerProfile]);
+  const designerJsonText = useMemo(() => formatJson(designerDraftJson), [designerDraftJson]);
+
   const filteredEvidence = useMemo(
     () =>
       evidenceItems.filter((item) => {
@@ -675,6 +863,7 @@ export default function App() {
 
   const activeFilterEntries = Object.entries(filters).filter(([, value]) => value !== 'all');
   const shareUrl = buildShareUrl({
+    uiMode,
     savedViewId,
     activeTab,
     search,
@@ -690,6 +879,7 @@ export default function App() {
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const nextUrl = buildShareUrl({
+      uiMode,
       savedViewId,
       activeTab,
       search,
@@ -702,7 +892,7 @@ export default function App() {
       selectedRunId,
     });
     if (nextUrl) window.history.replaceState({}, '', nextUrl);
-  }, [savedViewId, activeTab, search, filters, evidenceFilters, selectedRuleName, selectedTargetName, selectedProfileName, selectedScenarioName, selectedRunId]);
+  }, [uiMode, savedViewId, activeTab, search, filters, evidenceFilters, selectedRuleName, selectedTargetName, selectedProfileName, selectedScenarioName, selectedRunId]);
 
   function markCustom() {
     setSavedViewId('custom');
@@ -760,10 +950,22 @@ export default function App() {
     window.setTimeout(() => setShareCopied(false), 1200);
   }
 
+  async function copyDesignerJson() {
+    if (!navigator.clipboard) return;
+    await navigator.clipboard.writeText(designerJsonText);
+    setDesignerJsonCopied(true);
+    window.setTimeout(() => setDesignerJsonCopied(false), 1200);
+  }
+
+  function downloadDesignerJson() {
+    triggerDraftDownload(`${designerTarget?.name || 'designer'}-draft.json`, designerJsonText);
+  }
+
   const globalBreadcrumbs = [
-    { label: 'repository guide', onClick: () => applySavedView('overview') },
-    { label: savedViewId === 'custom' ? 'custom view' : savedViews.find((view) => view.id === savedViewId)?.label || 'overview' },
-    { label: titleCase(activeTab) },
+    { label: 'repository guide', onClick: () => { setUiMode('explorer'); applySavedView('overview'); } },
+    { label: titleCase(uiMode) },
+    uiMode === 'explorer' ? { label: savedViewId === 'custom' ? 'custom view' : savedViews.find((view) => view.id === savedViewId)?.label || 'overview' } : { label: designerTarget?.name || 'draft' },
+    uiMode === 'explorer' ? { label: titleCase(activeTab) } : { label: 'draft preview' },
     activeTab === 'rules' && selectedRule ? { label: selectedRule.name, id: `rule:${selectedRule.name}` } : null,
     activeTab === 'targets' && selectedTarget ? { label: selectedTarget.name, id: `target:${selectedTarget.name}` } : null,
     activeTab === 'profiles' && selectedProfile ? { label: selectedProfile.name, id: `profile:${selectedProfile.name}` } : null,
@@ -799,7 +1001,7 @@ export default function App() {
             </div>
             <div className="release-card">
               <div className="landing-label">Frontend mode</div>
-              <div className="landing-copy">Strictly read-only. No execution controls, config editing, or file write-back.</div>
+              <div className="landing-copy">Read-only explorer plus draft-only designer. No execution controls, no repository write-back, and no browser-triggered automation.</div>
             </div>
           </div>
           <div className="landing-grid">
@@ -813,6 +1015,21 @@ export default function App() {
           </div>
         </header>
 
+        <section className="shell-panel">
+          <SectionHeader
+            title="Workspace mode"
+            description="Switch between the repository explorer and the non-destructive visual target designer. The designer never runs automation from the browser and never writes back into repository files."
+          />
+          <div className="preset-row">
+            {appModes.map((mode) => (
+              <RuleModeButton key={mode.id} active={uiMode === mode.id} onClick={() => setUiMode(mode.id)}>
+                {mode.label}
+              </RuleModeButton>
+            ))}
+          </div>
+        </section>
+
+        {uiMode === 'explorer' ? (
         <section className="shell-panel">
           <Breadcrumbs items={globalBreadcrumbs} onSelect={handleObjectLink} />
           <SectionHeader
@@ -862,11 +1079,189 @@ export default function App() {
             {activeFilterEntries.length ? activeFilterEntries.map(([key, value]) => <div key={key} className="count-chip">{key}: {value}</div>) : <div className="count-chip">No active filters</div>}
           </div>
         </section>
+        ) : (
+          <section className="shell-panel">
+            <Breadcrumbs items={globalBreadcrumbs} onSelect={handleObjectLink} />
+            <SectionHeader
+              title="Visual target designer"
+              description="Draft-only configuration design surface. It previews target bundles, OCR profiles, ROI choices, rule composition, and safe actions, then exports JSON locally without triggering scripts."
+              actions={<button type="button" className="utility-button" onClick={copyDesignerJson}>{designerJsonCopied ? 'Draft copied' : 'Copy draft JSON'}</button>}
+            />
+            <div className="count-row">
+              <div className="count-chip">Mode draft-only</div>
+              <div className="count-chip">Execution disabled</div>
+              <div className="count-chip">Repository write-back disabled</div>
+              <div className="count-chip">Safe actions only</div>
+            </div>
+          </section>
+        )}
 
         {loading ? <EmptyState title="Loading repository guide" description="Reading repository files through the local read-only API." /> : null}
         {error ? <EmptyState title="Repository guide unavailable" description={error} /> : null}
 
         {!loading && !error && data ? (
+          uiMode === 'designer' ? (
+            <>
+              <JsonErrorList errors={data.loadErrors} title="Partial repo state detected" />
+              <div className="layout">
+                <div className="main-column">
+                  <section className="panel">
+                    <SectionHeader title="Designer safety frame" description="This browser surface only composes drafts. It does not launch scripts, does not execute automation, and does not save back into repository config." />
+                    <div className="designer-safety-grid">
+                      <div className="boundary-card boundary-in">
+                        <div className="boundary-title">Designer adds</div>
+                        <ul>
+                          <li>target bundle inspection</li>
+                          <li>OCR profile and ROI draft composition</li>
+                          <li>safe rule and action draft preview</li>
+                          <li>copy and local-file export</li>
+                        </ul>
+                      </div>
+                      <div className="boundary-card boundary-out">
+                        <div className="boundary-title">Designer still does not do</div>
+                        <ul>
+                          <li>no execution controls</li>
+                          <li>no repository write-back</li>
+                          <li>no config editing in-place</li>
+                          <li>no browser-triggered automation</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </section>
+
+                  <section className="panel">
+                    <SectionHeader title="Target selection" description="Choose an existing validated target bundle and inspect the abstraction directly: matcher, focus, control, readback, default OCR, and ROI presets." />
+                    <div className="split-view">
+                      <div className="selector-list">
+                        {targets.map((target) => (
+                          <button key={target.name} type="button" className={designerTargetName === target.name ? 'selector-card active' : 'selector-card'} onClick={() => {
+                            setDesignerTargetName(target.name);
+                            setDesignerProfileName(target.target_bundle?.default_ocr_profile || profiles[0]?.name || null);
+                            const presets = Object.keys(target.target_bundle?.roi_presets || {});
+                            setDesignerRoiPresetName(presets[0] || 'none');
+                            setDesignerUseCustomRoi(false);
+                          }}>
+                            <div className="selector-title">{target.name}</div>
+                            <div className="selector-subtitle">{target.target?.window_title || 'No window title'}</div>
+                          </button>
+                        ))}
+                      </div>
+                      <div className="detail-panel">
+                        <DetailSection title="Resolved target bundle">
+                          <div className="item-topline"><h3>{designerTarget?.name || 'No target selected'}</h3><Pill tone="muted">draft source</Pill></div>
+                          <div className="kv-grid">
+                            <div><strong>Window matcher</strong><span>{designerTarget?.target?.window_title || 'n/a'}</span></div>
+                            <div><strong>Process</strong><span>{designerTarget?.target?.process_name || 'n/a'}</span></div>
+                            <div><strong>Focus strategy</strong><span>{designerTargetSummary.focus}</span></div>
+                            <div><strong>Control strategy</strong><span>{designerTargetSummary.control}</span></div>
+                            <div><strong>Readback strategy</strong><span>{designerTargetSummary.readback}</span></div>
+                            <div><strong>Default OCR profile</strong><span>{designerTargetSummary.defaultProfile}</span></div>
+                            <div><strong>ROI presets</strong><span>{designerTargetSummary.roiPresets}</span></div>
+                            <div><strong>Source</strong><span>{designerTarget?.sourceFile || 'n/a'}</span></div>
+                          </div>
+                        </DetailSection>
+                      </div>
+                    </div>
+                  </section>
+
+                  <section className="panel">
+                    <SectionHeader title="OCR profile and ROI designer" description="Reuse an existing OCR profile, then narrow it with preset or form-based ROI overrides and lightweight preprocessing tweaks. All changes remain draft state only." />
+                    <div className="filter-grid">
+                      <label><span>Base OCR profile</span><select value={designerResolvedProfileName || ''} onChange={(event) => setDesignerProfileName(event.target.value)}>{profiles.map((profile) => <option key={profile.name} value={profile.name}>{profile.name}</option>)}</select></label>
+                      <label><span>ROI preset</span><select value={designerRoiPresetName} onChange={(event) => setDesignerRoiPresetName(event.target.value)}><option value="none">No preset</option>{designerRoiPresetEntries.map(([name]) => <option key={name} value={name}>{name}</option>)}</select></label>
+                      <label><span>Custom scale override</span><input value={designerScale} onChange={(event) => setDesignerScale(event.target.value)} placeholder="e.g. 2.5" /></label>
+                      <label><span>Confirmation frames</span><input value={designerConfirmFrames} onChange={(event) => setDesignerConfirmFrames(event.target.value)} placeholder="1" /></label>
+                      <label><span>Threshold value</span><input value={designerThresholdValue} onChange={(event) => setDesignerThresholdValue(event.target.value)} disabled={!designerThresholdEnabled} /></label>
+                    </div>
+                    <div className="preset-row">
+                      <RuleModeButton active={!designerUseCustomRoi} onClick={() => setDesignerUseCustomRoi(false)}>Use profile / preset ROI</RuleModeButton>
+                      <RuleModeButton active={designerUseCustomRoi} onClick={() => setDesignerUseCustomRoi(true)}>Use custom ROI form</RuleModeButton>
+                      <RuleModeButton active={designerThresholdEnabled} onClick={() => setDesignerThresholdEnabled((current) => !current)}>{designerThresholdEnabled ? 'Threshold on' : 'Threshold off'}</RuleModeButton>
+                    </div>
+                    <div className="kv-grid designer-grid">
+                      <div><strong>Resolved ROI</strong><span>{designerResolvedRoi ? `[${designerResolvedRoi.x}, ${designerResolvedRoi.y}, ${designerResolvedRoi.width}, ${designerResolvedRoi.height}]` : 'full window'}</span></div>
+                      <div><strong>Resolved preprocess</strong><span>{profileSummary(designerResolvedProfile)?.preprocess || 'n/a'}</span></div>
+                      <div><strong>Resolved normalize</strong><span>{profileSummary(designerResolvedProfile)?.normalize || 'n/a'}</span></div>
+                      <div><strong>Resolved confirm</strong><span>{profileSummary(designerResolvedProfile)?.confirm || 'n/a'}</span></div>
+                    </div>
+                    {designerUseCustomRoi ? (
+                      <div className="filter-grid">
+                        <label><span>ROI X</span><input value={designerRoi.x} onChange={(event) => setDesignerRoi((current) => ({ ...current, x: event.target.value }))} /></label>
+                        <label><span>ROI Y</span><input value={designerRoi.y} onChange={(event) => setDesignerRoi((current) => ({ ...current, y: event.target.value }))} /></label>
+                        <label><span>ROI width</span><input value={designerRoi.width} onChange={(event) => setDesignerRoi((current) => ({ ...current, width: event.target.value }))} /></label>
+                        <label><span>ROI height</span><input value={designerRoi.height} onChange={(event) => setDesignerRoi((current) => ({ ...current, height: event.target.value }))} /></label>
+                      </div>
+                    ) : null}
+                  </section>
+
+                  <section className="panel">
+                    <SectionHeader title="Rule builder" description="Compose a safe rule visually. The draft shows the resolved target, resolved OCR profile, match type, and confirmation behavior before export." />
+                    <div className="filter-grid">
+                      <label><span>Scenario inspiration</span><select value={designerScenarioName} onChange={(event) => setDesignerScenarioName(event.target.value)}><option value="none">No scenario context</option>{scenarios.map((scenario) => <option key={scenario.name} value={scenario.name}>{scenario.name}</option>)}</select></label>
+                      <label><span>Draft rule name</span><input value={designerRuleName} onChange={(event) => setDesignerRuleName(event.target.value)} /></label>
+                      <label><span>Safe action</span><select value={designerActionType} onChange={(event) => setDesignerActionType(event.target.value)}>{designerActionTypes.map((actionType) => <option key={actionType} value={actionType}>{actionType}</option>)}</select></label>
+                    </div>
+                    <div className="preset-row">
+                      {designerMatchTypes.map((type) => <RuleModeButton key={type} active={designerMatchType === type} onClick={() => setDesignerMatchType(type)}>{type}</RuleModeButton>)}
+                    </div>
+                    {(designerMatchType === 'contains_any' || designerMatchType === 'contains_all') ? (
+                      <label className="designer-field"><span>Match values</span><textarea value={designerMatchValuesText} onChange={(event) => setDesignerMatchValuesText(event.target.value)} placeholder="One value per line or comma-separated" rows={4} /></label>
+                    ) : (
+                      <label className="designer-field"><span>{designerMatchType === 'regex' ? 'Regex pattern' : 'Match value'}</span><input value={designerMatchValue} onChange={(event) => setDesignerMatchValue(event.target.value)} placeholder={designerMatchType === 'regex' ? 'e.g. invoice\\s+#\\d+' : 'Enter a token'} /></label>
+                    )}
+                    <label className="designer-field"><span>Action payload</span><textarea value={designerActionText} onChange={(event) => setDesignerActionText(event.target.value)} rows={4} placeholder="Validated safe action payload" /></label>
+                    <div className="designer-resolve-grid">
+                      <div className="designer-card"><div className="landing-label">Resolved target</div><div className="landing-copy">{designerTarget?.name || 'n/a'}</div></div>
+                      <div className="designer-card"><div className="landing-label">Resolved OCR profile</div><div className="landing-copy">{designerResolvedProfileName || 'n/a'}</div></div>
+                      <div className="designer-card"><div className="landing-label">Confirmation</div><div className="landing-copy">{profileSummary(designerResolvedProfile)?.confirm || 'n/a'}</div></div>
+                      <div className="designer-card"><div className="landing-label">Safe action set</div><div className="landing-copy">{designerActionTypes.join(', ')}</div></div>
+                    </div>
+                  </section>
+
+                  <section className="panel">
+                    <SectionHeader title="Draft preview and export" description="Preview the generated draft JSON, copy it to the clipboard, or download it locally. The frontend does not write repository config automatically." actions={<div className="designer-actions"><button type="button" className="utility-button" onClick={copyDesignerJson}>{designerJsonCopied ? 'Copied JSON' : 'Copy JSON'}</button><button type="button" className="utility-button" onClick={downloadDesignerJson}>Download draft</button></div>} />
+                    <div className="json-preview">{designerJsonText}</div>
+                  </section>
+                </div>
+
+                <aside className="side-column">
+                  <section className="panel">
+                    <SectionHeader title="Draft summary" description="The designer composes configuration drafts from validated repository objects and keeps the result non-destructive." />
+                    <div className="detail-list">
+                      <DetailField label="Target bundle">{designerTarget?.name || 'n/a'}</DetailField>
+                      <DetailField label="Window matcher">{designerTarget?.target?.window_title || 'n/a'}</DetailField>
+                      <DetailField label="Focus strategy">{designerTargetBundle.focus_strategy?.type || 'n/a'}</DetailField>
+                      <DetailField label="Readback strategy">{designerTargetBundle.readback_strategy?.type || 'n/a'}</DetailField>
+                      <DetailField label="Base OCR">{designerResolvedProfileName || 'n/a'}</DetailField>
+                      <DetailField label="Scenario context">{designerSelectedScenario?.name || 'none'}</DetailField>
+                    </div>
+                  </section>
+
+                  <section className="panel">
+                    <SectionHeader title="Repository links" description="The designer stays connected to validated repository objects and notes." />
+                    <SourceMeta
+                      title="Draft sources"
+                      items={[
+                        designerTarget ? { label: 'Target bundle source', path: designerTarget.sourceFile } : null,
+                        designerProfile ? { label: 'OCR profile source', path: designerProfile.sourceFile } : null,
+                        designerSelectedScenario ? { label: 'Scenario source', path: designerSelectedScenario.sourceFile } : null,
+                        { label: 'Phase 9 abstraction notes', path: 'notes/phase9-target-abstraction.md' },
+                        { label: 'Boundary summary', path: data.boundarySummary?.source },
+                      ].filter(Boolean)}
+                    />
+                  </section>
+
+                  <section className="panel">
+                    <SectionHeader title="Validated safe actions" description="Only the already validated action types are available in the visual builder." />
+                    <div className="actions-row">
+                      {designerActionTypes.map((action) => <Pill key={action}>{action}</Pill>)}
+                    </div>
+                    <div className="boundary-footnote">This designer intentionally excludes any unvalidated action or browser-side execution behavior.</div>
+                  </section>
+                </aside>
+              </div>
+            </>
+          ) : (
           <>
             <JsonErrorList errors={data.loadErrors} title="Partial repo state detected" />
             <div className="layout">
@@ -891,10 +1286,10 @@ export default function App() {
                     ))}
                   </div>
                   {activeTab === 'rules' && selectedRule ? <div className="detail-panel"><DetailSection title="Visible rules"><RelatedLinks title="Choose a rule" items={filteredRules.map((rule) => ({ label: rule.name, meta: rule.actionType, id: `rule:${rule.name}` }))} onSelect={handleObjectLink} emptyText="No rules." /></DetailSection><DetailSection title="Summary"><div className="item-topline"><h3>{selectedRule.name}</h3><Pill>{selectedRule.actionType}</Pill></div><p className="item-subline">{matchLabel(selectedRule.match)}</p><div className="item-meta"><span>Resolved target: {selectedRule.resolvedTargetName || selectedRule.targetRef || 'default'}</span><span>Resolved OCR profile: {selectedRuleProfile?.name || selectedRule.ocrProfileRef || 'default'}</span></div></DetailSection><DetailSection title="Source"><SourceMeta items={[{ label: 'Rule source', path: selectedRule.sourceFile }, ...relatedDocsFor('rule', selectedRule), ...relatedExamplesFor('rule', selectedRule)]} title="Source files" /></DetailSection><DetailSection title="Evidence"><EvidenceGroups items={[{ label: 'Rule source', path: selectedRule.sourceFile }, ...selectedRuleRuns.flatMap((run) => [run.sourceFile ? { label: `Run log ${run.id}`, path: run.sourceFile } : null, run.screenshotPath ? { label: `Screenshot ${run.id}`, path: run.screenshotPath } : null, ...(run.relatedEvidence || []).map((item) => ({ label: item.name, path: item.sourceFile }))]).filter(Boolean)]} /></DetailSection></div> : null}
-                  {activeTab === 'targets' && selectedTarget ? <div className="detail-panel"><DetailSection title="Visible targets"><RelatedLinks title="Choose a target" items={filteredTargets.map((target) => ({ label: target.name, meta: target.target.window_title, id: `target:${target.name}` }))} onSelect={handleObjectLink} emptyText="No targets." /></DetailSection><DetailSection title="Summary"><div className="item-topline"><h3>{selectedTarget.name}</h3><Pill tone="muted">target</Pill></div><div className="kv-grid"><div><strong>Window</strong><span>{selectedTarget.target.window_title}</span></div><div><strong>Control</strong><span>{selectedTarget.control.name}</span></div><div><strong>Process</strong><span>{selectedTarget.target.process_name}</span></div><div><strong>Target file</strong><span>{selectedTarget.notes?.target_file || 'n/a'}</span></div></div></DetailSection><DetailSection title="Related"><RelatedLinks title="Related rules" items={selectedTargetRules.map((rule) => ({ label: rule.name, meta: rule.actionType, id: `rule:${rule.name}` }))} onSelect={handleObjectLink} emptyText="No related rules." /><RelatedLinks title="Related runs" items={selectedTargetRuns.map((run) => ({ label: run.id, meta: run.status, id: `run:${run.id}` }))} onSelect={handleObjectLink} emptyText="No related runs." /></DetailSection></div> : null}
+                  {activeTab === 'targets' && selectedTarget ? <div className="detail-panel"><DetailSection title="Visible targets"><RelatedLinks title="Choose a target" items={filteredTargets.map((target) => ({ label: target.name, meta: target.target.window_title, id: `target:${target.name}` }))} onSelect={handleObjectLink} emptyText="No targets." /></DetailSection><DetailSection title="Summary"><div className="item-topline"><h3>{selectedTarget.name}</h3><Pill tone="muted">target</Pill></div><div className="kv-grid"><div><strong>Window</strong><span>{selectedTarget.target.window_title}</span></div><div><strong>Matcher</strong><span>{targetBundleSummary(selectedTarget).matcher}</span></div><div><strong>Control</strong><span>{targetBundleSummary(selectedTarget).control}</span></div><div><strong>Process</strong><span>{selectedTarget.target.process_name}</span></div><div><strong>Focus strategy</strong><span>{targetBundleSummary(selectedTarget).focus}</span></div><div><strong>Readback</strong><span>{targetBundleSummary(selectedTarget).readback}</span></div><div><strong>Default OCR</strong><span>{targetBundleSummary(selectedTarget).defaultProfile}</span></div><div><strong>ROI presets</strong><span>{targetBundleSummary(selectedTarget).roiPresets}</span></div><div><strong>Target file</strong><span>{selectedTarget.notes?.target_file || selectedTarget.notes?.target_folder || 'n/a'}</span></div></div></DetailSection><DetailSection title="Related"><RelatedLinks title="Related rules" items={selectedTargetRules.map((rule) => ({ label: rule.name, meta: rule.actionType, id: `rule:${rule.name}` }))} onSelect={handleObjectLink} emptyText="No related rules." /><RelatedLinks title="Related runs" items={selectedTargetRuns.map((run) => ({ label: run.id, meta: run.status, id: `run:${run.id}` }))} onSelect={handleObjectLink} emptyText="No related runs." /></DetailSection></div> : null}
                   {activeTab === 'profiles' && selectedProfile ? <div className="detail-panel"><DetailSection title="Visible OCR profiles"><RelatedLinks title="Choose a profile" items={filteredProfiles.map((profile) => ({ label: profile.name, meta: profileSummary(profile).confirm, id: `profile:${profile.name}` }))} onSelect={handleObjectLink} emptyText="No profiles." /></DetailSection><DetailSection title="Summary"><div className="item-topline"><h3>{selectedProfile.name}</h3><Pill tone="muted">OCR profile</Pill></div><div className="kv-grid"><div><strong>ROI</strong><span>{profileSummary(selectedProfile).roi}</span></div><div><strong>Confirm</strong><span>{profileSummary(selectedProfile).confirm}</span></div><div><strong>Preprocess</strong><span>{profileSummary(selectedProfile).preprocess}</span></div><div><strong>Normalize</strong><span>{profileSummary(selectedProfile).normalize}</span></div></div></DetailSection><DetailSection title="Related"><RelatedLinks title="Related rules" items={selectedProfileRules.map((rule) => ({ label: rule.name, meta: rule.actionType, id: `rule:${rule.name}` }))} onSelect={handleObjectLink} emptyText="No related rules." /><RelatedLinks title="Related runs" items={selectedProfileRuns.map((run) => ({ label: run.id, meta: run.status, id: `run:${run.id}` }))} onSelect={handleObjectLink} emptyText="No related runs." /></DetailSection></div> : null}
                   {activeTab === 'scenarios' && selectedScenario ? <div className="detail-panel"><DetailSection title="Visible scenarios"><RelatedLinks title="Choose a scenario" items={filteredScenarios.map((scenario) => ({ label: scenario.name, meta: `${scenario.ruleCount} rule(s)`, id: `scenario:${scenario.name}` }))} onSelect={handleObjectLink} emptyText="No scenarios." /></DetailSection><DetailSection title="Summary"><div className="item-topline"><h3>{selectedScenario.name}</h3><Pill tone="muted">scenario</Pill></div><p className="item-subline">{selectedScenario.description || 'No scenario description provided.'}</p><div className="item-meta"><span>Targets: {selectedScenario.targetNames.join(', ') || 'default only'}</span><span>Profiles: {selectedScenario.profileNames.join(', ') || 'default only'}</span></div></DetailSection><DetailSection title="Related"><RelatedLinks title="Scenario rules" items={(selectedScenario.rules || []).map((rule) => ({ label: rule.name, meta: `${rule.resolvedTarget} / ${rule.resolvedProfile}`, id: `rule:${rule.name}` }))} onSelect={handleObjectLink} emptyText="No scenario rules." /><RelatedLinks title="Related runs" items={selectedScenarioRuns.map((run) => ({ label: run.id, meta: run.status, id: `run:${run.id}` }))} onSelect={handleObjectLink} emptyText="No related runs." /></DetailSection></div> : null}
-                  {activeTab === 'runs' && selectedRun ? <div className="detail-panel"><DetailSection title="Visible runs"><RelatedLinks title="Choose a run" items={filteredRuns.map((run) => ({ label: run.id, meta: `${run.status} / ${run.targetName || 'unknown'}`, id: `run:${run.id}` }))} onSelect={handleObjectLink} emptyText="No runs." /></DetailSection><DetailSection title="Summary"><div className="item-topline"><h3>{selectedRun.id}</h3><Pill tone={toneFor(selectedRun.status)}>{selectedRun.status}</Pill></div><div className="detail-list"><DetailField label="Matched rule">{selectedRun.ruleName || 'none'}</DetailField><DetailField label="Target">{selectedRun.targetName || selectedRun.targetWindow || 'unknown'}</DetailField><DetailField label="OCR profile">{selectedRun.ocrProfileUsed || 'n/a'}</DetailField><DetailField label="Time">{timeLabel(selectedRun.timestamp)}</DetailField><DetailField label="Screenshot path"><SourcePath path={selectedRun.screenshotPath} /></DetailField><DetailField label="Normalized OCR"><div className="detail-text">{truncate(selectedRun.normalizedOcrOutput, 320)}</div></DetailField></div></DetailSection><DetailSection title="Related"><RelatedLinks title="Related objects" items={[selectedRunRule ? { label: `Rule: ${selectedRunRule.name}`, meta: selectedRunRule.actionType, id: `rule:${selectedRunRule.name}` } : null, selectedRunTarget ? { label: `Target: ${selectedRunTarget.name}`, meta: selectedRunTarget.target.window_title, id: `target:${selectedRunTarget.name}` } : null, selectedRunProfile ? { label: `OCR profile: ${selectedRunProfile.name}`, meta: profileSummary(selectedRunProfile)?.confirm, id: `profile:${selectedRunProfile.name}` } : null, ...selectedRunScenarios.map((scenario) => ({ label: `Scenario: ${scenario.name}`, meta: `${scenario.ruleCount} rule(s)`, id: `scenario:${scenario.name}` }))].filter(Boolean)} onSelect={handleObjectLink} emptyText="No related objects." /></DetailSection></div> : null}
+                  {activeTab === 'runs' && selectedRun ? <div className="detail-panel"><DetailSection title="Visible runs"><RelatedLinks title="Choose a run" items={filteredRuns.map((run) => ({ label: run.id, meta: `${run.status} / ${run.targetName || 'unknown'}`, id: `run:${run.id}` }))} onSelect={handleObjectLink} emptyText="No runs." /></DetailSection><DetailSection title="Summary"><div className="item-topline"><h3>{selectedRun.id}</h3><Pill tone={toneFor(selectedRun.status)}>{selectedRun.status}</Pill></div><div className="detail-list"><DetailField label="Matched rule">{selectedRun.ruleName || 'none'}</DetailField><DetailField label="Target">{selectedRun.targetName || selectedRun.targetWindow || 'unknown'}</DetailField><DetailField label="Target bundle">{selectedRun.targetBundleName || 'n/a'}</DetailField><DetailField label="Focus strategy">{selectedRun.focusStrategy?.type || 'n/a'}</DetailField><DetailField label="Readback">{selectedRun.readbackStrategy?.type || 'n/a'}</DetailField><DetailField label="OCR profile">{selectedRun.ocrProfileUsed || 'n/a'}</DetailField><DetailField label="Time">{timeLabel(selectedRun.timestamp)}</DetailField><DetailField label="Screenshot path"><SourcePath path={selectedRun.screenshotPath} /></DetailField><DetailField label="Normalized OCR"><div className="detail-text">{truncate(selectedRun.normalizedOcrOutput, 320)}</div></DetailField></div></DetailSection><DetailSection title="Related"><RelatedLinks title="Related objects" items={[selectedRunRule ? { label: `Rule: ${selectedRunRule.name}`, meta: selectedRunRule.actionType, id: `rule:${selectedRunRule.name}` } : null, selectedRunTarget ? { label: `Target: ${selectedRunTarget.name}`, meta: selectedRunTarget.target.window_title, id: `target:${selectedRunTarget.name}` } : null, selectedRunProfile ? { label: `OCR profile: ${selectedRunProfile.name}`, meta: profileSummary(selectedRunProfile)?.confirm, id: `profile:${selectedRunProfile.name}` } : null, ...selectedRunScenarios.map((scenario) => ({ label: `Scenario: ${scenario.name}`, meta: `${scenario.ruleCount} rule(s)`, id: `scenario:${scenario.name}` }))].filter(Boolean)} onSelect={handleObjectLink} emptyText="No related objects." /></DetailSection></div> : null}
                 </section>
 
                 <section className="panel">
@@ -933,6 +1328,7 @@ export default function App() {
               </aside>
             </div>
           </>
+          )
         ) : null}
       </div>
     </div>

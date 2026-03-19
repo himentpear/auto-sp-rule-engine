@@ -1,0 +1,119 @@
+{
+  "schema_version": "designer-draft/v1",
+  "draft_only": true,
+  "export_only": true,
+  "non_executing": true,
+  "generated_from": "visual-target-designer",
+  "exported_at": "2026-03-19T13:05:00.000Z",
+  "safe_boundary": "capture -> OCR -> rule match -> control-targeted write",
+  "target_bundle_ref": "phase8_7zip_target",
+  "target_bundle": {
+    "name": "phase8_7zip_target",
+    "window_matcher": {
+      "window_title_substring": "phase8-7zip-target",
+      "window_title": "C:\\Users\\jisub\\Documents\\GitHub\\auto sp rule engine\\notes\\phase8-7zip-target\\",
+      "process_name": "7zFM"
+    },
+    "focus_strategy": {
+      "type": "activate_then_focus_control",
+      "wait_timeout_seconds": 1,
+      "settle_delay_ms": 150
+    },
+    "control_strategy": {
+      "type": "control_text",
+      "control_name": "Edit1",
+      "control_type": "Win32Edit"
+    },
+    "readback_strategy": {
+      "type": "control_text",
+      "focus_strategy": {
+        "type": "activate_then_focus_control",
+        "wait_timeout_seconds": 1,
+        "settle_delay_ms": 150
+      }
+    },
+    "default_ocr_profile": "primary_full_window",
+    "default_roi_preset": "address_bar",
+    "roi_presets": {
+      "address_bar": {
+        "x": 12,
+        "y": 122,
+        "width": 560,
+        "height": 42
+      }
+    },
+    "ocr_overrides": {
+      "roi_preset": "address_bar",
+      "preprocessing": {
+        "scale": 2.5
+      }
+    }
+  },
+  "target": {
+    "window_title_substring": "phase8-7zip-target",
+    "window_title": "C:\\Users\\jisub\\Documents\\GitHub\\auto sp rule engine\\notes\\phase8-7zip-target\\",
+    "process_name": "7zFM"
+  },
+  "control": {
+    "name": "Edit1",
+    "type": "Win32Edit"
+  },
+  "selected_ocr_profile_ref": "primary_full_window",
+  "resolved_ocr_profile": {
+    "roi": {
+      "x": 12,
+      "y": 122,
+      "width": 560,
+      "height": 42
+    },
+    "preprocessing": {
+      "grayscale": true,
+      "scale": 2.5,
+      "threshold": {
+        "enabled": false,
+        "value": 180
+      },
+      "trim_border": {
+        "enabled": false,
+        "margin": 0
+      }
+    },
+    "normalization": {
+      "collapse_whitespace": true,
+      "preserve_line_breaks": false,
+      "case": "lower",
+      "simple_noise_cleanup": true
+    },
+    "watch": {
+      "enabled": false,
+      "polling_interval_seconds": 0.5,
+      "max_checks": 1,
+      "change_threshold": 0.005,
+      "forced_ocr_interval_seconds": 5.0,
+      "consecutive_match_count": 1
+    }
+  },
+  "applied_roi_preset": "address_bar",
+  "rule_draft": {
+    "name": "phase11-draft-preview",
+    "target": "phase8_7zip_target",
+    "ocr_profile": "primary_full_window",
+    "match": {
+      "type": "contains",
+      "value": "phase8 seed replace"
+    },
+    "action": {
+      "type": "replace_text",
+      "text": "PHASE11_DRAFT_PREVIEW"
+    }
+  },
+  "scenario_context": null,
+  "notes": {
+    "browser_designer_only": true,
+    "repository_writeback": false,
+    "frontend_execution_controls": false,
+    "source_target_bundle": "examples/targets/phase8-7zip-target.json",
+    "source_ocr_profile": "examples/profiles/default-full-window.json",
+    "source_scenario": null
+  }
+}

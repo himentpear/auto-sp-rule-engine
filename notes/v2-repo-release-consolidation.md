@@ -10,11 +10,11 @@ Date: 2026-03-19
 
 ## Main Changes
 
-- moved the package metadata to `2.0.0-rc.1`
+- moved the package metadata to `0.2.0`
 - aligned the frontend build output with the production server path
-- refreshed the top-level README, repo map, and morning workflow around the 2.0 RC story
+- refreshed the top-level README, repo map, and morning workflow around the 0.2.0 RC story
 - promoted a single safe validation command: `npm run repo:validate`
-- shifted the handoff notes from phase-only language to 2.0 RC release notes
+- shifted the handoff notes from phase-only language to 0.2.0 RC release notes
 
 ## Result
 

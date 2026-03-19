@@ -1,0 +1,487 @@
+{
+  "timestamp": "20260319-123659",
+  "target_window": "phase4-primary-target.txt - Notepad",
+  "target_control": "RichEditD2DPT1",
+  "screenshot_path": "C:\\Users\\jisub\\Documents\\GitHub\\auto sp rule engine\\screenshots\\phase4-20260319-123659-primary-default-full-window-check1.png",
+  "ocr_profile_used": "primary_full_window",
+  "target_bundle_name": "primary_notepad",
+  "focus_strategy": {
+    "type": "focus_control_direct",
+    "wait_timeout_seconds": 1.0,
+    "settle_delay_ms": 100
+  },
+  "readback_strategy": {
+    "type": "control_text",
+    "focus_strategy": {
+      "type": "focus_control_direct",
+      "wait_timeout_seconds": 1.0,
+      "settle_delay_ms": 100
+    },
+    "control_name": "RichEditD2DPT1"
+  },
+  "roi_used": null,
+  "preprocessing_settings": {
+    "grayscale": true,
+    "scale": 2.0,
+    "threshold": {
+      "enabled": false,
+      "value": 180
+    },
+    "trim_border": {
+      "enabled": false,
+      "margin": 0
+    }
+  },
+  "normalization_settings": {
+    "collapse_whitespace": true,
+    "preserve_line_breaks": false,
+    "case": "lower",
+    "simple_noise_cleanup": true
+  },
+  "raw_ocr_output": "phase4-primary-target.txt primary trigger token HI B S",
+  "normalized_ocr_output": "phase4-primary-target.txt primary trigger token hi b s",
+  "ocr_text": "phase4-primary-target.txt primary trigger token hi b s",
+  "evaluated_rules": [
+    {
+      "name": "primary-default-full-window",
+      "match": {
+        "type": "contains",
+        "matched": true,
+        "reason": "contains('primary trigger token')=true"
+      },
+      "eligible_for_action": true,
+      "duplicate_prevented": false,
+      "duplicate_reason": null
+    },
+    {
+      "name": "secondary-roi-append",
+      "match": {
+        "type": "contains",
+        "matched": true,
+        "reason": "contains('secondary token')=true"
+      },
+      "eligible_for_action": true,
+      "duplicate_prevented": false,
+      "duplicate_reason": null
+    },
+    {
+      "name": "secondary-confirm-write-if-missing",
+      "match": {
+        "type": "contains_all",
+        "matched": true,
+        "reason": "contains_all missing=[]"
+      },
+      "eligible_for_action": true,
+      "duplicate_prevented": false,
+      "duplicate_reason": null
+    }
+  ],
+  "matched_rule": "primary-default-full-window",
+  "action_type": "append_text",
+  "action_payload": "PHASE4_PRIMARY_APPEND",
+  "ahk_exit_code": 0,
+  "validation_result": {
+    "readback_exit_code": 0,
+    "pre_action_control_text": "\ufeffprimary trigger token",
+    "action_applied": true,
+    "duplicate_prevented": false,
+    "duplicate_reason": null,
+    "post_action_control_text": "\ufeffprimary trigger token\nPHASE4_PRIMARY_APPEND"
+  },
+  "dry_run": false,
+  "rule_runs": [
+    {
+      "rule_name": "primary-default-full-window",
+      "resolved_target": {
+        "window_title_substring": "phase4-primary-target.txt",
+        "window_title": "phase4-primary-target.txt - Notepad",
+        "process_name": "Notepad"
+      },
+      "resolved_control": {
+        "name": "RichEditD2DPT1",
+        "type": "NotepadRichEdit"
+      },
+      "focus_strategy": {
+        "type": "focus_control_direct",
+        "wait_timeout_seconds": 1.0,
+        "settle_delay_ms": 100
+      },
+      "readback_strategy": {
+        "type": "control_text",
+        "focus_strategy": {
+          "type": "focus_control_direct",
+          "wait_timeout_seconds": 1.0,
+          "settle_delay_ms": 100
+        },
+        "control_name": "RichEditD2DPT1"
+      },
+      "target_bundle_name": "primary_notepad",
+      "ocr_profile_used": "primary_full_window",
+      "roi_used": null,
+      "preprocessing_settings": {
+        "grayscale": true,
+        "scale": 2.0,
+        "threshold": {
+          "enabled": false,
+          "value": 180
+        },
+        "trim_border": {
+          "enabled": false,
+          "margin": 0
+        }
+      },
+      "normalization_settings": {
+        "collapse_whitespace": true,
+        "preserve_line_breaks": false,
+        "case": "lower",
+        "simple_noise_cleanup": true
+      },
+      "raw_ocr_output": "phase4-primary-target.txt primary trigger token HI B S",
+      "normalized_ocr_output": "phase4-primary-target.txt primary trigger token hi b s",
+      "screenshot_path": "C:\\Users\\jisub\\Documents\\GitHub\\auto sp rule engine\\screenshots\\phase4-20260319-123659-primary-default-full-window-check1.png",
+      "ocr_skipped_no_change": false,
+      "multi_frame_confirmation_required": 1,
+      "multi_frame_confirmation_satisfied": true,
+      "evaluated_rules": [
+        {
+          "name": "primary-default-full-window",
+          "match": {
+            "type": "contains",
+            "matched": true,
+            "reason": "contains('primary trigger token')=true"
+          },
+          "eligible_for_action": true,
+          "duplicate_prevented": false,
+          "duplicate_reason": null
+        }
+      ],
+      "matched_rule": "primary-default-full-window",
+      "action_type": "append_text",
+      "action_payload": "PHASE4_PRIMARY_APPEND",
+      "ahk_exit_code": 0,
+      "validation_result": {
+        "readback_exit_code": 0,
+        "pre_action_control_text": "\ufeffprimary trigger token",
+        "action_applied": true,
+        "duplicate_prevented": false,
+        "duplicate_reason": null,
+        "post_action_control_text": "\ufeffprimary trigger token\nPHASE4_PRIMARY_APPEND"
+      },
+      "frames": [
+        {
+          "check_index": 1,
+          "screenshot_path": "C:\\Users\\jisub\\Documents\\GitHub\\auto sp rule engine\\screenshots\\phase4-20260319-123659-primary-default-full-window-check1.png",
+          "processed_image_path": "C:\\Users\\jisub\\Documents\\GitHub\\auto sp rule engine\\screenshots\\phase4-20260319-123659-primary-default-full-window-check1-processed.png",
+          "change_ratio": null,
+          "ocr_skipped_no_change": false,
+          "forced_ocr": true,
+          "raw_ocr_output": "phase4-primary-target.txt primary trigger token HI B S",
+          "normalized_ocr_output": "phase4-primary-target.txt primary trigger token hi b s",
+          "roi_used": null,
+          "preprocessing_settings": {
+            "grayscale": true,
+            "scale": 2.0,
+            "threshold": {
+              "enabled": false,
+              "value": 180
+            },
+            "trim_border": {
+              "enabled": false,
+              "margin": 0
+            }
+          },
+          "normalization_settings": {
+            "collapse_whitespace": true,
+            "preserve_line_breaks": false,
+            "case": "lower",
+            "simple_noise_cleanup": true
+          },
+          "multi_frame_confirmation_count": 1,
+          "multi_frame_confirmation_satisfied": true,
+          "rule_evaluation_skipped_reason": null
+        }
+      ]
+    },
+    {
+      "rule_name": "secondary-roi-append",
+      "resolved_target": {
+        "window_title_substring": "phase4-secondary-target.txt",
+        "window_title": "phase4-secondary-target.txt - Notepad",
+        "process_name": "Notepad"
+      },
+      "resolved_control": {
+        "name": "RichEditD2DPT1",
+        "type": "NotepadRichEdit"
+      },
+      "focus_strategy": {
+        "type": "focus_control_direct",
+        "wait_timeout_seconds": 1.0,
+        "settle_delay_ms": 100
+      },
+      "readback_strategy": {
+        "type": "control_text",
+        "focus_strategy": {
+          "type": "focus_control_direct",
+          "wait_timeout_seconds": 1.0,
+          "settle_delay_ms": 100
+        },
+        "control_name": "RichEditD2DPT1"
+      },
+      "target_bundle_name": "secondary_notepad",
+      "ocr_profile_used": "secondary_roi",
+      "roi_used": {
+        "x": 24,
+        "y": 96,
+        "width": 1100,
+        "height": 280
+      },
+      "preprocessing_settings": {
+        "grayscale": true,
+        "scale": 2.5,
+        "threshold": {
+          "enabled": true,
+          "value": 190
+        },
+        "trim_border": {
+          "enabled": true,
+          "margin": 2
+        }
+      },
+      "normalization_settings": {
+        "collapse_whitespace": true,
+        "preserve_line_breaks": false,
+        "case": "lower",
+        "simple_noise_cleanup": true
+      },
+      "raw_ocr_output": "PHASE4 SECONDARY TARGET SECONDARY TOKEN CONFIRM TOKEN SECONDARY BODY",
+      "normalized_ocr_output": "phase4 secondary target secondary token confirm token secondary body",
+      "screenshot_path": "C:\\Users\\jisub\\Documents\\GitHub\\auto sp rule engine\\screenshots\\phase4-20260319-123659-secondary-roi-append-check1.png",
+      "ocr_skipped_no_change": false,
+      "multi_frame_confirmation_required": 1,
+      "multi_frame_confirmation_satisfied": true,
+      "evaluated_rules": [
+        {
+          "name": "secondary-roi-append",
+          "match": {
+            "type": "contains",
+            "matched": true,
+            "reason": "contains('secondary token')=true"
+          },
+          "eligible_for_action": true,
+          "duplicate_prevented": false,
+          "duplicate_reason": null
+        }
+      ],
+      "matched_rule": "secondary-roi-append",
+      "action_type": "append_text",
+      "action_payload": "PHASE4_SECONDARY_APPEND",
+      "ahk_exit_code": 0,
+      "validation_result": {
+        "readback_exit_code": 0,
+        "pre_action_control_text": "\ufeffPHASE4 SECONDARY TARGET\nSECONDARY TOKEN\nCONFIRM TOKEN\nSECONDARY BODY\n",
+        "action_applied": true,
+        "duplicate_prevented": false,
+        "duplicate_reason": null,
+        "post_action_control_text": "\ufeffPHASE4 SECONDARY TARGET\nSECONDARY TOKEN\nCONFIRM TOKEN\nSECONDARY BODY\n\nPHASE4_SECONDARY_APPEND"
+      },
+      "frames": [
+        {
+          "check_index": 1,
+          "screenshot_path": "C:\\Users\\jisub\\Documents\\GitHub\\auto sp rule engine\\screenshots\\phase4-20260319-123659-secondary-roi-append-check1.png",
+          "processed_image_path": "C:\\Users\\jisub\\Documents\\GitHub\\auto sp rule engine\\screenshots\\phase4-20260319-123659-secondary-roi-append-check1-processed.png",
+          "change_ratio": null,
+          "ocr_skipped_no_change": false,
+          "forced_ocr": true,
+          "raw_ocr_output": "PHASE4 SECONDARY TARGET SECONDARY TOKEN CONFIRM TOKEN SECONDARY BODY",
+          "normalized_ocr_output": "phase4 secondary target secondary token confirm token secondary body",
+          "roi_used": {
+            "x": 24,
+            "y": 96,
+            "width": 1100,
+            "height": 280
+          },
+          "preprocessing_settings": {
+            "grayscale": true,
+            "scale": 2.5,
+            "threshold": {
+              "enabled": true,
+              "value": 190
+            },
+            "trim_border": {
+              "enabled": true,
+              "margin": 2
+            }
+          },
+          "normalization_settings": {
+            "collapse_whitespace": true,
+            "preserve_line_breaks": false,
+            "case": "lower",
+            "simple_noise_cleanup": true
+          },
+          "multi_frame_confirmation_count": 1,
+          "multi_frame_confirmation_satisfied": true,
+          "rule_evaluation_skipped_reason": null
+        }
+      ]
+    },
+    {
+      "rule_name": "secondary-confirm-write-if-missing",
+      "resolved_target": {
+        "window_title_substring": "phase4-secondary-target.txt",
+        "window_title": "phase4-secondary-target.txt - Notepad",
+        "process_name": "Notepad"
+      },
+      "resolved_control": {
+        "name": "RichEditD2DPT1",
+        "type": "NotepadRichEdit"
+      },
+      "focus_strategy": {
+        "type": "focus_control_direct",
+        "wait_timeout_seconds": 1.0,
+        "settle_delay_ms": 100
+      },
+      "readback_strategy": {
+        "type": "control_text",
+        "focus_strategy": {
+          "type": "focus_control_direct",
+          "wait_timeout_seconds": 1.0,
+          "settle_delay_ms": 100
+        },
+        "control_name": "RichEditD2DPT1"
+      },
+      "target_bundle_name": "secondary_notepad",
+      "ocr_profile_used": "secondary_confirmed",
+      "roi_used": {
+        "x": 24,
+        "y": 96,
+        "width": 1100,
+        "height": 280
+      },
+      "preprocessing_settings": {
+        "grayscale": true,
+        "scale": 2.5,
+        "threshold": {
+          "enabled": true,
+          "value": 190
+        },
+        "trim_border": {
+          "enabled": true,
+          "margin": 2
+        }
+      },
+      "normalization_settings": {
+        "collapse_whitespace": true,
+        "preserve_line_breaks": false,
+        "case": "lower",
+        "simple_noise_cleanup": true
+      },
+      "raw_ocr_output": "PHASE4 SECONDARY TARGET SECONDARY TOKEN CONFIRM TOKEN SECONDARY BODY PHASE4 SECONDARY APPEND",
+      "normalized_ocr_output": "phase4 secondary target secondary token confirm token secondary body phase4 secondary append",
+      "screenshot_path": "C:\\Users\\jisub\\Documents\\GitHub\\auto sp rule engine\\screenshots\\phase4-20260319-123659-secondary-confirm-write-if-missing-check2.png",
+      "ocr_skipped_no_change": false,
+      "multi_frame_confirmation_required": 2,
+      "multi_frame_confirmation_satisfied": true,
+      "evaluated_rules": [
+        {
+          "name": "secondary-confirm-write-if-missing",
+          "match": {
+            "type": "contains_all",
+            "matched": true,
+            "reason": "contains_all missing=[]"
+          },
+          "eligible_for_action": true,
+          "duplicate_prevented": false,
+          "duplicate_reason": null
+        }
+      ],
+      "matched_rule": "secondary-confirm-write-if-missing",
+      "action_type": "write_if_missing",
+      "action_payload": "PHASE4_CONFIRM_MARKER",
+      "ahk_exit_code": 0,
+      "validation_result": {
+        "readback_exit_code": 0,
+        "pre_action_control_text": "\ufeffPHASE4 SECONDARY TARGET\nSECONDARY TOKEN\nCONFIRM TOKEN\nSECONDARY BODY\n\nPHASE4_SECONDARY_APPEND",
+        "action_applied": true,
+        "duplicate_prevented": false,
+        "duplicate_reason": null,
+        "post_action_control_text": "\ufeffPHASE4 SECONDARY TARGET\nSECONDARY TOKEN\nCONFIRM TOKEN\nSECONDARY BODY\n\nPHASE4_SECONDARY_APPEND\nPHASE4_CONFIRM_MARKER"
+      },
+      "frames": [
+        {
+          "check_index": 1,
+          "screenshot_path": "C:\\Users\\jisub\\Documents\\GitHub\\auto sp rule engine\\screenshots\\phase4-20260319-123659-secondary-confirm-write-if-missing-check1.png",
+          "processed_image_path": "C:\\Users\\jisub\\Documents\\GitHub\\auto sp rule engine\\screenshots\\phase4-20260319-123659-secondary-confirm-write-if-missing-check1-processed.png",
+          "change_ratio": null,
+          "ocr_skipped_no_change": false,
+          "forced_ocr": true,
+          "raw_ocr_output": "PHASE4 SECONDARY TARGET SECONDARY TOKEN CONFIRM TOKEN SECONDARY BODY PHASE4 SECONDARY APPEND",
+          "normalized_ocr_output": "phase4 secondary target secondary token confirm token secondary body phase4 secondary append",
+          "roi_used": {
+            "x": 24,
+            "y": 96,
+            "width": 1100,
+            "height": 280
+          },
+          "preprocessing_settings": {
+            "grayscale": true,
+            "scale": 2.5,
+            "threshold": {
+              "enabled": true,
+              "value": 190
+            },
+            "trim_border": {
+              "enabled": true,
+              "margin": 2
+            }
+          },
+          "normalization_settings": {
+            "collapse_whitespace": true,
+            "preserve_line_breaks": false,
+            "case": "lower",
+            "simple_noise_cleanup": true
+          },
+          "multi_frame_confirmation_count": 1,
+          "multi_frame_confirmation_satisfied": false,
+          "rule_evaluation_skipped_reason": "waiting_for_multi_frame_confirmation_1_of_2"
+        },
+        {
+          "check_index": 2,
+          "screenshot_path": "C:\\Users\\jisub\\Documents\\GitHub\\auto sp rule engine\\screenshots\\phase4-20260319-123659-secondary-confirm-write-if-missing-check2.png",
+          "processed_image_path": "C:\\Users\\jisub\\Documents\\GitHub\\auto sp rule engine\\screenshots\\phase4-20260319-123659-secondary-confirm-write-if-missing-check2-processed.png",
+          "change_ratio": 0.0,
+          "ocr_skipped_no_change": false,
+          "forced_ocr": true,
+          "raw_ocr_output": "PHASE4 SECONDARY TARGET SECONDARY TOKEN CONFIRM TOKEN SECONDARY BODY PHASE4 SECONDARY APPEND",
+          "normalized_ocr_output": "phase4 secondary target secondary token confirm token secondary body phase4 secondary append",
+          "roi_used": {
+            "x": 24,
+            "y": 96,
+            "width": 1100,
+            "height": 280
+          },
+          "preprocessing_settings": {
+            "grayscale": true,
+            "scale": 2.5,
+            "threshold": {
+              "enabled": true,
+              "value": 190
+            },
+            "trim_border": {
+              "enabled": true,
+              "margin": 2
+            }
+          },
+          "normalization_settings": {
+            "collapse_whitespace": true,
+            "preserve_line_breaks": false,
+            "case": "lower",
+            "simple_noise_cleanup": true
+          },
+          "multi_frame_confirmation_count": 2,
+          "multi_frame_confirmation_satisfied": true,
+          "rule_evaluation_skipped_reason": null
+        }
+      ]
+    }
+  ]
+}

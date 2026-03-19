@@ -7,7 +7,7 @@ Use this read-only flow when reopening the repository tomorrow.
 1. Open `docs/repo-map.md`
    Rebuild the repository structure first.
 2. Open `notes/v2-upgrade-summary.md`
-   Use the 2.0 RC summary as the latest handoff note.
+   Use the 0.2.0 RC summary as the latest handoff note.
 3. Open `docs/evidence-index.md`
    Re-anchor on the current evidence set and cross references.
 4. Run `npm run repo:health`

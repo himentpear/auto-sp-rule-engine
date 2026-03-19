@@ -1,11 +1,11 @@
 # Repo Map
 
-`auto-sp-rule-engine` 2.0 RC is organized as a read-only repository guide over a narrow validated automation core.
+`auto-sp-rule-engine` 0.2.0 RC is organized as a read-only repository guide over a narrow validated automation core.
 
 ## Top-level Reading Path
 
 1. `README.md`
-   Short 2.0 RC landing page.
+   Short 0.2.0 RC landing page.
 2. `docs/`
    Overview, workflow, validation path, evidence index, and navigation map.
 3. `examples/`
@@ -13,7 +13,7 @@
 4. `frontend/`
    Strictly read-only repository explorer, saved views, evidence hub, and repo health.
 5. `notes/`
-   Release-candidate notes, validation history, frontend notes, and 2.0 summaries.
+   Release-candidate notes, validation history, frontend notes, and 0.2.0 summaries.
 
 ## Core Terms
 
@@ -59,7 +59,7 @@ Evidence:
 - `screenshots/examples/`
 - `docs/evidence-index.md`
 
-## 2.0 RC Entry Points
+## 0.2.0 RC Entry Points
 
 - `docs/morning-workflow.md`
 - `docs/evidence-index.md`

@@ -2,14 +2,14 @@
 
 Date: 2026-03-19
 
-## 2.0 RC State
+## 0.2.0 RC State
 
-The repository is now in a cleaner 2.0 release-candidate state while preserving the same narrow validated execution boundary.
+The repository is now in a cleaner 0.2.0 release-candidate state while preserving the same narrow validated execution boundary.
 
 ## What Changed
 
 - repository structure and top-level docs were refreshed into a clearer release-candidate opening path
-- the read-only frontend was polished into a more explicit 2.0 RC repository guide
+- the read-only frontend was polished into a more explicit 0.2.0 RC repository guide
 - evidence and examples were tightened into a clearer read-only evidence system
 - developer tooling was cleaned up around safer validation and a coherent frontend build output path
 

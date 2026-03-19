@@ -1,0 +1,29 @@
+{
+  "draft_only": true,
+  "export_only": false,
+  "non_executing": true,
+  "generated_from": "visual-target-designer",
+  "exported_at": "2026-03-19T13:05:00.000Z",
+  "safe_boundary": "capture -> OCR -> rule match -> control-targeted write",
+  "target_bundle_ref": "missing_target_bundle",
+  "target_bundle": {
+    "name": "broken_bundle"
+  },
+  "selected_ocr_profile_ref": "missing_profile",
+  "resolved_ocr_profile": {
+    "roi": null
+  },
+  "rule_draft": {
+    "name": "",
+    "target": "broken_bundle",
+    "ocr_profile": "missing_profile",
+    "match": {
+      "type": "starts_with",
+      "value": "bad"
+    },
+    "action": {
+      "type": "delete_text",
+      "text": ""
+    }
+  }
+}

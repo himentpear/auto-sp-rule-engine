@@ -1,6 +1,6 @@
 # Overview
 
-`auto-sp-rule-engine` is a local Windows rule engine for low-risk desktop automation on a constrained, validated path. The current repository state is organized as a 2.0 release candidate for that same narrow path.
+`auto-sp-rule-engine` is a local Windows rule engine for low-risk desktop automation on a constrained, validated path. The current repository state is organized as a 0.2.0 release candidate for that same narrow path.
 
 Its current purpose is narrow:
 
@@ -78,8 +78,8 @@ This repository does not currently claim:
 
 ## Where To Go Next
 
-- 2.0 summary: [v2-upgrade-summary.md](/C:/Users/jisub/Documents/GitHub/auto%20sp%20rule%20engine/notes/v2-upgrade-summary.md)
-- 2.0 release readiness: [v2-release-readiness.md](/C:/Users/jisub/Documents/GitHub/auto%20sp%20rule%20engine/notes/v2-release-readiness.md)
+- 0.2.0 summary: [v2-upgrade-summary.md](/C:/Users/jisub/Documents/GitHub/auto%20sp%20rule%20engine/notes/v2-upgrade-summary.md)
+- 0.2.0 release readiness: [v2-release-readiness.md](/C:/Users/jisub/Documents/GitHub/auto%20sp%20rule%20engine/notes/v2-release-readiness.md)
 - Validation progression: [validation-path.md](/C:/Users/jisub/Documents/GitHub/auto%20sp%20rule%20engine/docs/validation-path.md)
 - Simplest verified run: [quickstart-notepad.md](/C:/Users/jisub/Documents/GitHub/auto%20sp%20rule%20engine/docs/quickstart-notepad.md)
 - Phase 4 public examples: [phase4-public-examples.md](/C:/Users/jisub/Documents/GitHub/auto%20sp%20rule%20engine/notes/phase4-public-examples.md)

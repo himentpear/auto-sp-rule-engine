@@ -1,7 +1,7 @@
 {
   "name": "auto-sp-rule-engine",
   "private": true,
-  "version": "2.0.0-rc.1",
+  "version": "0.2.0",
   "type": "module",
   "scripts": {
     "dev": "node frontend/server.mjs",
@@ -13,6 +13,8 @@
     "evidence:index": "powershell -ExecutionPolicy Bypass -File scripts/dev/generate_evidence_index.ps1",
     "docs:check": "powershell -ExecutionPolicy Bypass -File scripts/dev/docs_sanity_check.ps1",
     "repo:ux:check": "node scripts/dev/validate_repository_ux.mjs",
+    "draft:check": "node scripts/dev/designer_draft_tools.mjs check examples/drafts/valid-designer-draft.json",
+    "draft:preview": "node scripts/dev/designer_draft_tools.mjs preview examples/drafts/valid-designer-draft.json",
     "repo:validate": "npm run frontend:build && npm run docs:check && npm run repo:health && npm run repo:ux:check",
     "repo:refresh": "npm run evidence:index && npm run docs:check && npm run repo:health && npm run repo:ux:check"
   },

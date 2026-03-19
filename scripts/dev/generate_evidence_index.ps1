@@ -55,6 +55,7 @@ $notesFiles = @(Get-SectionFiles -Path (Join-Path $RepoRoot 'notes') -Base $Repo
 $targets = @(Get-SectionFiles -Path (Join-Path $RepoRoot 'examples\targets') -Base $RepoRoot -Include @('*.json'))
 $profiles = @(Get-SectionFiles -Path (Join-Path $RepoRoot 'examples\profiles') -Base $RepoRoot -Include @('*.json'))
 $scenarios = @(Get-SectionFiles -Path (Join-Path $RepoRoot 'examples\scenarios') -Base $RepoRoot -Include @('*.json'))
+$drafts = @(Get-SectionFiles -Path (Join-Path $RepoRoot 'examples\drafts') -Base $RepoRoot -Include @('*.json'))
 
 $lines = [System.Collections.Generic.List[string]]::new()
 $lines.Add('# Evidence Index')
@@ -86,6 +87,10 @@ $lines.Add('')
 $lines.Add('Scenarios: ' + $scenarios.Count)
 $lines.Add('')
 Add-MarkdownList -Lines $lines -Items $scenarios
+$lines.Add('')
+$lines.Add('Designer drafts: ' + $drafts.Count)
+$lines.Add('')
+Add-MarkdownList -Lines $lines -Items $drafts
 $lines.Add('')
 $lines.Add('## Evidence Logs')
 $lines.Add('')

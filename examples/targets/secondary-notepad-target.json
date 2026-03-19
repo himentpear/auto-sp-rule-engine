@@ -1,5 +1,40 @@
 {
   "name": "secondary_notepad",
+  "target_bundle": {
+    "name": "secondary_notepad",
+    "window_matcher": {
+      "window_title_substring": "phase4-secondary-target.txt",
+      "window_title": "phase4-secondary-target.txt - Notepad",
+      "process_name": "Notepad"
+    },
+    "focus_strategy": {
+      "type": "focus_control_direct",
+      "wait_timeout_seconds": 1.0,
+      "settle_delay_ms": 100
+    },
+    "control_strategy": {
+      "type": "control_text",
+      "control_name": "RichEditD2DPT1",
+      "control_type": "NotepadRichEdit"
+    },
+    "readback_strategy": {
+      "type": "control_text",
+      "focus_strategy": {
+        "type": "focus_control_direct",
+        "wait_timeout_seconds": 1.0,
+        "settle_delay_ms": 100
+      }
+    },
+    "default_ocr_profile": "secondary_roi",
+    "roi_presets": {
+      "secondary_editor": {
+        "x": 24,
+        "y": 96,
+        "width": 1100,
+        "height": 280
+      }
+    }
+  },
   "target": {
     "window_title_substring": "phase4-secondary-target.txt",
     "window_title": "phase4-secondary-target.txt - Notepad",
@@ -11,6 +46,7 @@
   },
   "notes": {
     "target_file": "notes/phase4-secondary-target.txt",
-    "validated_use": "Secondary Notepad target used with ROI and multi-frame OCR profiles."
+    "validated_use": "Secondary Notepad target used with ROI and multi-frame OCR profiles.",
+    "phase9_abstraction": "Uses the explicit target abstraction model with direct control focus, control-text readback, and a reusable secondary ROI preset."
   }
 }

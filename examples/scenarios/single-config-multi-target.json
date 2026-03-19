@@ -1,5 +1,32 @@
 {
   "description": "Validated Phase 4 scenario showing one config driving two safe Notepad targets with three rules and multiple OCR profiles.",
+  "target_bundle": {
+    "name": "primary_notepad",
+    "window_matcher": {
+      "window_title_substring": "phase4-primary-target.txt",
+      "window_title": "phase4-primary-target.txt - Notepad",
+      "process_name": "Notepad"
+    },
+    "focus_strategy": {
+      "type": "focus_control_direct",
+      "wait_timeout_seconds": 1.0,
+      "settle_delay_ms": 100
+    },
+    "control_strategy": {
+      "type": "control_text",
+      "control_name": "RichEditD2DPT1",
+      "control_type": "NotepadRichEdit"
+    },
+    "readback_strategy": {
+      "type": "control_text",
+      "focus_strategy": {
+        "type": "focus_control_direct",
+        "wait_timeout_seconds": 1.0,
+        "settle_delay_ms": 100
+      }
+    },
+    "default_ocr_profile": "primary_full_window"
+  },
   "target": {
     "window_title_substring": "phase4-primary-target.txt",
     "window_title": "phase4-primary-target.txt - Notepad",
@@ -11,14 +38,27 @@
   },
   "targets": {
     "secondary_notepad": {
+      "target_bundle": {
+        "name": "secondary_notepad",
+        "window_matcher": {
+          "window_title_substring": "phase4-secondary-target.txt",
+          "window_title": "phase4-secondary-target.txt - Notepad",
+          "process_name": "Notepad"
+        },
+        "default_ocr_profile": "secondary_roi",
+        "roi_presets": {
+          "secondary_editor": {
+            "x": 24,
+            "y": 96,
+            "width": 1100,
+            "height": 280
+          }
+        }
+      },
       "target": {
         "window_title_substring": "phase4-secondary-target.txt",
         "window_title": "phase4-secondary-target.txt - Notepad",
         "process_name": "Notepad"
-      },
-      "control": {
-        "name": "RichEditD2DPT1",
-        "type": "NotepadRichEdit"
       }
     }
   },
@@ -145,7 +185,6 @@
     {
       "name": "secondary-roi-append",
       "target": "secondary_notepad",
-      "ocr_profile": "secondary_roi",
       "match": {
         "type": "contains",
         "value": "secondary token"

@@ -4,7 +4,7 @@ Date: 2026-03-19
 
 ## Release Candidate Claim
 
-`auto-sp-rule-engine` is in a 2.0 release-candidate state for its narrow validated path.
+`auto-sp-rule-engine` is in a 0.2.0 release-candidate state for its narrow validated path.
 
 ## What Is Included
 
@@ -13,7 +13,7 @@ Date: 2026-03-19
 - validated OCR refinement
 - validated multi-target and multi-profile routing
 - strictly read-only repository explorer frontend
-- repository UX consolidation promoted into a cleaner 2.0 RC structure
+- repository UX consolidation promoted into a cleaner 0.2.0 RC structure
 
 ## What Is Still Intentionally Out Of Scope
 
@@ -35,4 +35,4 @@ Date: 2026-03-19
 
 ## Remaining Next Best Step
 
-The best next step after this 2.0 RC pass is a read-only comparison layer in the frontend for targets, OCR profiles, and runs so validation differences can be reviewed side by side.
+The best next step after this 0.2.0 RC pass is a read-only comparison layer in the frontend for targets, OCR profiles, and runs so validation differences can be reviewed side by side.

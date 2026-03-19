@@ -34,7 +34,14 @@ def run_winrt_ocr(image_path: Path):
         "-ImagePath",
         str(image_path.resolve()),
     ]
-    result = subprocess.run(cmd, capture_output=True, text=True, check=True)
+    result = subprocess.run(
+        cmd,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+        check=True,
+    )
     return json.loads(result.stdout)
 
 

@@ -1,0 +1,59 @@
+{
+  "name": "phase8_7zip_target",
+  "target_bundle": {
+    "name": "phase8_7zip_target",
+    "window_matcher": {
+      "window_title_substring": "phase8-7zip-target",
+      "window_title": "C:\\Users\\jisub\\Documents\\GitHub\\auto sp rule engine\\notes\\phase8-7zip-target\\",
+      "process_name": "7zFM"
+    },
+    "focus_strategy": {
+      "type": "activate_then_focus_control",
+      "wait_timeout_seconds": 1.0,
+      "settle_delay_ms": 150
+    },
+    "control_strategy": {
+      "type": "control_text",
+      "control_name": "Edit1",
+      "control_type": "Win32Edit"
+    },
+    "readback_strategy": {
+      "type": "control_text",
+      "focus_strategy": {
+        "type": "activate_then_focus_control",
+        "wait_timeout_seconds": 1.0,
+        "settle_delay_ms": 150
+      }
+    },
+    "default_ocr_profile": "primary_full_window",
+    "default_roi_preset": "address_bar",
+    "roi_presets": {
+      "address_bar": {
+        "x": 12,
+        "y": 122,
+        "width": 560,
+        "height": 42
+      }
+    },
+    "ocr_overrides": {
+      "roi_preset": "address_bar",
+      "preprocessing": {
+        "scale": 2.5
+      }
+    }
+  },
+  "target": {
+    "window_title_substring": "phase8-7zip-target",
+    "window_title": "C:\\Users\\jisub\\Documents\\GitHub\\auto sp rule engine\\notes\\phase8-7zip-target\\",
+    "process_name": "7zFM"
+  },
+  "control": {
+    "name": "Edit1",
+    "type": "Win32Edit"
+  },
+  "notes": {
+    "target_folder": "notes/phase8-7zip-target",
+    "validated_use": "Phase 8 second-application migration target using the 7-Zip address-bar edit control.",
+    "phase9_abstraction": "Uses explicit activate-then-focus behavior, control-text readback, and reuses the shared full-window OCR profile with a narrow address-bar override."
+  }
+}

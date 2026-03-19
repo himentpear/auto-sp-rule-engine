@@ -18,7 +18,9 @@ body {
 }
 
 button,
-input {
+input,
+select,
+textarea {
   font: inherit;
 }
 
@@ -193,6 +195,72 @@ input {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 10px;
+}
+
+.designer-safety-grid,
+.designer-resolve-grid {
+  margin-top: 16px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.designer-card {
+  padding: 14px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(17, 17, 17, 0.08);
+}
+
+.designer-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.designer-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+  font-size: 12px;
+  color: #666666;
+}
+
+.designer-field input,
+.designer-field textarea,
+.filter-grid input,
+.filter-grid textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(17, 17, 17, 0.08);
+  background: #ffffff;
+}
+
+.designer-field textarea,
+.filter-grid textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.designer-grid {
+  margin-top: 12px;
+}
+
+.json-preview {
+  margin-top: 16px;
+  padding: 16px;
+  border-radius: 22px;
+  background: #111111;
+  color: #f4f4f1;
+  font-family: Consolas, "SFMono-Regular", Menlo, monospace;
+  font-size: 12px;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 640px;
+  overflow: auto;
 }
 
 .saved-view-card {
@@ -834,6 +902,11 @@ input {
   .health-grid,
   .graph-grid,
   .filter-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .designer-safety-grid,
+  .designer-resolve-grid {
     grid-template-columns: 1fr;
   }
 

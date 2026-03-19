@@ -1,0 +1,199 @@
+{
+  "timestamp": "20260319-123552",
+  "target_window": "C:\\Users\\jisub\\Documents\\GitHub\\auto sp rule engine\\notes\\phase8-7zip-target\\",
+  "target_control": "Edit1",
+  "screenshot_path": "C:\\Users\\jisub\\Documents\\GitHub\\auto sp rule engine\\screenshots\\phase8-7zip-20260319-123552-phase8-7zip-replace-text-check1.png",
+  "ocr_profile_used": "primary_full_window",
+  "target_bundle_name": "phase8_7zip_target",
+  "focus_strategy": {
+    "type": "activate_then_focus_control",
+    "wait_timeout_seconds": 1.0,
+    "settle_delay_ms": 150
+  },
+  "readback_strategy": {
+    "type": "control_text",
+    "focus_strategy": {
+      "type": "activate_then_focus_control",
+      "wait_timeout_seconds": 1.0,
+      "settle_delay_ms": 150
+    },
+    "control_name": "Edit1"
+  },
+  "roi_used": {
+    "x": 12,
+    "y": 122,
+    "width": 560,
+    "height": 42
+  },
+  "preprocessing_settings": {
+    "grayscale": true,
+    "scale": 2.5,
+    "threshold": {
+      "enabled": false,
+      "value": 180
+    },
+    "trim_border": {
+      "enabled": false,
+      "margin": 0
+    }
+  },
+  "normalization_settings": {
+    "collapse_whitespace": true,
+    "preserve_line_breaks": false,
+    "case": "lower",
+    "simple_noise_cleanup": true
+  },
+  "raw_ocr_output": "PHASE8 SEED REPLACE",
+  "normalized_ocr_output": "phase8 seed replace",
+  "ocr_text": "phase8 seed replace",
+  "evaluated_rules": [
+    {
+      "name": "phase8-7zip-replace-text",
+      "match": {
+        "type": "contains",
+        "matched": true,
+        "reason": "contains('phase8 seed replace')=true"
+      },
+      "eligible_for_action": true,
+      "duplicate_prevented": false,
+      "duplicate_reason": null
+    }
+  ],
+  "matched_rule": "phase8-7zip-replace-text",
+  "action_type": "replace_text",
+  "action_payload": "PHASE8 REPLACE COMPLETE",
+  "ahk_exit_code": 0,
+  "validation_result": {
+    "readback_exit_code": 0,
+    "pre_action_control_text": "\ufeffPHASE8 SEED REPLACE",
+    "action_applied": true,
+    "duplicate_prevented": false,
+    "duplicate_reason": null,
+    "post_action_control_text": "\ufeffPHASE8 REPLACE COMPLETE"
+  },
+  "dry_run": false,
+  "rule_runs": [
+    {
+      "rule_name": "phase8-7zip-replace-text",
+      "resolved_target": {
+        "window_title_substring": "phase8-7zip-target",
+        "window_title": "C:\\Users\\jisub\\Documents\\GitHub\\auto sp rule engine\\notes\\phase8-7zip-target\\",
+        "process_name": "7zFM"
+      },
+      "resolved_control": {
+        "name": "Edit1",
+        "type": "Win32Edit"
+      },
+      "focus_strategy": {
+        "type": "activate_then_focus_control",
+        "wait_timeout_seconds": 1.0,
+        "settle_delay_ms": 150
+      },
+      "readback_strategy": {
+        "type": "control_text",
+        "focus_strategy": {
+          "type": "activate_then_focus_control",
+          "wait_timeout_seconds": 1.0,
+          "settle_delay_ms": 150
+        },
+        "control_name": "Edit1"
+      },
+      "target_bundle_name": "phase8_7zip_target",
+      "ocr_profile_used": "primary_full_window",
+      "roi_used": {
+        "x": 12,
+        "y": 122,
+        "width": 560,
+        "height": 42
+      },
+      "preprocessing_settings": {
+        "grayscale": true,
+        "scale": 2.5,
+        "threshold": {
+          "enabled": false,
+          "value": 180
+        },
+        "trim_border": {
+          "enabled": false,
+          "margin": 0
+        }
+      },
+      "normalization_settings": {
+        "collapse_whitespace": true,
+        "preserve_line_breaks": false,
+        "case": "lower",
+        "simple_noise_cleanup": true
+      },
+      "raw_ocr_output": "PHASE8 SEED REPLACE",
+      "normalized_ocr_output": "phase8 seed replace",
+      "screenshot_path": "C:\\Users\\jisub\\Documents\\GitHub\\auto sp rule engine\\screenshots\\phase8-7zip-20260319-123552-phase8-7zip-replace-text-check1.png",
+      "ocr_skipped_no_change": false,
+      "multi_frame_confirmation_required": 1,
+      "multi_frame_confirmation_satisfied": true,
+      "evaluated_rules": [
+        {
+          "name": "phase8-7zip-replace-text",
+          "match": {
+            "type": "contains",
+            "matched": true,
+            "reason": "contains('phase8 seed replace')=true"
+          },
+          "eligible_for_action": true,
+          "duplicate_prevented": false,
+          "duplicate_reason": null
+        }
+      ],
+      "matched_rule": "phase8-7zip-replace-text",
+      "action_type": "replace_text",
+      "action_payload": "PHASE8 REPLACE COMPLETE",
+      "ahk_exit_code": 0,
+      "validation_result": {
+        "readback_exit_code": 0,
+        "pre_action_control_text": "\ufeffPHASE8 SEED REPLACE",
+        "action_applied": true,
+        "duplicate_prevented": false,
+        "duplicate_reason": null,
+        "post_action_control_text": "\ufeffPHASE8 REPLACE COMPLETE"
+      },
+      "frames": [
+        {
+          "check_index": 1,
+          "screenshot_path": "C:\\Users\\jisub\\Documents\\GitHub\\auto sp rule engine\\screenshots\\phase8-7zip-20260319-123552-phase8-7zip-replace-text-check1.png",
+          "processed_image_path": "C:\\Users\\jisub\\Documents\\GitHub\\auto sp rule engine\\screenshots\\phase8-7zip-20260319-123552-phase8-7zip-replace-text-check1-processed.png",
+          "change_ratio": null,
+          "ocr_skipped_no_change": false,
+          "forced_ocr": true,
+          "raw_ocr_output": "PHASE8 SEED REPLACE",
+          "normalized_ocr_output": "phase8 seed replace",
+          "roi_used": {
+            "x": 12,
+            "y": 122,
+            "width": 560,
+            "height": 42
+          },
+          "preprocessing_settings": {
+            "grayscale": true,
+            "scale": 2.5,
+            "threshold": {
+              "enabled": false,
+              "value": 180
+            },
+            "trim_border": {
+              "enabled": false,
+              "margin": 0
+            }
+          },
+          "normalization_settings": {
+            "collapse_whitespace": true,
+            "preserve_line_breaks": false,
+            "case": "lower",
+            "simple_noise_cleanup": true
+          },
+          "multi_frame_confirmation_count": 1,
+          "multi_frame_confirmation_satisfied": true,
+          "rule_evaluation_skipped_reason": null
+        }
+      ]
+    }
+  ]
+}

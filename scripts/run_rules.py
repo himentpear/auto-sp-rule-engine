@@ -33,6 +33,29 @@ DEFAULT_OCR = {
     },
 }
 
+DEFAULT_FOCUS_STRATEGY = {
+    "type": "activate_then_focus_control",
+    "wait_timeout_seconds": 1.0,
+    "settle_delay_ms": 150,
+}
+
+DEFAULT_READBACK_STRATEGY = {
+    "type": "control_text",
+    "focus_strategy": {},
+}
+
+DEFAULT_TARGET_BUNDLE = {
+    "name": "default",
+    "window_matcher": {},
+    "focus_strategy": {},
+    "control_strategy": {},
+    "readback_strategy": {},
+    "default_ocr_profile": None,
+    "ocr_overrides": {},
+    "roi_presets": {},
+    "default_roi_preset": None,
+}
+
 
 def run_cmd(cmd, check=True):
     return subprocess.run(cmd, capture_output=True, text=True, check=check)
@@ -147,41 +170,207 @@ def was_recent_rule_hit(recent_logs, target_window: str, rule_name: str, cooldow
     return False
 
 
-def read_control_text(ahk_exe: Path, readback_script: Path, target_window: str, readback_path: Path):
+def normalize_focus_strategy(strategy: dict | None, fallback_type: str = "activate_then_focus_control"):
+    normalized = deep_merge(DEFAULT_FOCUS_STRATEGY, strategy or {})
+    normalized["type"] = normalized.get("type") or fallback_type
+    return normalized
+
+
+def normalize_readback_strategy(strategy: dict | None, fallback_focus: dict | None):
+    normalized = deep_merge(DEFAULT_READBACK_STRATEGY, strategy or {})
+    normalized["type"] = normalized.get("type") or "control_text"
+    normalized["focus_strategy"] = normalize_focus_strategy(
+        normalized.get("focus_strategy"), (fallback_focus or {}).get("type", "activate_then_focus_control")
+    )
+    return normalized
+
+
+def normalize_target_bundle(entry: dict | None, inherited_bundle: dict | None = None, name: str = "default"):
+    merged_entry = deep_merge({}, entry or {})
+    bundle = deep_merge(DEFAULT_TARGET_BUNDLE, inherited_bundle or {})
+    bundle = deep_merge(bundle, merged_entry.get("target_bundle", {}))
+
+    legacy_target = merged_entry.get("target", {})
+    legacy_control = merged_entry.get("control", {})
+
+    bundle["name"] = bundle.get("name") or name
+    bundle["window_matcher"] = deep_merge(bundle.get("window_matcher", {}), {k: v for k, v in legacy_target.items() if v is not None})
+    control_legacy_override = {}
+    if legacy_control.get("name") is not None:
+        control_legacy_override["control_name"] = legacy_control.get("name")
+    if legacy_control.get("type") is not None:
+        control_legacy_override["control_type"] = legacy_control.get("type")
+    bundle["control_strategy"] = deep_merge(bundle.get("control_strategy", {}), control_legacy_override)
+
+    default_focus_type = "activate_then_focus_control" if bundle["control_strategy"].get("control_name") else "activate_then_wait"
+    bundle["focus_strategy"] = normalize_focus_strategy(bundle.get("focus_strategy"), default_focus_type)
+    bundle["readback_strategy"] = normalize_readback_strategy(bundle.get("readback_strategy"), bundle["focus_strategy"])
+
+    if bundle["readback_strategy"]["type"] in ("control_text", "hybrid_readback") and not bundle["readback_strategy"].get(
+        "control_name"
+    ):
+        bundle["readback_strategy"]["control_name"] = bundle["control_strategy"].get("control_name")
+
+    target = {
+        "window_title_substring": bundle["window_matcher"].get("window_title_substring"),
+        "window_title": bundle["window_matcher"].get("window_title"),
+        "process_name": bundle["window_matcher"].get("process_name"),
+    }
+    control = {
+        "name": bundle["control_strategy"].get("control_name"),
+        "type": bundle["control_strategy"].get("control_type"),
+    }
+
+    return {"bundle": bundle, "target": target, "control": control}
+
+
+def apply_ocr_roi_preset(ocr_cfg: dict, target_bundle: dict, preset_name: str | None):
+    if not preset_name:
+        return ocr_cfg
+    preset = (target_bundle.get("roi_presets") or {}).get(preset_name)
+    if not preset:
+        raise KeyError(f"unknown target ROI preset: {preset_name}")
+    return deep_merge(ocr_cfg, {"roi": preset})
+
+
+def materialize_target_ocr_override(override: dict | None, target_bundle: dict):
+    if not override:
+        override = {}
+    resolved = deep_merge({}, override)
+    preset_name = resolved.pop("roi_preset", None)
+    if preset_name:
+        resolved = apply_ocr_roi_preset(resolved, target_bundle, preset_name)
+    return resolved
+
+
+def execute_readback_script(
+    ahk_exe: Path,
+    readback_script: Path,
+    readback_path: Path,
+    resolved_target: dict,
+    resolved_control: dict,
+    readback_strategy: dict,
+):
     read_proc = subprocess.run(
-        [str(ahk_exe), str(readback_script), target_window],
+        [
+            str(ahk_exe),
+            str(readback_script),
+            resolved_target["window_title"],
+            readback_strategy.get("control_name") or resolved_control.get("name") or "",
+            str(readback_path),
+            readback_strategy["focus_strategy"]["type"],
+            "window_text" if readback_strategy["type"] == "window_text" else "control_text",
+            str(readback_strategy["focus_strategy"]["wait_timeout_seconds"]),
+            str(readback_strategy["focus_strategy"]["settle_delay_ms"]),
+        ],
         capture_output=True,
         text=True,
     )
     current_text = readback_path.read_text(encoding="utf-8") if readback_path.exists() else None
-    return read_proc, current_text
+    return read_proc.returncode, current_text
+
+
+def capture_target_window(capture_script: Path, resolved_target: dict, screenshot_path: Path):
+    capture_cmd = [
+        "powershell",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        str(capture_script),
+        "-WindowTitleSubstring",
+        resolved_target["window_title_substring"],
+        "-ProcessName",
+        resolved_target["process_name"],
+        "-OutFile",
+        str(screenshot_path),
+    ]
+    return json.loads(run_cmd(capture_cmd).stdout)
+
+
+def read_target_text(
+    ahk_exe: Path,
+    readback_script: Path,
+    readback_path: Path,
+    capture_script: Path,
+    screenshots_dir: Path,
+    prefix: str,
+    timestamp: str,
+    rule_name: str,
+    readback_phase: str,
+    resolved_target: dict,
+    resolved_control: dict,
+    readback_strategy: dict,
+    ocr_cfg: dict,
+):
+    strategy_type = readback_strategy.get("type", "control_text")
+
+    if strategy_type in ("control_text", "window_text"):
+        return execute_readback_script(
+            ahk_exe=ahk_exe,
+            readback_script=readback_script,
+            readback_path=readback_path,
+            resolved_target=resolved_target,
+            resolved_control=resolved_control,
+            readback_strategy=readback_strategy,
+        )
+
+    screenshot_path = screenshots_dir / f"{prefix}-{timestamp}-{rule_name}-{readback_phase}-readback.png"
+    processed_path = screenshots_dir / f"{prefix}-{timestamp}-{rule_name}-{readback_phase}-readback-processed.png"
+    capture_target_window(capture_script, resolved_target, screenshot_path)
+    ocr_payload = run_ocr_pipeline(screenshot_path, ocr_cfg, processed_path)
+    ocr_text = ocr_payload["normalized_ocr_output"]
+
+    if strategy_type == "ocr_readback":
+        return 0, ocr_text
+
+    if strategy_type == "hybrid_readback":
+        exit_code, current_text = execute_readback_script(
+            ahk_exe=ahk_exe,
+            readback_script=readback_script,
+            readback_path=readback_path,
+            resolved_target=resolved_target,
+            resolved_control=resolved_control,
+            readback_strategy=deep_merge(readback_strategy, {"type": "control_text"}),
+        )
+        if exit_code == 0 and current_text:
+            return exit_code, current_text
+        return 0, ocr_text
+
+    raise KeyError(f"unsupported readback strategy: {strategy_type}")
 
 
 def get_targets_map(config: dict):
     targets = {}
-    if config.get("target") or config.get("control"):
-        targets["default"] = {
-            "target": config.get("target", {}),
-            "control": config.get("control", {}),
-        }
+    default_bundle = None
+    if config.get("target_bundle") or config.get("target") or config.get("control"):
+        default_target = normalize_target_bundle(
+            {
+                "target_bundle": config.get("target_bundle", {}),
+                "target": config.get("target", {}),
+                "control": config.get("control", {}),
+            },
+            name="default",
+        )
+        default_bundle = default_target["bundle"]
+        targets["default"] = default_target
     for name, entry in config.get("targets", {}).items():
-        if "target" in entry or "control" in entry:
-            targets[name] = {
-                "target": deep_merge(config.get("target", {}), entry.get("target", {})),
-                "control": deep_merge(config.get("control", {}), entry.get("control", {})),
-            }
-        else:
-            targets[name] = {
-                "target": deep_merge(config.get("target", {}), entry),
-                "control": deep_merge(config.get("control", {}), {}),
-            }
+        targets[name] = normalize_target_bundle(entry, inherited_bundle=default_bundle, name=name)
     return targets
 
 
 def resolve_rule_target(config: dict, rule: dict):
     targets = get_targets_map(config)
-    resolved_target = deep_merge(config.get("target", {}), {})
-    resolved_control = deep_merge(config.get("control", {}), {})
+    default_target = targets.get("default") or normalize_target_bundle(
+        {
+            "target_bundle": config.get("target_bundle", {}),
+            "target": config.get("target", {}),
+            "control": config.get("control", {}),
+        },
+        name="default",
+    )
+    resolved_target = deep_merge(default_target["target"], {})
+    resolved_control = deep_merge(default_target["control"], {})
+    resolved_bundle = deep_merge(DEFAULT_TARGET_BUNDLE, default_target["bundle"])
 
     target_ref = rule.get("target")
     if isinstance(target_ref, str):
@@ -189,17 +378,35 @@ def resolve_rule_target(config: dict, rule: dict):
             raise KeyError(f"unknown rule target reference: {target_ref}")
         resolved_target = deep_merge(resolved_target, targets[target_ref]["target"])
         resolved_control = deep_merge(resolved_control, targets[target_ref]["control"])
+        resolved_bundle = deep_merge(resolved_bundle, targets[target_ref]["bundle"])
 
     if isinstance(target_ref, dict):
-        if "target" in target_ref or "control" in target_ref:
-            resolved_target = deep_merge(resolved_target, target_ref.get("target", {}))
-            resolved_control = deep_merge(resolved_control, target_ref.get("control", {}))
-        else:
-            resolved_target = deep_merge(resolved_target, target_ref)
+        inline = normalize_target_bundle(target_ref, inherited_bundle=resolved_bundle, name=resolved_bundle.get("name", "inline"))
+        resolved_target = deep_merge(resolved_target, inline["target"])
+        resolved_control = deep_merge(resolved_control, inline["control"])
+        resolved_bundle = deep_merge(resolved_bundle, inline["bundle"])
 
+    resolved_bundle = deep_merge(resolved_bundle, rule.get("target_bundle_override", {}))
     resolved_target = deep_merge(resolved_target, rule.get("target_override", {}))
     resolved_control = deep_merge(resolved_control, rule.get("control_override", {}))
-    return resolved_target, resolved_control
+    resolved_bundle["window_matcher"] = deep_merge(resolved_bundle.get("window_matcher", {}), resolved_target)
+    resolved_bundle["control_strategy"] = deep_merge(
+        resolved_bundle.get("control_strategy", {}),
+        {"control_name": resolved_control.get("name"), "control_type": resolved_control.get("type")},
+    )
+    resolved_bundle["focus_strategy"] = normalize_focus_strategy(
+        deep_merge(resolved_bundle.get("focus_strategy", {}), rule.get("focus_override", {})),
+        resolved_bundle.get("focus_strategy", {}).get("type", "activate_then_focus_control"),
+    )
+    resolved_bundle["readback_strategy"] = normalize_readback_strategy(
+        deep_merge(resolved_bundle.get("readback_strategy", {}), rule.get("readback_override", {})),
+        resolved_bundle["focus_strategy"],
+    )
+    if resolved_bundle["readback_strategy"]["type"] in ("control_text", "hybrid_readback") and not resolved_bundle[
+        "readback_strategy"
+    ].get("control_name"):
+        resolved_bundle["readback_strategy"]["control_name"] = resolved_control.get("name")
+    return resolved_target, resolved_control, resolved_bundle
 
 
 def get_ocr_profiles(config: dict):
@@ -213,16 +420,21 @@ def get_ocr_profiles(config: dict):
     return profiles
 
 
-def resolve_rule_ocr_profile(config: dict, rule: dict):
+def resolve_rule_ocr_profile(config: dict, rule: dict, target_bundle: dict):
     profiles = get_ocr_profiles(config)
-    default_name = config.get("ocr_profile", "default")
+    default_name = target_bundle.get("default_ocr_profile") or config.get("ocr_profile", "default")
     if default_name not in profiles:
         profiles[default_name] = deep_merge(DEFAULT_OCR, config.get("ocr", {}))
 
     profile_name = rule.get("ocr_profile", default_name)
     if profile_name not in profiles:
         raise KeyError(f"unknown OCR profile: {profile_name}")
-    return profile_name, deep_merge(profiles[profile_name], rule.get("ocr_override", {}))
+    resolved = deep_merge(profiles[profile_name], materialize_target_ocr_override(target_bundle.get("ocr_overrides"), target_bundle))
+    default_roi_preset = target_bundle.get("default_roi_preset")
+    if default_roi_preset and not resolved.get("roi"):
+        resolved = apply_ocr_roi_preset(resolved, target_bundle, default_roi_preset)
+    resolved = deep_merge(resolved, materialize_target_ocr_override(rule.get("ocr_override"), target_bundle))
+    return profile_name, resolved
 
 
 def evaluate_rules_for_ocr_text(
@@ -236,10 +448,14 @@ def evaluate_rules_for_ocr_text(
     readback_script: Path,
     readback_path: Path,
     logs_dir: Path,
+    capture_script: Path,
+    screenshots_dir: Path,
     timestamp: str,
     prefix: str,
     resolved_target: dict,
     resolved_control: dict,
+    resolved_bundle: dict,
+    ocr_cfg: dict,
     cooldown_seconds: int,
 ):
     evaluation = {
@@ -284,13 +500,28 @@ def evaluate_rules_for_ocr_text(
                     resolved_control["name"],
                     map_action_to_ahk_mode(action_type),
                     str(action_file),
+                    resolved_bundle["focus_strategy"]["type"],
+                    str(resolved_bundle["focus_strategy"]["wait_timeout_seconds"]),
+                    str(resolved_bundle["focus_strategy"]["settle_delay_ms"]),
                 ]
                 action_proc = subprocess.run(trigger_cmd, capture_output=True, text=True)
                 ahk_exit_code = action_proc.returncode
-                read_proc, current_text = read_control_text(
-                    ahk_exe, readback_script, resolved_target["window_title"], readback_path
+                read_exit_code, current_text = read_target_text(
+                    ahk_exe,
+                    readback_script,
+                    readback_path,
+                    capture_script,
+                    screenshots_dir,
+                    prefix,
+                    timestamp,
+                    rule["name"],
+                    "post-action",
+                    resolved_target,
+                    resolved_control,
+                    resolved_bundle["readback_strategy"],
+                    ocr_cfg,
                 )
-                validation_result["readback_exit_code"] = read_proc.returncode
+                validation_result["readback_exit_code"] = read_exit_code
                 validation_result["post_action_control_text"] = current_text
                 validation_result["action_applied"] = action_proc.returncode == 0
             else:
@@ -326,10 +557,24 @@ def run_rule_pipeline(
     screenshots_dir: Path,
     cooldown_seconds: int,
 ):
-    resolved_target, resolved_control = resolve_rule_target(config, rule)
-    ocr_profile_name, ocr_cfg = resolve_rule_ocr_profile(config, rule)
+    resolved_target, resolved_control, resolved_bundle = resolve_rule_target(config, rule)
+    ocr_profile_name, ocr_cfg = resolve_rule_ocr_profile(config, rule, resolved_bundle)
 
-    read_proc, current_text = read_control_text(ahk_exe, readback_script, resolved_target["window_title"], readback_path)
+    read_exit_code, current_text = read_target_text(
+        ahk_exe,
+        readback_script,
+        readback_path,
+        capture_script,
+        screenshots_dir,
+        prefix,
+        timestamp,
+        rule["name"],
+        "pre-action",
+        resolved_target,
+        resolved_control,
+        resolved_bundle["readback_strategy"],
+        ocr_cfg,
+    )
     watch_cfg = ocr_cfg["watch"]
     watch_enabled = bool(watch_cfg.get("enabled", False))
     max_checks = int(watch_cfg.get("max_checks", 1 if watch_enabled else 1))
@@ -352,7 +597,7 @@ def run_rule_pipeline(
         "ahk_exit_code": None,
         "evaluated_rules": [],
         "validation_result": {
-            "readback_exit_code": read_proc.returncode,
+            "readback_exit_code": read_exit_code,
             "pre_action_control_text": current_text,
             "action_applied": False,
             "duplicate_prevented": False,
@@ -363,20 +608,7 @@ def run_rule_pipeline(
 
     for check_index in range(1, max_checks + 1):
         screenshot_path = screenshots_dir / f"{prefix}-{timestamp}-{rule['name']}-check{check_index}.png"
-        capture_cmd = [
-            "powershell",
-            "-ExecutionPolicy",
-            "Bypass",
-            "-File",
-            str(capture_script),
-            "-WindowTitleSubstring",
-            resolved_target["window_title_substring"],
-            "-ProcessName",
-            resolved_target["process_name"],
-            "-OutFile",
-            str(screenshot_path),
-        ]
-        capture = json.loads(run_cmd(capture_cmd).stdout)
+        capture = capture_target_window(capture_script, resolved_target, screenshot_path)
 
         change_ratio = None
         ocr_skipped = False
@@ -442,10 +674,14 @@ def run_rule_pipeline(
                     readback_script=readback_script,
                     readback_path=readback_path,
                     logs_dir=logs_dir,
+                    capture_script=capture_script,
+                    screenshots_dir=screenshots_dir,
                     timestamp=timestamp,
                     prefix=prefix,
                     resolved_target=resolved_target,
                     resolved_control=resolved_control,
+                    resolved_bundle=resolved_bundle,
+                    ocr_cfg=ocr_cfg,
                     cooldown_seconds=cooldown_seconds,
                 )
                 final_result["matched_rule"] = rule["name"] if rule_eval["evaluation"]["match"]["matched"] else None
@@ -475,6 +711,9 @@ def run_rule_pipeline(
         "rule_name": rule["name"],
         "resolved_target": resolved_target,
         "resolved_control": resolved_control,
+        "focus_strategy": resolved_bundle["focus_strategy"],
+        "readback_strategy": resolved_bundle["readback_strategy"],
+        "target_bundle_name": resolved_bundle.get("name"),
         "ocr_profile_used": ocr_profile_name,
         "roi_used": selected_ocr_payload["roi_used"] if selected_ocr_payload else ocr_cfg.get("roi"),
         "preprocessing_settings": selected_ocr_payload["preprocessing_settings"] if selected_ocr_payload else ocr_cfg["preprocessing"],
@@ -514,8 +753,8 @@ def main() -> int:
     capture_script = root / "scripts" / "capture_window.ps1"
     trigger_script = root / "scripts" / "trigger_action.ahk"
     ahk_exe = resolve_from_root(root, config["automation"]["ahk_exe"])
-    readback_script = root / "scripts" / "ahk" / "read_notepad_text.ahk"
-    readback_path = root / "scripts" / "ahk" / "read_notepad_text.txt"
+    readback_script = root / "scripts" / "ahk" / "read_control_text.ahk"
+    readback_path = root / "scripts" / "ahk" / "read_control_text.txt"
 
     engine_settings = config.get("engine", {})
     stop_after_first_match = engine_settings.get("stop_after_first_match", True)
@@ -537,6 +776,9 @@ def main() -> int:
     top_raw_ocr = None
     top_normalized_ocr = None
     top_ocr_profile = None
+    top_focus_strategy = None
+    top_readback_strategy = None
+    top_target_bundle_name = None
     top_validation = None
 
     for rule in config["rules"]:
@@ -573,6 +815,9 @@ def main() -> int:
             top_raw_ocr = run_record["raw_ocr_output"]
             top_normalized_ocr = run_record["normalized_ocr_output"]
             top_ocr_profile = run_record["ocr_profile_used"]
+            top_focus_strategy = run_record["focus_strategy"]
+            top_readback_strategy = run_record["readback_strategy"]
+            top_target_bundle_name = run_record["target_bundle_name"]
             top_validation = run_record["validation_result"]
             if stop_after_first_match:
                 break
@@ -583,6 +828,9 @@ def main() -> int:
         "target_control": top_target_control,
         "screenshot_path": top_screenshot_path,
         "ocr_profile_used": top_ocr_profile,
+        "target_bundle_name": top_target_bundle_name,
+        "focus_strategy": top_focus_strategy,
+        "readback_strategy": top_readback_strategy,
         "roi_used": top_roi_used,
         "preprocessing_settings": top_preprocessing,
         "normalization_settings": top_normalization,

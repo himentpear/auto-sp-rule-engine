@@ -24,15 +24,15 @@ ApplyFocusStrategy(strategyType, targetTitle, targetControl, waitTimeoutSeconds,
     Sleep(settleDelayMs)
 }
 
-if A_Args.Length < 4 {
+if A_Args.Length < 3 {
     ExitApp(64)
 }
 
 targetTitle := A_Args[1]
 targetControl := A_Args[2]
-actionType := A_Args[3]
-textFile := A_Args[4]
-focusStrategyType := A_Args.Length >= 5 ? A_Args[5] : "activate_then_focus_control"
+outFile := A_Args[3]
+focusStrategyType := A_Args.Length >= 4 ? A_Args[4] : "activate_then_focus_control"
+readbackStrategyType := A_Args.Length >= 5 ? A_Args[5] : "control_text"
 waitTimeoutSeconds := A_Args.Length >= 6 ? Number(A_Args[6]) : 1.0
 settleDelayMs := A_Args.Length >= 7 ? Integer(A_Args[7]) : 150
 
@@ -40,41 +40,14 @@ if !WinExist(targetTitle) {
     ExitApp(2)
 }
 
-if !FileExist(textFile) {
-    ExitApp(5)
-}
-
-payload := FileRead(textFile, "UTF-8")
 ApplyFocusStrategy(focusStrategyType, targetTitle, targetControl, waitTimeoutSeconds, settleDelayMs)
-existingText := ControlGetText(targetControl, targetTitle)
-
-if (actionType = "replace_text") {
-    newText := payload
-} else if (actionType = "append_text") {
-    if (existingText = "") {
-        newText := payload
-    } else {
-        newText := existingText . "`r`n" . payload
-    }
-} else if (actionType = "prepend_text") {
-    if (existingText = "") {
-        newText := payload
-    } else {
-        newText := payload . "`r`n" . existingText
-    }
-} else if (actionType = "write_if_missing") {
-    if (InStr(existingText, payload)) {
-        ExitApp(0)
-    }
-    if (existingText = "") {
-        newText := payload
-    } else {
-        newText := existingText . "`r`n" . payload
-    }
+if (readbackStrategyType = "window_text") {
+    controlText := WinGetText(targetTitle)
 } else {
-    ExitApp(6)
+    controlText := ControlGetText(targetControl, targetTitle)
 }
-
-ControlSetText(newText, targetControl, targetTitle)
-Sleep(300)
+if FileExist(outFile) {
+    FileDelete(outFile)
+}
+FileAppend(controlText, outFile, "UTF-8")
 ExitApp(0)
