@@ -1,18 +1,20 @@
 {
-  "name": "auto-sp-rule-engine-dashboard",
+  "name": "auto-sp-rule-engine",
   "private": true,
-  "version": "0.1.0",
+  "version": "2.0.0-rc.1",
   "type": "module",
   "scripts": {
     "dev": "node frontend/server.mjs",
-    "build": "vite build frontend --outDir frontend/dist",
+    "build": "vite build frontend --outDir dist",
     "start": "NODE_ENV=production node frontend/server.mjs",
     "frontend:dev": "node frontend/server.mjs",
-    "frontend:build": "vite build frontend --outDir frontend/dist",
+    "frontend:build": "vite build frontend --outDir dist",
     "repo:health": "powershell -ExecutionPolicy Bypass -File scripts/dev/repo_health.ps1",
     "evidence:index": "powershell -ExecutionPolicy Bypass -File scripts/dev/generate_evidence_index.ps1",
     "docs:check": "powershell -ExecutionPolicy Bypass -File scripts/dev/docs_sanity_check.ps1",
-    "repo:refresh": "npm run evidence:index && npm run docs:check && npm run repo:health"
+    "repo:ux:check": "node scripts/dev/validate_repository_ux.mjs",
+    "repo:validate": "npm run frontend:build && npm run docs:check && npm run repo:health && npm run repo:ux:check",
+    "repo:refresh": "npm run evidence:index && npm run docs:check && npm run repo:health && npm run repo:ux:check"
   },
   "dependencies": {
     "express": "^5.1.0",

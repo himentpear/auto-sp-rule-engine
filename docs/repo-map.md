@@ -1,24 +1,32 @@
 # Repo Map
 
-`auto-sp-rule-engine` is easiest to navigate as five connected layers:
+`auto-sp-rule-engine` 2.0 RC is organized as a read-only repository guide over a narrow validated automation core.
+
+## Top-level Reading Path
 
 1. `README.md`
-   Fast navigation page.
+   Short 2.0 RC landing page.
 2. `docs/`
-   Overview, validation path, quickstart, repo map, evidence index.
+   Overview, workflow, validation path, evidence index, and navigation map.
 3. `examples/`
-   Public target bundles, OCR profiles, scenarios, action examples, and evidence logs.
+   Targets, OCR profiles, scenarios, action configs, and evidence logs.
 4. `frontend/`
-   Strictly read-only repository explorer.
+   Strictly read-only repository explorer, saved views, evidence hub, and repo health.
 5. `notes/`
-   Validation notes, release notes, and refactor summaries.
+   Release-candidate notes, validation history, frontend notes, and 2.0 summaries.
 
-## Start Here
+## Core Terms
 
-- Overview: `docs/overview.md`
-- Validation progression: `docs/validation-path.md`
-- Simplest verified run: `docs/quickstart-notepad.md`
-- Evidence index: `docs/evidence-index.md`
+- Repository guide
+  The combined docs and read-only frontend entry path.
+- Saved views
+  Named read-only frontend filters for common repository slices.
+- Evidence hub
+  Read-only evidence browser grouped by scenario, rule, run status, or source file.
+- Repo health
+  Summary across docs, notes, examples, evidence, screenshots, build presence, and load errors.
+- Release candidate
+  Cleaner release-quality repository state without widening the validated execution boundary.
 
 ## Main Objects
 
@@ -47,53 +55,21 @@ Action examples:
 
 Evidence:
 
-- Logs and readback: `examples/logs/`
-- Representative screenshots: `screenshots/examples/`
-- Generated evidence index: `docs/evidence-index.md`
+- `examples/logs/`
+- `screenshots/examples/`
+- `docs/evidence-index.md`
 
-## Script Entrypoints
+## 2.0 RC Entry Points
 
-Core validated pipeline:
+- `docs/morning-workflow.md`
+- `docs/evidence-index.md`
+- `notes/v2-upgrade-summary.md`
+- `notes/v2-release-readiness.md`
 
-- `scripts/capture_window.ps1`
-- `scripts/winrt_ocr.py`
-- `scripts/run_rules.py`
-- `scripts/trigger_action.ahk`
+## Safe Validation Commands
 
-Daily convenience scripts:
-
-- `npm run frontend:dev`
-- `npm run frontend:build`
-- `npm run repo:health`
 - `npm run evidence:index`
 - `npm run docs:check`
-- `npm run repo:refresh`
-
-## Frontend Explorer
-
-Main files:
-
-- `frontend/src/App.jsx`
-- `frontend/src/styles.css`
-- `frontend/server.mjs`
-
-The frontend is intentionally read-only. It is for navigation, filtering, evidence lookup, and repository orientation only.
-
-## Release And Notes
-
-Release-facing files:
-
-- `CHANGELOG.md`
-- `notes/release-readiness-v0.1.0.md`
-- `notes/release-cleanup-summary.md`
-
-Validation notes:
-
-- `notes/phase2-validation-results.md`
-- `notes/ocr-phase-validation-results.md`
-- `notes/phase3-validation-results.md`
-- `notes/phase4-validation-results.md`
-
-Latest repo cleanup summary:
-
-- `notes/overnight-refactor-summary.md`
+- `npm run repo:health`
+- `npm run repo:ux:check`
+- `npm run repo:validate`

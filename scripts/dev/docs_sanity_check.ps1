@@ -7,12 +7,19 @@ $ErrorActionPreference = 'Stop'
 $requiredDocs = @(
   'README.md',
   'docs/repo-map.md',
+  'docs/morning-workflow.md',
   'docs/evidence-index.md',
   'docs/overview.md',
   'docs/quickstart-notepad.md',
   'docs/validation-path.md',
   'notes/release-readiness-v0.1.0.md',
-  'notes/overnight-refactor-summary.md'
+  'notes/v2-upgrade-plan.md',
+  'notes/v2-upgrade-summary.md',
+  'notes/v2-repo-release-consolidation.md',
+  'notes/frontend-v2-polish.md',
+  'notes/v2-evidence-system.md',
+  'notes/v2-devex.md',
+  'notes/v2-release-readiness.md'
 )
 
 $missing = @()
@@ -26,7 +33,10 @@ $readme = Get-Content -Raw (Join-Path $RepoRoot 'README.md')
 $requiredMentions = @(
   'docs/repo-map.md',
   'docs/evidence-index.md',
-  'docs/overview.md'
+  'docs/overview.md',
+  'docs/morning-workflow.md',
+  'notes/v2-upgrade-summary.md',
+  'notes/v2-release-readiness.md'
 )
 
 $missingMentions = @()

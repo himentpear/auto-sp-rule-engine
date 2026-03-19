@@ -16,6 +16,7 @@ function Test-PathRequired {
 $required = @(
   'README.md',
   'docs/repo-map.md',
+  'docs/morning-workflow.md',
   'docs/evidence-index.md',
   'docs/overview.md',
   'docs/quickstart-notepad.md',
@@ -26,7 +27,13 @@ $required = @(
   'examples/logs',
   'frontend/src/App.jsx',
   'frontend/server.mjs',
-  'notes/overnight-refactor-summary.md'
+  'notes/v2-upgrade-plan.md',
+  'notes/v2-upgrade-summary.md',
+  'notes/v2-repo-release-consolidation.md',
+  'notes/frontend-v2-polish.md',
+  'notes/v2-evidence-system.md',
+  'notes/v2-devex.md',
+  'notes/v2-release-readiness.md'
 ) | ForEach-Object { Test-PathRequired $_ }
 
 $dashboardJson = @'
@@ -38,7 +45,11 @@ import("./frontend/server.mjs").then(async (m) => {
     rules: data.rules.length,
     scenarios: data.scenarios.length,
     recentRuns: data.recentRuns.length,
-    loadErrors: data.loadErrors.length
+    evidenceItems: data.evidenceItems.length,
+    docs: data.repoHealth.docsCount,
+    notes: data.repoHealth.notesCount,
+    loadErrors: data.loadErrors.length,
+    frontendBuild: data.repoHealth.frontendBuildStatus
   }));
 }).catch((error) => {
   console.error(error.message);
