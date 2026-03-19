@@ -1,0 +1,47 @@
+{
+  "schema_version": "designer-template/v1",
+  "id": "notepad-write-if-missing",
+  "label": "Notepad Write If Missing",
+  "category": "validated-app",
+  "summary": "Use the primary Notepad target with the validated write_if_missing action pattern.",
+  "recommended_target_bundle_ref": "primary_notepad",
+  "recommended_ocr_profile_ref": "primary_full_window",
+  "recommended_roi_preset": null,
+  "recommended_action_type": "write_if_missing",
+  "recommendation_metadata": {
+    "recommended_for": ["idempotent marker writes", "safe repeatable annotations"],
+    "best_with_profiles": ["primary_full_window"],
+    "validated_actions": ["write_if_missing"],
+    "known_limitations": ["clear OCR of the existing marker still matters for duplicate prevention"],
+    "evidence_refs": [
+      "examples/logs/phase3-write_if_missing.json",
+      "notes/phase3-validation-results.md"
+    ]
+  },
+  "minimal_rule": {
+    "name": "notepad-write-if-missing",
+    "match": {
+      "type": "contains",
+      "value": "primary trigger token"
+    },
+    "action": {
+      "type": "write_if_missing",
+      "text": "TEMPLATE_MISSING_MARKER"
+    }
+  },
+  "related_refs": {
+    "docs": [
+      "docs/quickstart-notepad.md",
+      "notes/phase3-validation-results.md"
+    ],
+    "examples": [
+      "examples/targets/primary-notepad-target.json",
+      "examples/profiles/default-full-window.json",
+      "examples/write_if_missing.notepad.json"
+    ],
+    "evidence": [
+      "examples/logs/phase3-write_if_missing.json",
+      "screenshots/examples/phase3-write_if_missing-after.png"
+    ]
+  }
+}

@@ -55,5 +55,16 @@
     "target_folder": "notes/phase8-7zip-target",
     "validated_use": "Phase 8 second-application migration target using the 7-Zip address-bar edit control.",
     "phase9_abstraction": "Uses explicit activate-then-focus behavior, control-text readback, and reuses the shared full-window OCR profile with a narrow address-bar override."
+  },
+  "recommendation_metadata": {
+    "recommended_for": ["address-bar style edit controls", "explicit activation before control focus", "second-app migration examples"],
+    "best_with_profiles": ["primary_full_window", "phase8_7zip_address_bar"],
+    "validated_actions": ["replace_text", "write_if_missing"],
+    "known_limitations": ["focus/activation is more application-specific than Notepad", "ROI tuning is necessary for stable OCR on the address bar"],
+    "evidence_refs": [
+      "examples/logs/phase8-7zip-replace-validation.json",
+      "examples/logs/phase8-7zip-write-if-missing-validation.json",
+      "notes/phase8-summary.md"
+    ]
   }
 }

@@ -31,6 +31,7 @@ const savedViews = [
 ].map((id) => ({ id, count: countSavedView(id) }));
 
 const failures = [];
+if ((data.templates || []).length < 1) failures.push('template library resolved to zero templates');
 for (const view of savedViews) {
   if (view.count < 1) failures.push(`saved view ${view.id} resolved to zero items`);
 }
@@ -42,6 +43,7 @@ const result = {
   ok: failures.length === 0,
   savedViews,
   groupedEvidence,
+  templateCount: (data.templates || []).length,
   failures,
 };
 

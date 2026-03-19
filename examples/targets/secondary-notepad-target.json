@@ -48,5 +48,15 @@
     "target_file": "notes/phase4-secondary-target.txt",
     "validated_use": "Secondary Notepad target used with ROI and multi-frame OCR profiles.",
     "phase9_abstraction": "Uses the explicit target abstraction model with direct control focus, control-text readback, and a reusable secondary ROI preset."
+  },
+  "recommendation_metadata": {
+    "recommended_for": ["narrow watch regions", "secondary text zones", "ROI-focused OCR tuning"],
+    "best_with_profiles": ["secondary_roi"],
+    "validated_actions": ["append_text", "write_if_missing"],
+    "known_limitations": ["ROI presets remain coordinate-specific to the validated window layout"],
+    "evidence_refs": [
+      "examples/logs/phase4-multi-target.json",
+      "notes/phase4-validation-results.md"
+    ]
   }
 }

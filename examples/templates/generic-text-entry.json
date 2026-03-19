@@ -1,0 +1,46 @@
+{
+  "schema_version": "designer-template/v1",
+  "id": "generic-text-entry",
+  "label": "Generic Text Entry",
+  "category": "pattern",
+  "summary": "A reusable text-entry pattern starting from a validated text control target and append_text action.",
+  "recommended_target_bundle_ref": "primary_notepad",
+  "recommended_ocr_profile_ref": "primary_full_window",
+  "recommended_roi_preset": null,
+  "recommended_action_type": "append_text",
+  "recommendation_metadata": {
+    "recommended_for": ["pattern reuse on text-entry controls", "starting from the safest control-text path"],
+    "best_with_profiles": ["primary_full_window"],
+    "validated_actions": ["append_text", "prepend_text", "replace_text", "write_if_missing", "append_timestamped_note"],
+    "known_limitations": ["pattern-level recommendation is weaker than app-specific validation"],
+    "evidence_refs": [
+      "examples/logs/phase9-notepad-target-abstraction-validation.json",
+      "notes/phase9-summary.md"
+    ]
+  },
+  "minimal_rule": {
+    "name": "generic-text-entry",
+    "match": {
+      "type": "contains_any",
+      "values": ["trigger token", "watch token"]
+    },
+    "action": {
+      "type": "append_text",
+      "text": "GENERIC_ENTRY_APPEND"
+    }
+  },
+  "related_refs": {
+    "docs": [
+      "docs/validation-path.md",
+      "notes/phase9-target-abstraction.md"
+    ],
+    "examples": [
+      "examples/targets/primary-notepad-target.json",
+      "examples/profiles/default-full-window.json"
+    ],
+    "evidence": [
+      "examples/logs/phase3-append_text.json",
+      "examples/logs/phase9-notepad-target-abstraction-validation.json"
+    ]
+  }
+}

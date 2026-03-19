@@ -14,9 +14,18 @@ const appModes = [
 ];
 
 const designerSchemaVersion = 'designer-draft/v1';
+const designerTemplateSchemaVersion = 'designer-template/v1';
 const designerSafeBoundary = 'capture -> OCR -> rule match -> control-targeted write';
 const designerMatchTypes = ['contains', 'contains_any', 'contains_all', 'not_contains', 'regex'];
 const designerActionTypes = ['append_text', 'prepend_text', 'replace_text', 'write_if_missing', 'append_timestamped_note'];
+const designerOnboardingSteps = [
+  'Choose template or blank draft',
+  'Choose target bundle',
+  'Choose OCR profile and ROI preset',
+  'Choose safe action',
+  'Define trigger rule',
+  'Preview and export JSON draft',
+];
 
 const defaultFilters = {
   objectType: 'all',
@@ -281,6 +290,51 @@ function targetBundleSummary(target) {
     defaultProfile: bundle.default_ocr_profile || 'default',
     roiPresets: roiPresetNames.join(', ') || 'none',
   };
+}
+
+function compatibilityTone(status) {
+  if (status === 'validated') return 'success';
+  if (status === 'recommended') return 'muted';
+  if (status === 'limited') return 'warning';
+  return 'default';
+}
+
+function CompatibilityPanel({ title, entries = [], emptyText = 'No compatibility guidance.', sourceItems = [] }) {
+  return (
+    <div className="detail-block">
+      <strong>{title}</strong>
+      {entries.length ? (
+        <div className="compatibility-list">
+          {entries.map((entry) => (
+            <div key={entry.id} className="compatibility-card">
+              <div className="item-topline">
+                <h3>{entry.templateLabel || entry.template || entry.target_bundle || entry.ocr_profile || entry.id}</h3>
+                <Pill tone={compatibilityTone(entry.validation_status)}>{entry.validation_status || 'info'}</Pill>
+              </div>
+              <div className="item-meta">
+                <span>Target: {entry.target_bundle || 'n/a'}</span>
+                <span>Focus: {entry.focus_strategy || 'n/a'}</span>
+                <span>Readback: {entry.readback_strategy || 'n/a'}</span>
+                <span>OCR: {entry.ocr_profile || 'n/a'}</span>
+              </div>
+              <div className="actions-row">
+                {(entry.safe_action_types || []).map((action) => <Pill key={`${entry.id}:${action}`}>{action}</Pill>)}
+              </div>
+              {(entry.recommended_for || []).length ? <div className="boundary-footnote">Recommended for: {entry.recommended_for.join(', ')}</div> : null}
+              {(entry.known_limitations || []).length ? <div className="boundary-footnote">Known limitations: {entry.known_limitations.join('; ')}</div> : null}
+              {entry.notes ? <div className="boundary-footnote">{entry.notes}</div> : null}
+              {(entry.evidence_refs || []).length ? (
+                <SourceMeta title="Evidence and docs" items={entry.evidence_refs.map((path) => ({ label: 'Reference', path }))} />
+              ) : null}
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="detail-empty">{emptyText}</div>
+      )}
+      {sourceItems.length ? <SourceMeta title="Compatibility sources" items={sourceItems} /> : null}
+    </div>
+  );
 }
 
 function parseDesignerList(value) {
@@ -558,6 +612,9 @@ export default function App() {
   const [savedViewId, setSavedViewId] = useState(initialUrlState.savedViewId || 'overview');
   const [evidenceFilters, setEvidenceFilters] = useState({ ...defaultEvidenceFilters, ...(initialUrlState.evidenceFilters || {}) });
   const [shareCopied, setShareCopied] = useState(false);
+  const [designerStartMode, setDesignerStartMode] = useState('template');
+  const [designerTemplateId, setDesignerTemplateId] = useState(null);
+  const [designerTemplateSeededId, setDesignerTemplateSeededId] = useState(null);
   const [designerTargetName, setDesignerTargetName] = useState(null);
   const [designerProfileName, setDesignerProfileName] = useState(null);
   const [designerScenarioName, setDesignerScenarioName] = useState('none');
@@ -596,6 +653,7 @@ export default function App() {
           setDesignerProfileName((current) => current || payload.ocrProfiles?.[0]?.name || null);
           setDesignerScenarioName((current) => current || 'none');
           setDesignerActionType((current) => current || payload.validatedActionTypes?.[0] || 'append_text');
+          setDesignerTemplateId((current) => current || payload.templates?.[0]?.id || null);
         }
       } catch (err) {
         if (!cancelled) setError(err.message);
@@ -611,6 +669,8 @@ export default function App() {
 
   const targets = data?.targets ?? [];
   const profiles = data?.ocrProfiles ?? [];
+  const templates = data?.templates ?? [];
+  const compatibilityEntries = data?.compatibilityMatrix?.entries ?? [];
   const rules = data?.rules ?? [];
   const scenarios = data?.scenarios ?? [];
   const recentRuns = data?.recentRuns ?? [];
@@ -734,6 +794,64 @@ export default function App() {
   const selectedRunProfile = profiles.find((profile) => profile.name === selectedRun?.ocrProfileUsed) || profiles.find((profile) => profile.name === selectedRunRule?.ocrProfileRef) || null;
   const selectedRunScenarios = scenarios.filter((scenario) => (selectedRun?.scenarioNames || []).includes(scenario.name));
 
+  function startBlankDraft() {
+    setDesignerStartMode('blank');
+    setDesignerTemplateId(null);
+    setDesignerTemplateSeededId(null);
+    setDesignerTargetName(targets[0]?.name || null);
+    setDesignerProfileName(profiles[0]?.name || null);
+    setDesignerScenarioName('none');
+    setDesignerRoiPresetName('none');
+    setDesignerUseCustomRoi(false);
+    setDesignerRoi({ x: '24', y: '96', width: '1100', height: '280' });
+    setDesignerScale('');
+    setDesignerThresholdEnabled(false);
+    setDesignerThresholdValue('180');
+    setDesignerConfirmFrames('1');
+    setDesignerRuleName('draft-rule');
+    setDesignerMatchType('contains');
+    setDesignerMatchValue('');
+    setDesignerMatchValuesText('');
+    setDesignerActionType('append_text');
+    setDesignerActionText('');
+  }
+
+  function applyDesignerTemplate(templateId) {
+    const template = templates.find((item) => item.id === templateId);
+    if (!template) return;
+    setDesignerStartMode('template');
+    setDesignerTemplateId(template.id);
+    setDesignerTemplateSeededId(template.id);
+    setDesignerTargetName(template.recommended_target_bundle_ref || targets[0]?.name || null);
+    setDesignerProfileName(template.recommended_ocr_profile_ref || profiles[0]?.name || null);
+    setDesignerScenarioName('none');
+    setDesignerRoiPresetName(template.recommended_roi_preset || 'none');
+    setDesignerUseCustomRoi(false);
+    setDesignerScale('');
+    setDesignerThresholdEnabled(false);
+    setDesignerThresholdValue('180');
+    setDesignerConfirmFrames('1');
+    setDesignerRuleName(template.minimal_rule?.name || `${template.id}-draft`);
+    setDesignerMatchType(template.minimal_rule?.match?.type || 'contains');
+    setDesignerMatchValue(template.minimal_rule?.match?.value || template.minimal_rule?.match?.pattern || '');
+    setDesignerMatchValuesText((template.minimal_rule?.match?.values || []).join('\n'));
+    setDesignerActionType(template.minimal_rule?.action?.type || template.recommended_action_type || 'append_text');
+    setDesignerActionText(template.minimal_rule?.action?.text || '');
+  }
+
+  const designerSelectedTemplate = templates.find((template) => template.id === designerTemplateId) || null;
+  useEffect(() => {
+    if (designerStartMode === 'template' && !designerTemplateId && templates[0]?.id) {
+      setDesignerTemplateId(templates[0].id);
+    }
+  }, [designerStartMode, designerTemplateId, templates]);
+  useEffect(() => {
+    if (designerStartMode !== 'template' || !designerTemplateId || !templates.length) return;
+    if (designerTemplateSeededId !== designerTemplateId) {
+      applyDesignerTemplate(designerTemplateId);
+    }
+  }, [designerStartMode, designerTemplateId, designerTemplateSeededId, templates]);
+
   const designerTarget = targets.find((target) => target.name === designerTargetName) || targets[0] || null;
   const designerTargetBundle = designerTarget?.target_bundle || {};
   const designerTargetSummary = targetBundleSummary(designerTarget);
@@ -810,6 +928,12 @@ export default function App() {
       targetNames: designerSelectedScenario.targetNames,
       profileNames: designerSelectedScenario.profileNames,
     } : null;
+    const templateMetadata = designerSelectedTemplate ? {
+      template_id: designerSelectedTemplate.id,
+      template_label: designerSelectedTemplate.label,
+      template_schema_version: designerTemplateSchemaVersion,
+      source_template_file: designerSelectedTemplate.sourceFile,
+    } : null;
     return {
       schema_version: designerSchemaVersion,
       draft_only: true,
@@ -826,18 +950,57 @@ export default function App() {
       resolved_ocr_profile: designerResolvedProfile || null,
       applied_roi_preset: designerRoiPresetName !== 'none' ? designerRoiPresetName : null,
       rule_draft: designerRuleDraft,
+      template_metadata: templateMetadata,
+      onboarding: {
+        start_mode: designerStartMode,
+        flow: designerOnboardingSteps,
+      },
       scenario_context: scenarioContext,
       notes: {
         browser_designer_only: true,
         repository_writeback: false,
         frontend_execution_controls: false,
+        source_template: designerSelectedTemplate?.sourceFile || null,
         source_target_bundle: targetSource?.sourceFile || null,
         source_ocr_profile: designerProfile?.sourceFile || null,
         source_scenario: designerSelectedScenario?.sourceFile || null,
       },
     };
-  }, [designerTarget, designerResolvedProfileName, designerResolvedProfile, designerRoiPresetName, designerRuleDraft, designerSelectedScenario, designerProfile]);
+  }, [designerTarget, designerResolvedProfileName, designerResolvedProfile, designerRoiPresetName, designerRuleDraft, designerStartMode, designerSelectedTemplate, designerSelectedScenario, designerProfile]);
   const designerJsonText = useMemo(() => formatJson(designerDraftJson), [designerDraftJson]);
+  const designerCompatibilityEntries = useMemo(
+    () =>
+      compatibilityEntries
+        .filter((entry) =>
+          (designerSelectedTemplate?.id && entry.template === designerSelectedTemplate.id)
+          || (designerTarget?.name && entry.target_bundle === designerTarget.name)
+          || (designerResolvedProfileName && entry.ocr_profile === designerResolvedProfileName))
+        .map((entry) => ({
+          ...entry,
+          templateLabel: templates.find((template) => template.id === entry.template)?.label || entry.template,
+        })),
+    [compatibilityEntries, designerSelectedTemplate, designerTarget, designerResolvedProfileName, templates]
+  );
+  const selectedTargetCompatibilityEntries = useMemo(
+    () =>
+      compatibilityEntries
+        .filter((entry) => entry.target_bundle === selectedTarget?.name)
+        .map((entry) => ({
+          ...entry,
+          templateLabel: templates.find((template) => template.id === entry.template)?.label || entry.template,
+        })),
+    [compatibilityEntries, selectedTarget, templates]
+  );
+  const selectedProfileCompatibilityEntries = useMemo(
+    () =>
+      compatibilityEntries
+        .filter((entry) => entry.ocr_profile === selectedProfile?.name)
+        .map((entry) => ({
+          ...entry,
+          templateLabel: templates.find((template) => template.id === entry.template)?.label || entry.template,
+        })),
+    [compatibilityEntries, selectedProfile, templates]
+  );
 
   const filteredEvidence = useMemo(
     () =>
@@ -958,14 +1121,16 @@ export default function App() {
   }
 
   function downloadDesignerJson() {
-    triggerDraftDownload(`${designerTarget?.name || 'designer'}-draft.json`, designerJsonText);
+    triggerDraftDownload(`${designerSelectedTemplate?.id || designerTarget?.name || designerStartMode}-draft.json`, designerJsonText);
   }
 
   const globalBreadcrumbs = [
     { label: 'repository guide', onClick: () => { setUiMode('explorer'); applySavedView('overview'); } },
     { label: titleCase(uiMode) },
-    uiMode === 'explorer' ? { label: savedViewId === 'custom' ? 'custom view' : savedViews.find((view) => view.id === savedViewId)?.label || 'overview' } : { label: designerTarget?.name || 'draft' },
-    uiMode === 'explorer' ? { label: titleCase(activeTab) } : { label: 'draft preview' },
+    uiMode === 'explorer'
+      ? { label: savedViewId === 'custom' ? 'custom view' : savedViews.find((view) => view.id === savedViewId)?.label || 'overview' }
+      : { label: designerSelectedTemplate?.label || (designerStartMode === 'blank' ? 'blank draft' : designerTarget?.name || 'draft') },
+    uiMode === 'explorer' ? { label: titleCase(activeTab) } : { label: designerStartMode === 'template' ? 'template onboarding' : 'blank onboarding' },
     activeTab === 'rules' && selectedRule ? { label: selectedRule.name, id: `rule:${selectedRule.name}` } : null,
     activeTab === 'targets' && selectedTarget ? { label: selectedTarget.name, id: `target:${selectedTarget.name}` } : null,
     activeTab === 'profiles' && selectedProfile ? { label: selectedProfile.name, id: `profile:${selectedProfile.name}` } : null,
@@ -1084,11 +1249,12 @@ export default function App() {
             <Breadcrumbs items={globalBreadcrumbs} onSelect={handleObjectLink} />
             <SectionHeader
               title="Visual target designer"
-              description="Draft-only configuration design surface. It previews target bundles, OCR profiles, ROI choices, rule composition, and safe actions, then exports JSON locally without triggering scripts."
+              description="Draft-only configuration design surface. Start from a validated template or a blank draft, inspect target bundles and OCR settings, then export JSON locally without triggering scripts."
               actions={<button type="button" className="utility-button" onClick={copyDesignerJson}>{designerJsonCopied ? 'Draft copied' : 'Copy draft JSON'}</button>}
             />
             <div className="count-row">
               <div className="count-chip">Mode draft-only</div>
+              <div className="count-chip">Templates {templates.length}</div>
               <div className="count-chip">Execution disabled</div>
               <div className="count-chip">Repository write-back disabled</div>
               <div className="count-chip">Safe actions only</div>
@@ -1105,6 +1271,59 @@ export default function App() {
               <JsonErrorList errors={data.loadErrors} title="Partial repo state detected" />
               <div className="layout">
                 <div className="main-column">
+                  <section className="panel">
+                    <SectionHeader title="Designer onboarding" description="Choose a validated template to reduce blank-page complexity, or start blank and compose the same draft manually. Either path stays export-only." />
+                    <div className="count-row">
+                      {designerOnboardingSteps.map((step, index) => <div key={step} className="count-chip">{index + 1}. {step}</div>)}
+                    </div>
+                    <div className="split-view onboarding-split">
+                      <div className="selector-list">
+                        <button type="button" className={designerStartMode === 'blank' ? 'selector-card active' : 'selector-card'} onClick={startBlankDraft}>
+                          <div className="selector-title">Blank draft</div>
+                          <div className="selector-subtitle">Start with repository defaults and fill each field manually.</div>
+                        </button>
+                        {templates.map((template) => (
+                          <button key={template.id} type="button" className={designerStartMode === 'template' && designerTemplateId === template.id ? 'selector-card active' : 'selector-card'} onClick={() => applyDesignerTemplate(template.id)}>
+                            <div className="selector-title">{template.label}</div>
+                            <div className="selector-subtitle">{template.summary}</div>
+                          </button>
+                        ))}
+                      </div>
+                      <div className="detail-panel">
+                        <DetailSection title="Selected start point">
+                          <div className="item-topline"><h3>{designerSelectedTemplate?.label || 'Blank draft'}</h3><Pill tone="muted">{designerStartMode}</Pill></div>
+                          <p className="item-subline">{designerSelectedTemplate?.summary || 'Manual composition path using validated repository objects without template metadata.'}</p>
+                          <div className="kv-grid">
+                            <div><strong>Recommended target</strong><span>{designerSelectedTemplate?.recommended_target_bundle_ref || targets[0]?.name || 'n/a'}</span></div>
+                            <div><strong>Recommended OCR</strong><span>{designerSelectedTemplate?.recommended_ocr_profile_ref || profiles[0]?.name || 'n/a'}</span></div>
+                            <div><strong>ROI preset</strong><span>{designerSelectedTemplate?.recommended_roi_preset || 'none'}</span></div>
+                            <div><strong>Safe action</strong><span>{designerSelectedTemplate?.recommended_action_type || 'manual choice'}</span></div>
+                          </div>
+                          {designerSelectedTemplate ? (
+                            <>
+                              <div className="actions-row">
+                                {(designerSelectedTemplate.recommendation_metadata?.validated_actions || []).map((action) => <Pill key={`${designerSelectedTemplate.id}:${action}`}>{action}</Pill>)}
+                              </div>
+                              <div className="boundary-footnote">Recommended for: {(designerSelectedTemplate.recommendation_metadata?.recommended_for || []).join(', ') || 'n/a'}</div>
+                              <div className="boundary-footnote">Known limitations: {(designerSelectedTemplate.recommendation_metadata?.known_limitations || []).join('; ') || 'none recorded'}</div>
+                            </>
+                          ) : null}
+                          {designerSelectedTemplate?.related_refs ? (
+                            <SourceMeta
+                              title="Template references"
+                              items={[
+                                { label: 'Template source', path: designerSelectedTemplate.sourceFile },
+                                ...(designerSelectedTemplate.related_refs.docs || []).map((path) => ({ label: 'Related doc', path })),
+                                ...(designerSelectedTemplate.related_refs.examples || []).map((path) => ({ label: 'Related example', path })),
+                                ...(designerSelectedTemplate.related_refs.evidence || []).map((path) => ({ label: 'Related evidence', path })),
+                              ]}
+                            />
+                          ) : null}
+                        </DetailSection>
+                      </div>
+                    </div>
+                  </section>
+
                   <section className="panel">
                     <SectionHeader title="Designer safety frame" description="This browser surface only composes drafts. It does not launch scripts, does not execute automation, and does not save back into repository config." />
                     <div className="designer-safety-grid">
@@ -1211,6 +1430,7 @@ export default function App() {
                     )}
                     <label className="designer-field"><span>Action payload</span><textarea value={designerActionText} onChange={(event) => setDesignerActionText(event.target.value)} rows={4} placeholder="Validated safe action payload" /></label>
                     <div className="designer-resolve-grid">
+                      <div className="designer-card"><div className="landing-label">Start point</div><div className="landing-copy">{designerSelectedTemplate?.label || 'Blank draft'}</div></div>
                       <div className="designer-card"><div className="landing-label">Resolved target</div><div className="landing-copy">{designerTarget?.name || 'n/a'}</div></div>
                       <div className="designer-card"><div className="landing-label">Resolved OCR profile</div><div className="landing-copy">{designerResolvedProfileName || 'n/a'}</div></div>
                       <div className="designer-card"><div className="landing-label">Confirmation</div><div className="landing-copy">{profileSummary(designerResolvedProfile)?.confirm || 'n/a'}</div></div>
@@ -1228,6 +1448,8 @@ export default function App() {
                   <section className="panel">
                     <SectionHeader title="Draft summary" description="The designer composes configuration drafts from validated repository objects and keeps the result non-destructive." />
                     <div className="detail-list">
+                      <DetailField label="Start mode">{designerStartMode}</DetailField>
+                      <DetailField label="Template">{designerSelectedTemplate?.label || 'none'}</DetailField>
                       <DetailField label="Target bundle">{designerTarget?.name || 'n/a'}</DetailField>
                       <DetailField label="Window matcher">{designerTarget?.target?.window_title || 'n/a'}</DetailField>
                       <DetailField label="Focus strategy">{designerTargetBundle.focus_strategy?.type || 'n/a'}</DetailField>
@@ -1238,14 +1460,29 @@ export default function App() {
                   </section>
 
                   <section className="panel">
+                    <SectionHeader title="Compatibility guidance" description="Static recommendation guidance for the current template, target, and OCR profile selection. This is advisory only and does not change the draft automatically." />
+                    <CompatibilityPanel
+                      title="Recommended and validated pairings"
+                      entries={designerCompatibilityEntries}
+                      emptyText="No compatibility entries matched the current draft selection."
+                      sourceItems={[
+                        { label: 'Compatibility matrix', path: 'examples/compatibility/phase13-compatibility-matrix.json' },
+                        { label: 'Phase 13 notes', path: 'notes/phase13-compatibility-matrix.md' },
+                      ]}
+                    />
+                  </section>
+
+                  <section className="panel">
                     <SectionHeader title="Repository links" description="The designer stays connected to validated repository objects and notes." />
                     <SourceMeta
                       title="Draft sources"
                       items={[
+                        designerSelectedTemplate ? { label: 'Template source', path: designerSelectedTemplate.sourceFile } : null,
                         designerTarget ? { label: 'Target bundle source', path: designerTarget.sourceFile } : null,
                         designerProfile ? { label: 'OCR profile source', path: designerProfile.sourceFile } : null,
                         designerSelectedScenario ? { label: 'Scenario source', path: designerSelectedScenario.sourceFile } : null,
                         { label: 'Phase 9 abstraction notes', path: 'notes/phase9-target-abstraction.md' },
+                        { label: 'Phase 12 template notes', path: 'notes/phase12-template-library.md' },
                         { label: 'Boundary summary', path: data.boundarySummary?.source },
                       ].filter(Boolean)}
                     />
@@ -1286,8 +1523,8 @@ export default function App() {
                     ))}
                   </div>
                   {activeTab === 'rules' && selectedRule ? <div className="detail-panel"><DetailSection title="Visible rules"><RelatedLinks title="Choose a rule" items={filteredRules.map((rule) => ({ label: rule.name, meta: rule.actionType, id: `rule:${rule.name}` }))} onSelect={handleObjectLink} emptyText="No rules." /></DetailSection><DetailSection title="Summary"><div className="item-topline"><h3>{selectedRule.name}</h3><Pill>{selectedRule.actionType}</Pill></div><p className="item-subline">{matchLabel(selectedRule.match)}</p><div className="item-meta"><span>Resolved target: {selectedRule.resolvedTargetName || selectedRule.targetRef || 'default'}</span><span>Resolved OCR profile: {selectedRuleProfile?.name || selectedRule.ocrProfileRef || 'default'}</span></div></DetailSection><DetailSection title="Source"><SourceMeta items={[{ label: 'Rule source', path: selectedRule.sourceFile }, ...relatedDocsFor('rule', selectedRule), ...relatedExamplesFor('rule', selectedRule)]} title="Source files" /></DetailSection><DetailSection title="Evidence"><EvidenceGroups items={[{ label: 'Rule source', path: selectedRule.sourceFile }, ...selectedRuleRuns.flatMap((run) => [run.sourceFile ? { label: `Run log ${run.id}`, path: run.sourceFile } : null, run.screenshotPath ? { label: `Screenshot ${run.id}`, path: run.screenshotPath } : null, ...(run.relatedEvidence || []).map((item) => ({ label: item.name, path: item.sourceFile }))]).filter(Boolean)]} /></DetailSection></div> : null}
-                  {activeTab === 'targets' && selectedTarget ? <div className="detail-panel"><DetailSection title="Visible targets"><RelatedLinks title="Choose a target" items={filteredTargets.map((target) => ({ label: target.name, meta: target.target.window_title, id: `target:${target.name}` }))} onSelect={handleObjectLink} emptyText="No targets." /></DetailSection><DetailSection title="Summary"><div className="item-topline"><h3>{selectedTarget.name}</h3><Pill tone="muted">target</Pill></div><div className="kv-grid"><div><strong>Window</strong><span>{selectedTarget.target.window_title}</span></div><div><strong>Matcher</strong><span>{targetBundleSummary(selectedTarget).matcher}</span></div><div><strong>Control</strong><span>{targetBundleSummary(selectedTarget).control}</span></div><div><strong>Process</strong><span>{selectedTarget.target.process_name}</span></div><div><strong>Focus strategy</strong><span>{targetBundleSummary(selectedTarget).focus}</span></div><div><strong>Readback</strong><span>{targetBundleSummary(selectedTarget).readback}</span></div><div><strong>Default OCR</strong><span>{targetBundleSummary(selectedTarget).defaultProfile}</span></div><div><strong>ROI presets</strong><span>{targetBundleSummary(selectedTarget).roiPresets}</span></div><div><strong>Target file</strong><span>{selectedTarget.notes?.target_file || selectedTarget.notes?.target_folder || 'n/a'}</span></div></div></DetailSection><DetailSection title="Related"><RelatedLinks title="Related rules" items={selectedTargetRules.map((rule) => ({ label: rule.name, meta: rule.actionType, id: `rule:${rule.name}` }))} onSelect={handleObjectLink} emptyText="No related rules." /><RelatedLinks title="Related runs" items={selectedTargetRuns.map((run) => ({ label: run.id, meta: run.status, id: `run:${run.id}` }))} onSelect={handleObjectLink} emptyText="No related runs." /></DetailSection></div> : null}
-                  {activeTab === 'profiles' && selectedProfile ? <div className="detail-panel"><DetailSection title="Visible OCR profiles"><RelatedLinks title="Choose a profile" items={filteredProfiles.map((profile) => ({ label: profile.name, meta: profileSummary(profile).confirm, id: `profile:${profile.name}` }))} onSelect={handleObjectLink} emptyText="No profiles." /></DetailSection><DetailSection title="Summary"><div className="item-topline"><h3>{selectedProfile.name}</h3><Pill tone="muted">OCR profile</Pill></div><div className="kv-grid"><div><strong>ROI</strong><span>{profileSummary(selectedProfile).roi}</span></div><div><strong>Confirm</strong><span>{profileSummary(selectedProfile).confirm}</span></div><div><strong>Preprocess</strong><span>{profileSummary(selectedProfile).preprocess}</span></div><div><strong>Normalize</strong><span>{profileSummary(selectedProfile).normalize}</span></div></div></DetailSection><DetailSection title="Related"><RelatedLinks title="Related rules" items={selectedProfileRules.map((rule) => ({ label: rule.name, meta: rule.actionType, id: `rule:${rule.name}` }))} onSelect={handleObjectLink} emptyText="No related rules." /><RelatedLinks title="Related runs" items={selectedProfileRuns.map((run) => ({ label: run.id, meta: run.status, id: `run:${run.id}` }))} onSelect={handleObjectLink} emptyText="No related runs." /></DetailSection></div> : null}
+                  {activeTab === 'targets' && selectedTarget ? <div className="detail-panel"><DetailSection title="Visible targets"><RelatedLinks title="Choose a target" items={filteredTargets.map((target) => ({ label: target.name, meta: target.target.window_title, id: `target:${target.name}` }))} onSelect={handleObjectLink} emptyText="No targets." /></DetailSection><DetailSection title="Summary"><div className="item-topline"><h3>{selectedTarget.name}</h3><Pill tone="muted">target</Pill></div><div className="kv-grid"><div><strong>Window</strong><span>{selectedTarget.target.window_title}</span></div><div><strong>Matcher</strong><span>{targetBundleSummary(selectedTarget).matcher}</span></div><div><strong>Control</strong><span>{targetBundleSummary(selectedTarget).control}</span></div><div><strong>Process</strong><span>{selectedTarget.target.process_name}</span></div><div><strong>Focus strategy</strong><span>{targetBundleSummary(selectedTarget).focus}</span></div><div><strong>Readback</strong><span>{targetBundleSummary(selectedTarget).readback}</span></div><div><strong>Default OCR</strong><span>{targetBundleSummary(selectedTarget).defaultProfile}</span></div><div><strong>ROI presets</strong><span>{targetBundleSummary(selectedTarget).roiPresets}</span></div><div><strong>Target file</strong><span>{selectedTarget.notes?.target_file || selectedTarget.notes?.target_folder || 'n/a'}</span></div></div></DetailSection><DetailSection title="Recommendations"><div className="actions-row">{(selectedTarget.recommendation_metadata?.validated_actions || []).map((action) => <Pill key={action}>{action}</Pill>)}</div><div className="boundary-footnote">Recommended for: {(selectedTarget.recommendation_metadata?.recommended_for || []).join(', ') || 'n/a'}</div><div className="boundary-footnote">Known limitations: {(selectedTarget.recommendation_metadata?.known_limitations || []).join('; ') || 'none recorded'}</div><CompatibilityPanel title="Matrix entries" entries={selectedTargetCompatibilityEntries} emptyText="No compatibility entries for this target." sourceItems={[{ label: 'Compatibility matrix', path: 'examples/compatibility/phase13-compatibility-matrix.json' }]} /></DetailSection><DetailSection title="Related"><RelatedLinks title="Related rules" items={selectedTargetRules.map((rule) => ({ label: rule.name, meta: rule.actionType, id: `rule:${rule.name}` }))} onSelect={handleObjectLink} emptyText="No related rules." /><RelatedLinks title="Related runs" items={selectedTargetRuns.map((run) => ({ label: run.id, meta: run.status, id: `run:${run.id}` }))} onSelect={handleObjectLink} emptyText="No related runs." /></DetailSection></div> : null}
+                  {activeTab === 'profiles' && selectedProfile ? <div className="detail-panel"><DetailSection title="Visible OCR profiles"><RelatedLinks title="Choose a profile" items={filteredProfiles.map((profile) => ({ label: profile.name, meta: profileSummary(profile).confirm, id: `profile:${profile.name}` }))} onSelect={handleObjectLink} emptyText="No profiles." /></DetailSection><DetailSection title="Summary"><div className="item-topline"><h3>{selectedProfile.name}</h3><Pill tone="muted">OCR profile</Pill></div><div className="kv-grid"><div><strong>ROI</strong><span>{profileSummary(selectedProfile).roi}</span></div><div><strong>Confirm</strong><span>{profileSummary(selectedProfile).confirm}</span></div><div><strong>Preprocess</strong><span>{profileSummary(selectedProfile).preprocess}</span></div><div><strong>Normalize</strong><span>{profileSummary(selectedProfile).normalize}</span></div></div></DetailSection><DetailSection title="Recommendations"><div className="actions-row">{(selectedProfile.recommendation_metadata?.validated_actions || []).map((action) => <Pill key={action}>{action}</Pill>)}</div><div className="boundary-footnote">Recommended for: {(selectedProfile.recommendation_metadata?.recommended_for || []).join(', ') || 'n/a'}</div><div className="boundary-footnote">Known limitations: {(selectedProfile.recommendation_metadata?.known_limitations || []).join('; ') || 'none recorded'}</div><CompatibilityPanel title="Matrix entries" entries={selectedProfileCompatibilityEntries} emptyText="No compatibility entries for this OCR profile." sourceItems={[{ label: 'Compatibility matrix', path: 'examples/compatibility/phase13-compatibility-matrix.json' }]} /></DetailSection><DetailSection title="Related"><RelatedLinks title="Related rules" items={selectedProfileRules.map((rule) => ({ label: rule.name, meta: rule.actionType, id: `rule:${rule.name}` }))} onSelect={handleObjectLink} emptyText="No related rules." /><RelatedLinks title="Related runs" items={selectedProfileRuns.map((run) => ({ label: run.id, meta: run.status, id: `run:${run.id}` }))} onSelect={handleObjectLink} emptyText="No related runs." /></DetailSection></div> : null}
                   {activeTab === 'scenarios' && selectedScenario ? <div className="detail-panel"><DetailSection title="Visible scenarios"><RelatedLinks title="Choose a scenario" items={filteredScenarios.map((scenario) => ({ label: scenario.name, meta: `${scenario.ruleCount} rule(s)`, id: `scenario:${scenario.name}` }))} onSelect={handleObjectLink} emptyText="No scenarios." /></DetailSection><DetailSection title="Summary"><div className="item-topline"><h3>{selectedScenario.name}</h3><Pill tone="muted">scenario</Pill></div><p className="item-subline">{selectedScenario.description || 'No scenario description provided.'}</p><div className="item-meta"><span>Targets: {selectedScenario.targetNames.join(', ') || 'default only'}</span><span>Profiles: {selectedScenario.profileNames.join(', ') || 'default only'}</span></div></DetailSection><DetailSection title="Related"><RelatedLinks title="Scenario rules" items={(selectedScenario.rules || []).map((rule) => ({ label: rule.name, meta: `${rule.resolvedTarget} / ${rule.resolvedProfile}`, id: `rule:${rule.name}` }))} onSelect={handleObjectLink} emptyText="No scenario rules." /><RelatedLinks title="Related runs" items={selectedScenarioRuns.map((run) => ({ label: run.id, meta: run.status, id: `run:${run.id}` }))} onSelect={handleObjectLink} emptyText="No related runs." /></DetailSection></div> : null}
                   {activeTab === 'runs' && selectedRun ? <div className="detail-panel"><DetailSection title="Visible runs"><RelatedLinks title="Choose a run" items={filteredRuns.map((run) => ({ label: run.id, meta: `${run.status} / ${run.targetName || 'unknown'}`, id: `run:${run.id}` }))} onSelect={handleObjectLink} emptyText="No runs." /></DetailSection><DetailSection title="Summary"><div className="item-topline"><h3>{selectedRun.id}</h3><Pill tone={toneFor(selectedRun.status)}>{selectedRun.status}</Pill></div><div className="detail-list"><DetailField label="Matched rule">{selectedRun.ruleName || 'none'}</DetailField><DetailField label="Target">{selectedRun.targetName || selectedRun.targetWindow || 'unknown'}</DetailField><DetailField label="Target bundle">{selectedRun.targetBundleName || 'n/a'}</DetailField><DetailField label="Focus strategy">{selectedRun.focusStrategy?.type || 'n/a'}</DetailField><DetailField label="Readback">{selectedRun.readbackStrategy?.type || 'n/a'}</DetailField><DetailField label="OCR profile">{selectedRun.ocrProfileUsed || 'n/a'}</DetailField><DetailField label="Time">{timeLabel(selectedRun.timestamp)}</DetailField><DetailField label="Screenshot path"><SourcePath path={selectedRun.screenshotPath} /></DetailField><DetailField label="Normalized OCR"><div className="detail-text">{truncate(selectedRun.normalizedOcrOutput, 320)}</div></DetailField></div></DetailSection><DetailSection title="Related"><RelatedLinks title="Related objects" items={[selectedRunRule ? { label: `Rule: ${selectedRunRule.name}`, meta: selectedRunRule.actionType, id: `rule:${selectedRunRule.name}` } : null, selectedRunTarget ? { label: `Target: ${selectedRunTarget.name}`, meta: selectedRunTarget.target.window_title, id: `target:${selectedRunTarget.name}` } : null, selectedRunProfile ? { label: `OCR profile: ${selectedRunProfile.name}`, meta: profileSummary(selectedRunProfile)?.confirm, id: `profile:${selectedRunProfile.name}` } : null, ...selectedRunScenarios.map((scenario) => ({ label: `Scenario: ${scenario.name}`, meta: `${scenario.ruleCount} rule(s)`, id: `scenario:${scenario.name}` }))].filter(Boolean)} onSelect={handleObjectLink} emptyText="No related objects." /></DetailSection></div> : null}
                 </section>
@@ -1309,7 +1546,7 @@ export default function App() {
               <aside className="side-column">
                 <section className="panel">
                   <SectionHeader title="Repo health" description="Stronger health summary across docs, examples, evidence, the read-only frontend artifact, and repository data load." />
-                  <div className="health-grid"><StatCard label="Docs" value={repoHealth.docsCount ?? 0} hint="Markdown docs under docs/" /><StatCard label="Notes" value={repoHealth.notesCount ?? 0} hint="Phase, release, and UX notes" /><StatCard label="Examples" value={repoHealth.exampleConfigsCount ?? 0} hint="Configs, targets, profiles, scenarios" /><StatCard label="Evidence logs" value={repoHealth.evidenceLogsCount ?? 0} hint="JSON logs and readback text" /><StatCard label="Screenshots" value={repoHealth.screenshotCount ?? 0} hint="Representative evidence images" /><StatCard label="Load errors" value={repoHealth.loadErrorsCount ?? 0} hint="Dashboard data load issues" /></div>
+                  <div className="health-grid"><StatCard label="Docs" value={repoHealth.docsCount ?? 0} hint="Markdown docs under docs/" /><StatCard label="Notes" value={repoHealth.notesCount ?? 0} hint="Phase, release, and UX notes" /><StatCard label="Examples" value={repoHealth.exampleConfigsCount ?? 0} hint="Configs, targets, profiles, scenarios, templates" /><StatCard label="Templates" value={repoHealth.templatesCount ?? 0} hint="Reusable onboarding starting points" /><StatCard label="Evidence logs" value={repoHealth.evidenceLogsCount ?? 0} hint="JSON logs and readback text" /><StatCard label="Screenshots" value={repoHealth.screenshotCount ?? 0} hint="Representative evidence images" /><StatCard label="Load errors" value={repoHealth.loadErrorsCount ?? 0} hint="Dashboard data load issues" /></div>
                   <div className="detail-list"><div className="detail-row"><div className="detail-row-title">Latest evidence</div><div className="detail-row-body">{repoHealth.latestEvidenceTimestamp ? timeLabel(repoHealth.latestEvidenceTimestamp) : 'n/a'}</div></div><div className="detail-row"><div className="detail-row-title">Frontend build</div><div className="detail-row-body">{repoHealth.frontendBuildStatus || 'unknown'}<span>{repoHealth.frontendBuildHint || 'No build status hint available.'}</span></div></div><div className="detail-row"><div className="detail-row-title">Saved views</div><div className="detail-row-body">{savedViews.length} formalized read-only views</div></div></div>
                 </section>
 

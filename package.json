@@ -15,6 +15,9 @@
     "repo:ux:check": "node scripts/dev/validate_repository_ux.mjs",
     "draft:check": "node scripts/dev/designer_draft_tools.mjs check examples/drafts/valid-designer-draft.json",
     "draft:preview": "node scripts/dev/designer_draft_tools.mjs preview examples/drafts/valid-designer-draft.json",
+    "template:check": "node scripts/dev/designer_draft_tools.mjs template-check examples/templates/notepad-basic-append.json",
+    "template:summary": "node scripts/dev/designer_draft_tools.mjs template-summary examples/templates/notepad-basic-append.json",
+    "compatibility:summary": "node scripts/dev/designer_draft_tools.mjs compatibility-summary",
     "repo:validate": "npm run frontend:build && npm run docs:check && npm run repo:health && npm run repo:ux:check",
     "repo:refresh": "npm run evidence:index && npm run docs:check && npm run repo:health && npm run repo:ux:check"
   },

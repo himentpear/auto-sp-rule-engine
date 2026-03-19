@@ -1,0 +1,102 @@
+{
+  "schema_version": "compatibility-matrix/v1",
+  "updated_at": "2026-03-19T18:10:00.000Z",
+  "entries": [
+    {
+      "id": "template-notepad-basic-append",
+      "template": "notepad-basic-append",
+      "target_bundle": "primary_notepad",
+      "target_type": "desktop-text-editor",
+      "focus_strategy": "focus_control_direct",
+      "control_strategy": "control_text",
+      "readback_strategy": "control_text",
+      "ocr_profile": "primary_full_window",
+      "safe_action_types": ["append_text", "prepend_text", "write_if_missing", "append_timestamped_note"],
+      "validation_status": "validated",
+      "recommended_for": ["stable single-control text entry", "lowest-friction first validation"],
+      "known_limitations": ["full-window OCR is broader than necessary for narrow regions"],
+      "evidence_refs": [
+        "examples/logs/phase3-append_text.json",
+        "notes/phase3-validation-results.md"
+      ],
+      "notes": "Best first-step path for plain text entry in Notepad."
+    },
+    {
+      "id": "template-notepad-write-if-missing",
+      "template": "notepad-write-if-missing",
+      "target_bundle": "primary_notepad",
+      "target_type": "desktop-text-editor",
+      "focus_strategy": "focus_control_direct",
+      "control_strategy": "control_text",
+      "readback_strategy": "control_text",
+      "ocr_profile": "primary_full_window",
+      "safe_action_types": ["write_if_missing"],
+      "validation_status": "validated",
+      "recommended_for": ["idempotent note insertion", "marker-style writes"],
+      "known_limitations": ["duplicate-prevention still depends on OCR seeing the marker clearly"],
+      "evidence_refs": [
+        "examples/logs/phase3-write_if_missing.json",
+        "notes/phase3-validation-results.md"
+      ],
+      "notes": "Recommended when the output should not repeat."
+    },
+    {
+      "id": "template-7zip-addressbar-replace",
+      "template": "7zip-addressbar-replace",
+      "target_bundle": "phase8_7zip_target",
+      "target_type": "desktop-address-bar",
+      "focus_strategy": "activate_then_focus_control",
+      "control_strategy": "control_text",
+      "readback_strategy": "control_text",
+      "ocr_profile": "primary_full_window",
+      "safe_action_types": ["replace_text", "write_if_missing"],
+      "validation_status": "validated",
+      "recommended_for": ["address-bar replacement", "second-app migration evidence"],
+      "known_limitations": ["requires explicit activation/focus", "ROI tuning is application-specific"],
+      "evidence_refs": [
+        "examples/logs/phase8-7zip-replace-validation.json",
+        "examples/logs/phase8-7zip-write-if-missing-validation.json",
+        "notes/phase8-summary.md"
+      ],
+      "notes": "Validated beyond Notepad, but still more app-specific than the Notepad path."
+    },
+    {
+      "id": "template-generic-text-entry",
+      "template": "generic-text-entry",
+      "target_bundle": "primary_notepad",
+      "target_type": "desktop-text-editor",
+      "focus_strategy": "focus_control_direct",
+      "control_strategy": "control_text",
+      "readback_strategy": "control_text",
+      "ocr_profile": "primary_full_window",
+      "safe_action_types": ["append_text", "prepend_text", "replace_text", "write_if_missing", "append_timestamped_note"],
+      "validation_status": "recommended",
+      "recommended_for": ["deriving new text-entry drafts from the safest validated path"],
+      "known_limitations": ["generic pattern is broader than specific validated templates"],
+      "evidence_refs": [
+        "notes/phase9-target-abstraction.md",
+        "examples/logs/phase9-notepad-target-abstraction-validation.json"
+      ],
+      "notes": "Recommended as a pattern starter, not as strong as the app-specific validated templates."
+    },
+    {
+      "id": "template-generic-roi-watch",
+      "template": "generic-roi-watch",
+      "target_bundle": "secondary_notepad",
+      "target_type": "desktop-text-editor-roi",
+      "focus_strategy": "focus_control_direct",
+      "control_strategy": "control_text",
+      "readback_strategy": "control_text",
+      "ocr_profile": "secondary_roi",
+      "safe_action_types": ["append_text", "write_if_missing"],
+      "validation_status": "validated",
+      "recommended_for": ["narrow ROI watch zones", "secondary text regions with stronger preprocessing"],
+      "known_limitations": ["ROI coordinates remain app and window-layout specific"],
+      "evidence_refs": [
+        "examples/logs/phase4-multi-target.json",
+        "notes/phase4-validation-results.md"
+      ],
+      "notes": "Strong when the watch area is known and intentionally narrow."
+    }
+  ]
+}

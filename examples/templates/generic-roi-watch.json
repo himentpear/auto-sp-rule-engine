@@ -1,0 +1,49 @@
+{
+  "schema_version": "designer-template/v1",
+  "id": "generic-roi-watch",
+  "label": "Generic ROI Watch",
+  "category": "pattern",
+  "summary": "Start from the validated ROI-focused secondary Notepad target to watch a narrower text region safely.",
+  "recommended_target_bundle_ref": "secondary_notepad",
+  "recommended_ocr_profile_ref": "secondary_roi",
+  "recommended_roi_preset": "secondary_editor",
+  "recommended_action_type": "write_if_missing",
+  "recommendation_metadata": {
+    "recommended_for": ["narrow text regions", "ROI-focused watch profiles"],
+    "best_with_profiles": ["secondary_roi"],
+    "validated_actions": ["append_text", "write_if_missing"],
+    "known_limitations": ["ROI coordinates are still layout-specific"],
+    "evidence_refs": [
+      "examples/logs/phase4-multi-target.json",
+      "notes/phase4-validation-results.md"
+    ]
+  },
+  "minimal_rule": {
+    "name": "generic-roi-watch",
+    "match": {
+      "type": "contains_all",
+      "values": ["secondary token", "confirm token"]
+    },
+    "action": {
+      "type": "write_if_missing",
+      "text": "GENERIC_ROI_MARKER"
+    }
+  },
+  "related_refs": {
+    "docs": [
+      "notes/ocr-phase-validation-results.md",
+      "notes/phase4-validation-results.md",
+      "notes/phase9-target-abstraction.md"
+    ],
+    "examples": [
+      "examples/targets/secondary-notepad-target.json",
+      "examples/profiles/roi-profile.json",
+      "examples/scenarios/single-config-multi-target.json"
+    ],
+    "evidence": [
+      "examples/logs/phase4-multi-target.json",
+      "examples/logs/phase4-secondary-readback.txt",
+      "screenshots/examples/phase4-secondary-roi-append-check1-processed.png"
+    ]
+  }
+}

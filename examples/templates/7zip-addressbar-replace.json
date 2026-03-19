@@ -1,0 +1,50 @@
+{
+  "schema_version": "designer-template/v1",
+  "id": "7zip-addressbar-replace",
+  "label": "7-Zip Address Bar Replace",
+  "category": "validated-app",
+  "summary": "Reuse the validated 7-Zip address-bar target with its narrow ROI preset and replace_text action.",
+  "recommended_target_bundle_ref": "phase8_7zip_target",
+  "recommended_ocr_profile_ref": "primary_full_window",
+  "recommended_roi_preset": "address_bar",
+  "recommended_action_type": "replace_text",
+  "recommendation_metadata": {
+    "recommended_for": ["validated second-app migration", "address-bar text replacement"],
+    "best_with_profiles": ["primary_full_window"],
+    "validated_actions": ["replace_text", "write_if_missing"],
+    "known_limitations": ["activation/focus is required", "ROI tuning remains application-specific"],
+    "evidence_refs": [
+      "examples/logs/phase8-7zip-replace-validation.json",
+      "examples/logs/phase8-7zip-write-if-missing-validation.json",
+      "notes/phase8-summary.md"
+    ]
+  },
+  "minimal_rule": {
+    "name": "7zip-addressbar-replace",
+    "match": {
+      "type": "contains",
+      "value": "phase8 seed replace"
+    },
+    "action": {
+      "type": "replace_text",
+      "text": "TEMPLATE_7ZIP_REPLACE"
+    }
+  },
+  "related_refs": {
+    "docs": [
+      "notes/phase8-second-app-selection.md",
+      "notes/phase8-migration-validation.md",
+      "notes/phase9-validation-matrix.md"
+    ],
+    "examples": [
+      "examples/targets/phase8-7zip-target.json",
+      "examples/profiles/phase8-7zip-address-bar.json",
+      "config/phase8.second-app.7zip.json"
+    ],
+    "evidence": [
+      "examples/logs/phase8-7zip-replace-validation.json",
+      "examples/logs/phase8-7zip-replace-readback.txt",
+      "screenshots/phase8-7zip-replace-validation.png"
+    ]
+  }
+}

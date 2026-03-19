@@ -10,6 +10,10 @@ Main areas:
   named OCR profiles used in validated OCR refinement and second-application validation
 - `scenarios/`
   repository-level scenario examples including validated multi-target routing
+- `templates/`
+  reusable onboarding templates that pre-bind validated targets, OCR profiles, ROI presets, and safe actions
+- `compatibility/`
+  static compatibility matrix covering recommended and validated template/target/profile/action pairings
 - `drafts/`
   non-executing visual-designer draft examples for safe schema validation and preview
 - `logs/`
@@ -42,6 +46,19 @@ Phase 11 designer-validation bridge examples:
 
 - `drafts/valid-designer-draft.json`
 - `drafts/invalid-designer-draft.json`
+
+Phase 12 template-library examples:
+
+- `templates/notepad-basic-append.json`
+- `templates/notepad-write-if-missing.json`
+- `templates/7zip-addressbar-replace.json`
+- `templates/generic-text-entry.json`
+- `templates/generic-roi-watch.json`
+- `drafts/blank-designer-draft.json`
+
+Phase 13 compatibility guidance:
+
+- `compatibility/phase13-compatibility-matrix.json`
 
 Related read-only entrypoints:
 

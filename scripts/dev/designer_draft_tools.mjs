@@ -12,7 +12,9 @@ const ALLOWED_ACTION_TYPES = [
 ];
 
 const ALLOWED_MATCH_TYPES = ['contains', 'contains_any', 'contains_all', 'not_contains', 'regex'];
-const SCHEMA_VERSION = 'designer-draft/v1';
+const DRAFT_SCHEMA_VERSION = 'designer-draft/v1';
+const TEMPLATE_SCHEMA_VERSION = 'designer-template/v1';
+const COMPATIBILITY_SCHEMA_VERSION = 'compatibility-matrix/v1';
 const SAFE_BOUNDARY = 'capture -> OCR -> rule match -> control-targeted write';
 
 function profileSummary(profile) {
@@ -100,6 +102,177 @@ function validateRuleDraft(rule, errors, warnings) {
   }
 }
 
+function validateStringArray(value, errors, prefix) {
+  if (value == null) return;
+  if (!Array.isArray(value) || value.some((item) => typeof item !== 'string' || !item)) {
+    errors.push(`${prefix} must be an array of non-empty strings`);
+  }
+}
+
+function validateTemplateMetadata(templateMetadata, repoTemplate, errors, warnings) {
+  if (!isObject(templateMetadata)) {
+    errors.push('template_metadata must be an object when present');
+    return;
+  }
+  if (!templateMetadata.template_id) errors.push('template_metadata.template_id is required');
+  if (templateMetadata.template_schema_version !== TEMPLATE_SCHEMA_VERSION) {
+    errors.push(`template_metadata.template_schema_version must be ${TEMPLATE_SCHEMA_VERSION}`);
+  }
+  if (!repoTemplate) {
+    errors.push(`template_metadata.template_id does not resolve to an existing template: ${templateMetadata.template_id}`);
+    return;
+  }
+  if (templateMetadata.template_label && templateMetadata.template_label !== repoTemplate.label) {
+    warnings.push('template_metadata.template_label does not match the repository template label');
+  }
+}
+
+function validateTemplateDocumentPayload(payload, repoData) {
+  const errors = [];
+  const warnings = [];
+
+  if (payload.schema_version !== TEMPLATE_SCHEMA_VERSION) {
+    errors.push(`schema_version must be ${TEMPLATE_SCHEMA_VERSION}`);
+  }
+  if (!payload.id) errors.push('id is required');
+  if (!payload.label) errors.push('label is required');
+  if (!payload.summary) errors.push('summary is required');
+  if (!payload.recommended_target_bundle_ref) errors.push('recommended_target_bundle_ref is required');
+  if (!payload.recommended_ocr_profile_ref) errors.push('recommended_ocr_profile_ref is required');
+  if (!payload.recommended_action_type) errors.push('recommended_action_type is required');
+
+  const repoTarget = repoData.targets.find((target) => target.name === payload.recommended_target_bundle_ref);
+  const repoProfile = repoData.ocrProfiles.find((profile) => profile.name === payload.recommended_ocr_profile_ref);
+
+  if (!repoTarget) {
+    errors.push(`recommended_target_bundle_ref does not resolve to an existing target: ${payload.recommended_target_bundle_ref}`);
+  }
+  if (!repoProfile) {
+    errors.push(`recommended_ocr_profile_ref does not resolve to an existing OCR profile: ${payload.recommended_ocr_profile_ref}`);
+  }
+  if (!ALLOWED_ACTION_TYPES.includes(payload.recommended_action_type)) {
+    errors.push(`recommended_action_type must be one of: ${ALLOWED_ACTION_TYPES.join(', ')}`);
+  }
+
+  if (payload.recommended_roi_preset && !repoTarget?.target_bundle?.roi_presets?.[payload.recommended_roi_preset]) {
+    errors.push(`recommended_roi_preset does not resolve on target ${payload.recommended_target_bundle_ref}: ${payload.recommended_roi_preset}`);
+  }
+
+  validateRuleDraft(
+    {
+      ...(payload.minimal_rule || {}),
+      target: payload.recommended_target_bundle_ref,
+      ocr_profile: payload.recommended_ocr_profile_ref,
+    },
+    errors,
+    warnings,
+  );
+
+  if (isObject(payload.related_refs)) {
+    validateStringArray(payload.related_refs.docs, errors, 'related_refs.docs');
+    validateStringArray(payload.related_refs.examples, errors, 'related_refs.examples');
+    validateStringArray(payload.related_refs.evidence, errors, 'related_refs.evidence');
+  } else if (payload.related_refs != null) {
+    errors.push('related_refs must be an object when present');
+  }
+  validateRecommendationMetadata(payload.recommendation_metadata, errors, 'recommendation_metadata');
+
+  return {
+    ok: errors.length === 0,
+    summary: {
+      schema: payload.schema_version || null,
+      template: {
+        id: payload.id || null,
+        label: payload.label || null,
+        category: payload.category || null,
+      },
+      target: targetSummary(repoTarget),
+      ocr_profile: {
+        name: payload.recommended_ocr_profile_ref || null,
+        summary: profileSummary(repoProfile),
+      },
+      rule: {
+        name: payload.minimal_rule?.name || null,
+        match_type: payload.minimal_rule?.match?.type || null,
+        action_type: payload.minimal_rule?.action?.type || payload.recommended_action_type || null,
+      },
+      counts: {
+        errors: errors.length,
+        warnings: warnings.length,
+      },
+      errors,
+      warnings,
+    },
+  };
+}
+
+function validateRecommendationMetadata(metadata, errors, prefix) {
+  if (metadata == null) return;
+  if (!isObject(metadata)) {
+    errors.push(`${prefix} must be an object`);
+    return;
+  }
+  validateStringArray(metadata.recommended_for, errors, `${prefix}.recommended_for`);
+  validateStringArray(metadata.best_with_profiles, errors, `${prefix}.best_with_profiles`);
+  validateStringArray(metadata.validated_actions, errors, `${prefix}.validated_actions`);
+  validateStringArray(metadata.known_limitations, errors, `${prefix}.known_limitations`);
+  validateStringArray(metadata.evidence_refs, errors, `${prefix}.evidence_refs`);
+}
+
+export async function summarizeCompatibilityMatrix() {
+  const repoData = await buildDashboardData();
+  const matrix = repoData.compatibilityMatrix || {};
+  const entries = Array.isArray(matrix.entries) ? matrix.entries : [];
+  const errors = [];
+
+  if (matrix.schema_version !== COMPATIBILITY_SCHEMA_VERSION) {
+    errors.push(`schema_version must be ${COMPATIBILITY_SCHEMA_VERSION}`);
+  }
+
+  entries.forEach((entry, index) => {
+    const prefix = `entries[${index}]`;
+    if (!entry.id) errors.push(`${prefix}.id is required`);
+    if (!entry.template) errors.push(`${prefix}.template is required`);
+    if (!entry.target_bundle) errors.push(`${prefix}.target_bundle is required`);
+    if (!entry.ocr_profile) errors.push(`${prefix}.ocr_profile is required`);
+    if (!entry.validation_status) errors.push(`${prefix}.validation_status is required`);
+    validateStringArray(entry.safe_action_types, errors, `${prefix}.safe_action_types`);
+    validateStringArray(entry.recommended_for, errors, `${prefix}.recommended_for`);
+    validateStringArray(entry.known_limitations, errors, `${prefix}.known_limitations`);
+    validateStringArray(entry.evidence_refs, errors, `${prefix}.evidence_refs`);
+    if (!repoData.templates.find((template) => template.id === entry.template)) {
+      errors.push(`${prefix}.template does not resolve to an existing template: ${entry.template}`);
+    }
+    if (!repoData.targets.find((target) => target.name === entry.target_bundle)) {
+      errors.push(`${prefix}.target_bundle does not resolve to an existing target: ${entry.target_bundle}`);
+    }
+    if (!repoData.ocrProfiles.find((profile) => profile.name === entry.ocr_profile)) {
+      errors.push(`${prefix}.ocr_profile does not resolve to an existing OCR profile: ${entry.ocr_profile}`);
+    }
+  });
+
+  repoData.templates.forEach((template, index) => validateRecommendationMetadata(template.recommendation_metadata, errors, `templates[${index}].recommendation_metadata`));
+  repoData.targets.forEach((target, index) => validateRecommendationMetadata(target.recommendation_metadata, errors, `targets[${index}].recommendation_metadata`));
+
+  return {
+    ok: errors.length === 0,
+    summary: {
+      schema_version: matrix.schema_version || null,
+      entry_count: entries.length,
+      validated_entries: entries.filter((entry) => entry.validation_status === 'validated').length,
+      recommended_entries: entries.filter((entry) => entry.validation_status === 'recommended').length,
+      limited_entries: entries.filter((entry) => entry.validation_status === 'limited').length,
+      templates: repoData.templates.map((template) => ({
+        id: template.id,
+        target_bundle: template.recommended_target_bundle_ref,
+        ocr_profile: template.recommended_ocr_profile_ref,
+        validated_actions: template.recommendation_metadata?.validated_actions || [],
+      })),
+      errors,
+    },
+  };
+}
+
 export async function loadDraft(filePath) {
   const resolved = resolve(filePath);
   const raw = await fs.readFile(resolved, 'utf8');
@@ -117,8 +290,8 @@ export async function validateDraftDocument(documentPath) {
   const errors = [];
   const warnings = [];
 
-  if (payload.schema_version !== SCHEMA_VERSION) {
-    errors.push(`schema_version must be ${SCHEMA_VERSION}`);
+  if (payload.schema_version !== DRAFT_SCHEMA_VERSION) {
+    errors.push(`schema_version must be ${DRAFT_SCHEMA_VERSION}`);
   }
   if (payload.safe_boundary !== SAFE_BOUNDARY) {
     errors.push(`safe_boundary must be ${SAFE_BOUNDARY}`);
@@ -133,6 +306,9 @@ export async function validateDraftDocument(documentPath) {
 
   const repoTarget = repoData.targets.find((target) => target.name === payload.target_bundle_ref);
   const repoProfile = repoData.ocrProfiles.find((profile) => profile.name === payload.selected_ocr_profile_ref);
+  const repoTemplate = payload.template_metadata?.template_id
+    ? repoData.templates.find((template) => template.id === payload.template_metadata.template_id)
+    : null;
 
   if (!repoTarget) {
     errors.push(`target_bundle_ref does not resolve to an existing target: ${payload.target_bundle_ref}`);
@@ -144,6 +320,9 @@ export async function validateDraftDocument(documentPath) {
   validateTargetBundle(payload.target_bundle, errors);
   validateOcrProfile(payload.resolved_ocr_profile, errors);
   validateRuleDraft(payload.rule_draft, errors, warnings);
+  if (payload.template_metadata) {
+    validateTemplateMetadata(payload.template_metadata, repoTemplate, errors, warnings);
+  }
 
   if (payload.rule_draft?.target && payload.rule_draft.target !== payload.target_bundle_ref) {
     warnings.push('rule_draft.target does not match target_bundle_ref');
@@ -176,6 +355,7 @@ export async function validateDraftDocument(documentPath) {
       generated_from: payload.generated_from,
       source_target_bundle_ref: payload.target_bundle_ref,
       source_ocr_profile_ref: payload.selected_ocr_profile_ref,
+      template_metadata: payload.template_metadata || null,
       safe_boundary: payload.safe_boundary,
       draft_only: true,
       export_only: true,
@@ -186,11 +366,19 @@ export async function validateDraftDocument(documentPath) {
   const summary = {
     schema: {
       version: payload.schema_version || null,
-      expected_version: SCHEMA_VERSION,
+      expected_version: DRAFT_SCHEMA_VERSION,
       generated_from: payload.generated_from || null,
       exported_at: payload.exported_at || null,
       safe_boundary: payload.safe_boundary || null,
     },
+    template: payload.template_metadata
+      ? {
+          id: payload.template_metadata.template_id || null,
+          label: payload.template_metadata.template_label || repoTemplate?.label || null,
+          schema_version: payload.template_metadata.template_schema_version || null,
+          source: payload.template_metadata.source_template_file || null,
+        }
+      : null,
     target: targetSummary(repoTarget || payload),
     ocr_profile: {
       name: payload.selected_ocr_profile_ref || null,
@@ -217,12 +405,49 @@ export async function validateDraftDocument(documentPath) {
   };
 }
 
+export async function validateTemplateDocument(documentPath) {
+  const repoData = await buildDashboardData();
+  const template = await loadDraft(documentPath);
+  const result = validateTemplateDocumentPayload(template.parsed, repoData);
+  return {
+    ok: result.ok,
+    templatePath: template.path,
+    summary: result.summary,
+  };
+}
+
 async function main() {
   const mode = process.argv[2];
   const filePath = process.argv[3];
-  if (!mode || !filePath || !['check', 'preview'].includes(mode)) {
-    console.error('Usage: node scripts/dev/designer_draft_tools.mjs <check|preview> <draft-json-path>');
+  if (!mode || (!filePath && mode !== 'compatibility-summary') || !['check', 'preview', 'template-check', 'template-summary', 'compatibility-summary'].includes(mode)) {
+    console.error('Usage: node scripts/dev/designer_draft_tools.mjs <check|preview|template-check|template-summary> <json-path> | compatibility-summary');
     process.exit(64);
+  }
+
+  if (mode === 'compatibility-summary') {
+    const result = await summarizeCompatibilityMatrix();
+    console.log(JSON.stringify(result, null, 2));
+    if (!result.ok) process.exit(1);
+    return;
+  }
+
+  if (mode === 'template-check' || mode === 'template-summary') {
+    const result = await validateTemplateDocument(filePath);
+    const output = {
+      ok: result.ok,
+      templatePath: result.templatePath,
+      schema: result.summary.schema,
+      template: result.summary.template,
+      target: result.summary.target,
+      ocr_profile: result.summary.ocr_profile,
+      rule: result.summary.rule,
+      counts: result.summary.counts,
+      errors: result.summary.errors,
+      warnings: result.summary.warnings,
+    };
+    console.log(JSON.stringify(output, null, 2));
+    if (!result.ok) process.exit(1);
+    return;
   }
 
   const result = await validateDraftDocument(filePath);
@@ -231,6 +456,7 @@ async function main() {
       ok: result.ok,
       draftPath: result.draftPath,
       schema: result.summary.schema,
+      template: result.summary.template,
       target: result.summary.target,
       ocr_profile: result.summary.ocr_profile,
       rule: result.summary.rule,

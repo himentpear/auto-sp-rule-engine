@@ -233,6 +233,7 @@ async function deriveRepoHealth({ docsFiles, notesFiles, targets, profiles, scen
     docsCount: docsFiles.length,
     notesCount: notesFiles.length,
     exampleConfigsCount: targets.length + profiles.length + scenarios.length,
+    templatesCount: 0,
     evidenceLogsCount: logs.length + textEvidenceFiles.length,
     screenshotCount: screenshots.length,
     evidenceItemsCount: evidenceItems.length,
@@ -247,11 +248,76 @@ async function deriveRepoHealth({ docsFiles, notesFiles, targets, profiles, scen
   };
 }
 
+function applyRecommendationMetadata(targets, profiles, templates) {
+  const targetMap = new Map(targets.map((target) => [target.name, target]));
+  const profileMap = new Map(profiles.map((profile) => [profile.name, profile]));
+
+  const enrichedTargets = targets.map((target) => ({
+    ...target,
+    recommendation_metadata: {
+      recommended_for: target.recommendation_metadata?.recommended_for || [],
+      best_with_profiles: target.recommendation_metadata?.best_with_profiles || [],
+      validated_actions: target.recommendation_metadata?.validated_actions || [],
+      known_limitations: target.recommendation_metadata?.known_limitations || [],
+      evidence_refs: target.recommendation_metadata?.evidence_refs || [],
+    },
+  }));
+
+  const enrichedProfiles = profiles.map((profile) => {
+    const linkedTargets = enrichedTargets
+      .filter((target) =>
+        target.target_bundle?.default_ocr_profile === profile.name
+        || target.recommendation_metadata?.best_with_profiles?.includes(profile.name))
+      .map((target) => target.name);
+    return {
+      ...profile,
+      recommendation_metadata: {
+        recommended_for: linkedTargets.length ? [`best with ${linkedTargets.join(', ')}`] : [],
+        best_with_targets: linkedTargets,
+        validated_actions: enrichedTargets
+          .filter((target) => target.recommendation_metadata?.best_with_profiles?.includes(profile.name))
+          .flatMap((target) => target.recommendation_metadata?.validated_actions || [])
+          .filter((value, index, list) => list.indexOf(value) === index),
+        known_limitations: profile.roi ? ['ROI coordinates remain target and layout specific'] : ['full-window OCR is broader than narrow ROI profiles'],
+        evidence_refs: [],
+      },
+    };
+  });
+
+  const enrichedTemplates = templates.map((template) => ({
+    ...template,
+    recommendation_metadata: {
+      recommended_for: template.recommendation_metadata?.recommended_for || [],
+      best_with_profiles: template.recommendation_metadata?.best_with_profiles || [],
+      validated_actions: template.recommendation_metadata?.validated_actions || [],
+      known_limitations: template.recommendation_metadata?.known_limitations || [],
+      evidence_refs: template.recommendation_metadata?.evidence_refs || [],
+      target_bundle: targetMap.get(template.recommended_target_bundle_ref)?.name || null,
+      ocr_profile: profileMap.get(template.recommended_ocr_profile_ref)?.name || null,
+    },
+  }));
+
+  return {
+    targets: enrichedTargets,
+    profiles: enrichedProfiles,
+    templates: enrichedTemplates,
+  };
+}
+
 export async function buildDashboardData() {
   const loadErrors = [];
   const targetsRaw = await readDirJson(join(repoRoot, 'examples', 'targets'), loadErrors);
-  const targets = targetsRaw.map((target) => ({ ...target, name: target.name || safeSlug(target.sourceName.replace('.json', '')) }));
-  const ocrProfiles = (await readDirJson(join(repoRoot, 'examples', 'profiles'), loadErrors)).map((profile) => ({ ...profile, name: profile.name || safeSlug(profile.sourceName.replace('.json', '')) }));
+  const normalizedTargets = targetsRaw.map((target) => ({ ...target, name: target.name || safeSlug(target.sourceName.replace('.json', '')) }));
+  const normalizedProfiles = (await readDirJson(join(repoRoot, 'examples', 'profiles'), loadErrors)).map((profile) => ({ ...profile, name: profile.name || safeSlug(profile.sourceName.replace('.json', '')) }));
+  const normalizedTemplates = (await readDirJson(join(repoRoot, 'examples', 'templates'), loadErrors)).map((template) => ({
+    ...template,
+    id: template.id || safeSlug(template.sourceName.replace('.json', '')),
+  }));
+  const compatibilityMatrix = await readJsonFile(join(repoRoot, 'examples', 'compatibility', 'phase13-compatibility-matrix.json'), loadErrors);
+  const enrichedRecommendations = applyRecommendationMetadata(normalizedTargets, normalizedProfiles, normalizedTemplates);
+  const targets = enrichedRecommendations.targets;
+  const ocrProfiles = enrichedRecommendations.profiles;
+  const templates = enrichedRecommendations.templates;
   const scenarioRaw = (await readDirJson(join(repoRoot, 'examples', 'scenarios'), loadErrors)).map((scenario) => ({
     ...scenario,
     name: safeSlug(scenario.sourceName.replace('.json', '')),
@@ -280,10 +346,14 @@ export async function buildDashboardData() {
   const recentRuns = deriveRecentRuns(logs, textEvidenceFiles, ruleScenarioMap, targets);
   const evidenceItems = deriveEvidenceItems(recentRuns);
   const repoHealth = await deriveRepoHealth({ docsFiles, notesFiles, targets, profiles: ocrProfiles, scenarios, logs, textEvidenceFiles, screenshots, derivedRuns: recentRuns, evidenceItems, loadErrors });
+  repoHealth.templatesCount = templates.length;
+  repoHealth.exampleConfigsCount += templates.length;
 
   return {
     targets,
     ocrProfiles,
+    templates,
+    compatibilityMatrix,
     rules: rules.map((rule) => ({ ...rule, scenarioNames: rule.scenarioNames?.length ? rule.scenarioNames : ruleScenarioMap.get(rule.name) || [] })),
     scenarios,
     recentRuns,
@@ -299,16 +369,19 @@ export async function buildDashboardData() {
     releaseCandidate: {
       label: '0.2.0 Release Candidate',
       packageVersion: '0.2.0',
-      summary: 'Repository explorer plus a draft-only visual target designer, with consolidated evidence paths and safer validation tooling without widening the execution boundary.',
+      summary: 'Repository explorer plus a draft-only visual target designer, now with reusable templates and safer validation tooling without widening the execution boundary.',
       source: 'notes/v2-release-readiness.md',
     },
     entrypoints: [
       { label: 'Start here', description: 'Top-level landing and navigation path.', path: 'README.md' },
       { label: 'Repo map', description: 'Structure, terminology, and entrypoints.', path: 'docs/repo-map.md' },
       { label: 'Morning workflow', description: 'Tomorrow-morning read-only checking flow.', path: 'docs/morning-workflow.md' },
+      { label: 'Compatibility guide', description: 'How to choose templates, targets, OCR profiles, and safe actions from current evidence.', path: 'docs/compatibility-guide.md' },
       { label: 'Evidence index', description: 'Generated evidence list and cross references.', path: 'docs/evidence-index.md' },
       { label: '0.2.0 summary', description: 'Release-candidate summary for the current repository state.', path: 'notes/v2-upgrade-summary.md' },
       { label: 'Designer summary', description: 'Draft-only visual target designer scope and safety notes.', path: 'notes/phase10-summary.md' },
+      { label: 'Template summary', description: 'Template library and onboarding flow summary.', path: 'notes/phase12-summary.md' },
+      { label: 'Compatibility summary', description: 'Static compatibility guidance across templates, targets, OCR profiles, and safe actions.', path: 'notes/phase13-summary.md' },
     ],
     morningWorkflow: [
       { label: '1. Re-open the map', description: 'Use the repo map to re-enter the project quickly.', path: 'docs/repo-map.md' },

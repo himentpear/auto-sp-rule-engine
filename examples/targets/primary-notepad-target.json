@@ -41,5 +41,16 @@
     "target_file": "notes/phase4-primary-target.txt",
     "validated_use": "Primary Notepad target used in the Phase 4 multi-target validation.",
     "phase9_abstraction": "Uses the explicit target abstraction model with direct control focus and control-text readback."
+  },
+  "recommendation_metadata": {
+    "recommended_for": ["plain text editors", "single visible edit controls", "lowest-friction first target"],
+    "best_with_profiles": ["primary_full_window"],
+    "validated_actions": ["append_text", "prepend_text", "replace_text", "write_if_missing", "append_timestamped_note"],
+    "known_limitations": ["full-window OCR is not the tightest choice for narrow regions"],
+    "evidence_refs": [
+      "examples/logs/phase3-append_text.json",
+      "examples/logs/phase9-notepad-target-abstraction-validation.json",
+      "notes/phase9-validation-matrix.md"
+    ]
   }
 }

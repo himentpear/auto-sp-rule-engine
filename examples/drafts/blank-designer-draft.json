@@ -4,71 +4,52 @@
   "export_only": true,
   "non_executing": true,
   "generated_from": "visual-target-designer",
-  "exported_at": "2026-03-19T13:05:00.000Z",
+  "exported_at": "2026-03-19T17:20:00.000Z",
   "safe_boundary": "capture -> OCR -> rule match -> control-targeted write",
-  "target_bundle_ref": "phase8_7zip_target",
+  "target_bundle_ref": "primary_notepad",
   "target_bundle": {
-    "name": "phase8_7zip_target",
+    "name": "primary_notepad",
     "window_matcher": {
-      "window_title_substring": "phase8-7zip-target",
-      "window_title": "C:\\Users\\jisub\\Documents\\GitHub\\auto sp rule engine\\notes\\phase8-7zip-target\\",
-      "process_name": "7zFM"
+      "window_title_substring": "phase4-primary-target.txt",
+      "window_title": "phase4-primary-target.txt - Notepad",
+      "process_name": "Notepad"
     },
     "focus_strategy": {
-      "type": "activate_then_focus_control",
+      "type": "focus_control_direct",
       "wait_timeout_seconds": 1,
-      "settle_delay_ms": 150
+      "settle_delay_ms": 100
     },
     "control_strategy": {
       "type": "control_text",
-      "control_name": "Edit1",
-      "control_type": "Win32Edit"
+      "control_name": "RichEditD2DPT1",
+      "control_type": "NotepadRichEdit"
     },
     "readback_strategy": {
       "type": "control_text",
       "focus_strategy": {
-        "type": "activate_then_focus_control",
+        "type": "focus_control_direct",
         "wait_timeout_seconds": 1,
-        "settle_delay_ms": 150
+        "settle_delay_ms": 100
       }
     },
     "default_ocr_profile": "primary_full_window",
-    "default_roi_preset": "address_bar",
-    "roi_presets": {
-      "address_bar": {
-        "x": 12,
-        "y": 122,
-        "width": 560,
-        "height": 42
-      }
-    },
-    "ocr_overrides": {
-      "roi_preset": "address_bar",
-      "preprocessing": {
-        "scale": 2.5
-      }
-    }
+    "roi_presets": {}
   },
   "target": {
-    "window_title_substring": "phase8-7zip-target",
-    "window_title": "C:\\Users\\jisub\\Documents\\GitHub\\auto sp rule engine\\notes\\phase8-7zip-target\\",
-    "process_name": "7zFM"
+    "window_title_substring": "phase4-primary-target.txt",
+    "window_title": "phase4-primary-target.txt - Notepad",
+    "process_name": "Notepad"
   },
   "control": {
-    "name": "Edit1",
-    "type": "Win32Edit"
+    "name": "RichEditD2DPT1",
+    "type": "NotepadRichEdit"
   },
   "selected_ocr_profile_ref": "primary_full_window",
   "resolved_ocr_profile": {
-    "roi": {
-      "x": 12,
-      "y": 122,
-      "width": 560,
-      "height": 42
-    },
+    "roi": null,
     "preprocessing": {
       "grayscale": true,
-      "scale": 2.5,
+      "scale": 2,
       "threshold": {
         "enabled": false,
         "value": 180
@@ -89,19 +70,14 @@
       "polling_interval_seconds": 0.5,
       "max_checks": 1,
       "change_threshold": 0.005,
-      "forced_ocr_interval_seconds": 5.0,
+      "forced_ocr_interval_seconds": 5,
       "consecutive_match_count": 1
     }
   },
-  "applied_roi_preset": "address_bar",
-  "template_metadata": {
-    "template_id": "7zip-addressbar-replace",
-    "template_label": "7-Zip Address Bar Replace",
-    "template_schema_version": "designer-template/v1",
-    "source_template_file": "examples/templates/7zip-addressbar-replace.json"
-  },
+  "applied_roi_preset": null,
+  "template_metadata": null,
   "onboarding": {
-    "start_mode": "template",
+    "start_mode": "blank",
     "flow": [
       "Choose template or blank draft",
       "Choose target bundle",
@@ -112,16 +88,16 @@
     ]
   },
   "rule_draft": {
-    "name": "phase11-draft-preview",
-    "target": "phase8_7zip_target",
+    "name": "blank-onboarding-draft",
+    "target": "primary_notepad",
     "ocr_profile": "primary_full_window",
     "match": {
       "type": "contains",
-      "value": "phase8 seed replace"
+      "value": "manual trigger token"
     },
     "action": {
-      "type": "replace_text",
-      "text": "PHASE11_DRAFT_PREVIEW"
+      "type": "append_text",
+      "text": "BLANK_FLOW_APPEND"
     }
   },
   "scenario_context": null,
@@ -129,8 +105,7 @@
     "browser_designer_only": true,
     "repository_writeback": false,
     "frontend_execution_controls": false,
-    "source_template": "examples/templates/7zip-addressbar-replace.json",
-    "source_target_bundle": "examples/targets/phase8-7zip-target.json",
+    "source_target_bundle": "examples/targets/primary-notepad-target.json",
     "source_ocr_profile": "examples/profiles/default-full-window.json",
     "source_scenario": null
   }
