@@ -11,7 +11,7 @@ import {
 } from './workspaces.js';
 import { executeWorkspaceRule } from './execution.js';
 import { monitorManager } from './monitor.js';
-import { listWindows } from './windows.js';
+import { inspectWindowControls, listWindows } from './windows.js';
 import { sanitizeMonitorOptions, sanitizeRulePayload } from './security.js';
 import { applyLaunchAtLogin, cleanupOldWorkspaceLogs, getSettings, saveSettings } from './settings.js';
 import { getWorkspacesRoot } from './workspaces.js';
@@ -29,11 +29,7 @@ function getRendererEntry() {
 }
 
 function getPreloadPath() {
-  if (process.env.VITE_DEV_SERVER_URL) {
-    return path.join(__dirname, 'preload.js');
-  }
-
-  return path.join(__dirname, '../preload/preload.mjs');
+  return path.join(__dirname, '../preload/preload.cjs');
 }
 
 async function createMainWindow() {
@@ -49,6 +45,7 @@ async function createMainWindow() {
       preload: preloadPath,
       contextIsolation: true,
       nodeIntegration: false,
+      sandbox: false,
     },
   });
 
@@ -74,6 +71,7 @@ function registerWorkspaceIpc() {
     return executeWorkspaceRule(app.getPath('userData'), workspaceId, sanitizedRule);
   });
   ipcMain.handle('monitor:list-windows', async (_event, titleRegex) => listWindows(titleRegex));
+  ipcMain.handle('monitor:inspect-controls', async (_event, windowTitle) => inspectWindowControls(windowTitle));
   ipcMain.handle('monitor:start', async (_event, workspaceId, options) => {
     const workspace = await getWorkspace(app.getPath('userData'), workspaceId);
     const sanitizedOptions = sanitizeMonitorOptions(options, workspace);
@@ -83,6 +81,9 @@ function registerWorkspaceIpc() {
   ipcMain.handle('monitor:status', async (_event, workspaceId) => monitorManager.getStatus(workspaceId));
   ipcMain.handle('monitor:logs', async (_event, workspaceId) =>
     monitorManager.loadWorkspaceLogs(app.getPath('userData'), workspaceId),
+  );
+  ipcMain.handle('monitor:export-captures', async (_event, workspaceId) =>
+    monitorManager.exportCapturedContent(app.getPath('userData'), workspaceId),
   );
   ipcMain.handle('settings:get', async () => getSettings(app.getPath('userData')));
   ipcMain.handle('settings:save', async (_event, nextSettings) => saveSettings(app.getPath('userData'), nextSettings));

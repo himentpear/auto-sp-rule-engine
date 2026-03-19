@@ -54,6 +54,11 @@
     "productName": "Auto SP Rule Engine Assistant",
     "compression": "store",
     "asar": true,
+    "asarUnpack": [
+      "scripts/**",
+      "vendor/**",
+      "examples/**"
+    ],
     "electronLanguages": [
       "en-US",
       "zh-CN"

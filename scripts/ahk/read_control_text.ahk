@@ -4,7 +4,11 @@ SetTitleMatchMode 2
 ApplyFocusStrategy(strategyType, targetTitle, targetControl, waitTimeoutSeconds, settleDelayMs) {
     if (strategyType = "focus_control_direct") {
         if (targetControl != "") {
-            ControlFocus(targetControl, targetTitle)
+            try {
+                ControlFocus(targetControl, targetTitle)
+            } catch {
+                ExitApp(8)
+            }
         }
         Sleep(settleDelayMs)
         return
@@ -19,7 +23,11 @@ ApplyFocusStrategy(strategyType, targetTitle, targetControl, waitTimeoutSeconds,
     }
 
     if (targetControl != "") {
-        ControlFocus(targetControl, targetTitle)
+        try {
+            ControlFocus(targetControl, targetTitle)
+        } catch {
+            ExitApp(8)
+        }
     }
     Sleep(settleDelayMs)
 }
@@ -40,11 +48,19 @@ if !WinExist(targetTitle) {
     ExitApp(2)
 }
 
+if (readbackStrategyType != "window_text" && targetControl = "") {
+    ExitApp(7)
+}
+
 ApplyFocusStrategy(focusStrategyType, targetTitle, targetControl, waitTimeoutSeconds, settleDelayMs)
 if (readbackStrategyType = "window_text") {
     controlText := WinGetText(targetTitle)
 } else {
-    controlText := ControlGetText(targetControl, targetTitle)
+    try {
+        controlText := ControlGetText(targetControl, targetTitle)
+    } catch {
+        ExitApp(9)
+    }
 }
 if FileExist(outFile) {
     FileDelete(outFile)

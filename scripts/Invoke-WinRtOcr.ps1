@@ -1,6 +1,8 @@
 param(
     [Parameter(Mandatory = $true)]
-    [string]$ImagePath
+    [string]$ImagePath,
+
+    [string[]]$PreferredLanguages = @('zh-CN', 'zh-Hans', 'en-US')
 )
 
 $ErrorActionPreference = 'Stop'
@@ -50,9 +52,30 @@ $stream = Await-WinRt ($storageFile.OpenAsync([Windows.Storage.FileAccessMode]::
 $decoder = Await-WinRt ([Windows.Graphics.Imaging.BitmapDecoder]::CreateAsync($stream)) ([Windows.Graphics.Imaging.BitmapDecoder])
 $bitmap = Await-WinRt ($decoder.GetSoftwareBitmapAsync()) ([Windows.Graphics.Imaging.SoftwareBitmap])
 
-$engine = [Windows.Media.Ocr.OcrEngine]::TryCreateFromLanguage([Windows.Globalization.Language]::new('en-US'))
+function Try-CreateOcrEngine {
+    param(
+        [string[]]$LanguageTags
+    )
+
+    foreach ($tag in ($LanguageTags | Where-Object { $_ } | Select-Object -Unique)) {
+        try {
+            $candidate = [Windows.Media.Ocr.OcrEngine]::TryCreateFromLanguage([Windows.Globalization.Language]::new($tag))
+            if ($candidate) {
+                return $candidate
+            }
+        } catch {
+        }
+    }
+
+    return $null
+}
+
+$engine = Try-CreateOcrEngine -LanguageTags $PreferredLanguages
 if (-not $engine) {
     $engine = [Windows.Media.Ocr.OcrEngine]::TryCreateFromUserProfileLanguages()
+}
+if (-not $engine) {
+    $engine = Try-CreateOcrEngine -LanguageTags @('en-US')
 }
 if (-not $engine) {
     throw 'Unable to create WinRT OCR engine.'

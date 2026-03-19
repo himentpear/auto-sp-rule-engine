@@ -34,6 +34,7 @@ export function sanitizeRulePayload(rule) {
     match,
     action,
     targetOverride,
+    dryRun: Boolean(rule.dryRun || rule.logOnly),
   };
 }
 
@@ -44,12 +45,6 @@ export function sanitizeAction(action) {
   const type = assertString(action.type, 'rule.action.type');
   if (!SAFE_ACTION_TYPES.has(type)) {
     throw new Error(`Unsupported action type: ${type}`);
-  }
-  const keys = Object.keys(action);
-  const allowedKeys = new Set(['type', 'text']);
-  const disallowed = keys.filter((key) => !allowedKeys.has(key));
-  if (disallowed.length) {
-    throw new Error(`Unsupported action fields: ${disallowed.join(', ')}`);
   }
   return {
     type,

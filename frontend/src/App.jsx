@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+﻿
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   BellRing,
   FolderKanban,
@@ -7,7 +8,9 @@ import {
   Moon,
   Play,
   RefreshCcw,
+  Share2,
   Settings2,
+  ShieldAlert,
   ShieldCheck,
   Square,
   Sun,
@@ -20,9 +23,9 @@ import { Select } from './components/ui/select.jsx';
 import { Switch } from './components/ui/switch.jsx';
 
 const pageTabs = [
-  { id: 'monitor', label: 'Monitor', icon: MonitorPlay },
-  { id: 'workspaces', label: 'Workspaces', icon: FolderKanban },
-  { id: 'settings', label: 'Settings', icon: Settings2 },
+  { id: 'monitor', label: '监控 Monitor', icon: MonitorPlay },
+  { id: 'workspaces', label: '工作区 Workspaces', icon: FolderKanban },
+  { id: 'settings', label: '设置 Settings', icon: Settings2 },
 ];
 
 function AppLogo() {
@@ -42,6 +45,10 @@ function formatTime(value) {
   }
 }
 
+function escapeRegex(value) {
+  return String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 function JsonPanel({ title, value }) {
   return (
     <Card className="overflow-hidden">
@@ -49,7 +56,9 @@ function JsonPanel({ title, value }) {
         <CardTitle className="text-base">{title}</CardTitle>
       </CardHeader>
       <CardContent>
-        <pre className="max-h-[24rem] overflow-auto rounded-lg bg-slate-950/90 p-4 text-xs text-slate-100">{JSON.stringify(value, null, 2)}</pre>
+        <pre className="max-h-[24rem] overflow-auto rounded-lg bg-slate-950/90 p-4 text-xs text-slate-100">
+          {JSON.stringify(value, null, 2)}
+        </pre>
       </CardContent>
     </Card>
   );
@@ -57,9 +66,45 @@ function JsonPanel({ title, value }) {
 
 function StatusPill({ running }) {
   return (
-    <Badge className={running ? 'border-emerald-500/30 bg-emerald-500/15 text-emerald-300' : 'border-slate-500/30 bg-slate-500/15 text-slate-300'}>
-      {running ? 'Running' : 'Stopped'}
+    <Badge
+      className={
+        running
+          ? 'border-emerald-500/30 bg-emerald-500/15 text-emerald-300'
+          : 'border-slate-500/30 bg-slate-500/15 text-slate-300'
+      }
+    >
+      {running ? '运行中 Running' : '已停止 Stopped'}
     </Badge>
+  );
+}
+
+function BrowserFallback() {
+  return (
+    <div className="min-h-screen bg-background px-6 py-12 text-foreground">
+      <div className="mx-auto flex max-w-4xl flex-col gap-6">
+        <Card className="border-amber-500/30 bg-amber-500/10">
+          <CardHeader>
+            <div className="flex items-center gap-3">
+              <ShieldAlert className="h-6 w-6 text-amber-300" />
+              <CardTitle>需要 Electron 运行时 / Electron Runtime Required</CardTitle>
+            </div>
+            <CardDescription>
+              `http://localhost:5173` 只是前端预览页，不包含 Electron preload IPC、工作区存储、监控控制或窗口捕获。
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4 text-sm text-slate-200">
+            <div>`.exe` 窗口才是真正桌面应用，所以它和浏览器标签页显示内容会不同。</div>
+            <div>If you see this same screen inside the `.exe`, the Electron preload bridge failed to load and the package needs to be rebuilt.</div>
+            <div>
+              请运行：
+              <pre className="mt-2 rounded-lg bg-slate-950/90 p-4 text-xs text-slate-100">{`npm run electron:dev
+release\\Auto SP Rule Engine Assistant-0.2.0.exe`}</pre>
+            </div>
+            <div>启动 Electron 后，请到监控页点击 `刷新窗口 / Refresh Windows`。</div>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
   );
 }
 
@@ -67,12 +112,12 @@ function SidebarNav({ activeTab, onChange, workspaces, activeWorkspaceId, onSele
   return (
     <aside className="flex w-full max-w-xs flex-col gap-6 border-r border-border bg-slate-950/70 p-6 backdrop-blur">
       <div className="space-y-3">
-        <Badge className="border-cyan-500/20 bg-cyan-500/10 text-cyan-300">Electron + OCR Monitor</Badge>
+        <Badge className="border-cyan-500/20 bg-cyan-500/10 text-cyan-300">桌面 OCR 监控 / Desktop OCR Monitor</Badge>
         <div className="flex items-start gap-3">
           <AppLogo />
           <div>
-            <h1 className="text-2xl font-semibold tracking-tight">Auto SP Assistant</h1>
-            <p className="mt-2 text-sm text-muted-foreground">Desktop automation assistant with isolated workspaces and a main-process enforced safety boundary.</p>
+            <h1 className="text-2xl font-semibold tracking-tight">自动化助手 Auto SP Assistant</h1>
+            <p className="mt-2 text-sm text-muted-foreground">带隔离工作区和主进程安全边界的桌面自动化助手。</p>
           </div>
         </div>
       </div>
@@ -86,7 +131,9 @@ function SidebarNav({ activeTab, onChange, workspaces, activeWorkspaceId, onSele
               type="button"
               onClick={() => onChange(tab.id)}
               className={`flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-sm transition ${
-                activeTab === tab.id ? 'bg-primary text-primary-foreground' : 'bg-transparent text-muted-foreground hover:bg-secondary hover:text-foreground'
+                activeTab === tab.id
+                  ? 'bg-primary text-primary-foreground'
+                  : 'bg-transparent text-muted-foreground hover:bg-secondary hover:text-foreground'
               }`}
             >
               <Icon className="h-4 w-4" />
@@ -98,11 +145,11 @@ function SidebarNav({ activeTab, onChange, workspaces, activeWorkspaceId, onSele
 
       <Card className="bg-slate-900/80">
         <CardHeader className="pb-3">
-          <CardTitle className="text-base">Workspaces</CardTitle>
-          <CardDescription>Each workspace keeps its own targets, profiles, scenarios, logs, and screenshots.</CardDescription>
+          <CardTitle className="text-base">工作区 Workspaces</CardTitle>
+          <CardDescription>每个工作区独立保存 targets、profiles、scenarios、logs、screenshots。</CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">
-          <Button className="w-full" onClick={onCreateWorkspace}>Create Workspace</Button>
+          <Button className="w-full" onClick={onCreateWorkspace}>创建工作区 Create Workspace</Button>
           <div className="space-y-2">
             {workspaces.map((workspace) => (
               <button
@@ -110,7 +157,9 @@ function SidebarNav({ activeTab, onChange, workspaces, activeWorkspaceId, onSele
                 type="button"
                 onClick={() => onSelectWorkspace(workspace.id)}
                 className={`w-full rounded-xl border px-3 py-3 text-left transition ${
-                  workspace.id === activeWorkspaceId ? 'border-primary bg-primary/10' : 'border-border bg-background/50 hover:bg-secondary'
+                  workspace.id === activeWorkspaceId
+                    ? 'border-primary bg-primary/10'
+                    : 'border-border bg-background/50 hover:bg-secondary'
                 }`}
               >
                 <div className="font-medium">{workspace.name}</div>
@@ -123,7 +172,6 @@ function SidebarNav({ activeTab, onChange, workspaces, activeWorkspaceId, onSele
     </aside>
   );
 }
-
 function MonitorPage(props) {
   const {
     workspaces,
@@ -141,6 +189,10 @@ function MonitorPage(props) {
     monitorStatus,
     windowResults,
     workspaceLogs,
+    exportCapturedContent,
+    exportStatus,
+    inspectedControls,
+    inspectControls,
     busy,
   } = props;
 
@@ -148,6 +200,8 @@ function MonitorPage(props) {
   const selectedScenario = scenarios.find((scenario) => scenario.id === selectedScenarioId) || scenarios[0] || null;
   const selectedTarget = activeWorkspace?.targets.find((item) => item.id === selectedScenario?.targetRef || item.name === selectedScenario?.targetRef) || null;
   const selectedProfile = activeWorkspace?.profiles.find((item) => item.id === selectedScenario?.ocrProfileRef || item.profile_key === selectedScenario?.ocrProfileRef || item.name === selectedScenario?.ocrProfileRef) || null;
+  const canStart = Boolean(activeWorkspaceId && selectedScenario && titleRegex.trim()) && !busy;
+  const effectiveWindows = windowResults.length ? windowResults : monitorStatus?.matchedWindow ? [monitorStatus.matchedWindow] : [];
 
   return (
     <div className="space-y-6">
@@ -156,8 +210,8 @@ function MonitorPage(props) {
           <CardHeader>
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div>
-                <CardTitle className="text-2xl">Monitor Console</CardTitle>
-                <CardDescription>Run WinRT OCR, normalization, rule matching, and safe text actions every 3-8 seconds.</CardDescription>
+                <CardTitle className="text-2xl">监控控制台 Monitor Console</CardTitle>
+                <CardDescription>每 3-8 秒执行一次 WinRT OCR、规范化、规则匹配和安全动作。</CardDescription>
               </div>
               <StatusPill running={monitorStatus?.running} />
             </div>
@@ -165,43 +219,65 @@ function MonitorPage(props) {
           <CardContent className="space-y-5">
             <div className="grid gap-4 md:grid-cols-3">
               <div className="space-y-2">
-                <label className="text-sm font-medium">Scenario</label>
+                <label className="text-sm font-medium">场景 Scenario</label>
                 <Select value={selectedScenario?.id || ''} onChange={(event) => setSelectedScenarioId(event.target.value)}>
                   {scenarios.map((scenario) => <option key={scenario.id} value={scenario.id}>{scenario.name}</option>)}
                 </Select>
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium">Window Title Regex</label>
-                <Input value={titleRegex} onChange={(event) => setTitleRegex(event.target.value)} placeholder="WeChat|微信" />
+                <label className="text-sm font-medium">窗口标题正则 Window Title Regex</label>
+                <Input value={titleRegex} onChange={(event) => setTitleRegex(event.target.value)} placeholder="从下面窗口列表中选择 / Select from window list" />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium">Interval Seconds</label>
+                <label className="text-sm font-medium">监控间隔 Interval Seconds</label>
                 <Input type="number" min="3" max="8" value={intervalSeconds} onChange={(event) => setIntervalSeconds(Number(event.target.value))} />
               </div>
             </div>
 
             <div className="flex flex-wrap gap-3">
-              <Button onClick={refreshWindows} variant="secondary" disabled={busy}><RefreshCcw className="mr-2 h-4 w-4" />Refresh Windows</Button>
-              <Button onClick={startMonitor} disabled={busy || !activeWorkspaceId || !selectedScenario}><Play className="mr-2 h-4 w-4" />Start Monitor</Button>
-              <Button onClick={stopMonitor} variant="outline" disabled={busy || !monitorStatus?.running}><Square className="mr-2 h-4 w-4" />Stop</Button>
+              <Button onClick={refreshWindows} variant="secondary" disabled={busy}><RefreshCcw className="mr-2 h-4 w-4" />刷新窗口 Refresh Windows</Button>
+              <Button onClick={startMonitor} disabled={!canStart}><Play className="mr-2 h-4 w-4" />启动监控 Start Monitor</Button>
+              <Button onClick={stopMonitor} variant="outline" disabled={busy || !monitorStatus?.running}><Square className="mr-2 h-4 w-4" />停止 Stop</Button>
+              <Button onClick={exportCapturedContent} variant="outline" disabled={busy || !activeWorkspaceId}><Share2 className="mr-2 h-4 w-4" />导出捕获 Export Captures</Button>
+              <Button onClick={inspectControls} variant="outline" disabled={busy || !monitorStatus?.matchedWindow?.WindowTitle}><LayoutGrid className="mr-2 h-4 w-4" />检查控件 Inspect Controls</Button>
             </div>
 
+            {exportStatus ? (
+              <div className="rounded-xl border border-cyan-500/30 bg-cyan-500/10 p-3 text-sm text-cyan-100">
+                已导出 {exportStatus.uniqueRecordCount} 条去重结果，共扫描 {exportStatus.rawRecordCount} 条记录。 JSON: {exportStatus.jsonPath} TXT: {exportStatus.txtPath}
+              </div>
+            ) : null}
+
+            {!titleRegex.trim() ? (
+              <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-3 text-sm text-amber-100">
+                启动监控前请先填写窗口正则。最稳妥的方式是先点 `刷新窗口 / Refresh Windows`，再点 `使用精确标题 / Use Exact Title`。
+              </div>
+            ) : null}
+
             <div className="grid gap-4 md:grid-cols-3">
-              <Card className="bg-background/70"><CardHeader className="pb-3"><CardTitle className="text-sm">Active Workspace</CardTitle></CardHeader><CardContent><div className="text-lg font-semibold">{activeWorkspace?.metadata?.name || 'n/a'}</div><div className="text-xs text-muted-foreground">{workspaces.length} workspaces loaded</div></CardContent></Card>
-              <Card className="bg-background/70"><CardHeader className="pb-3"><CardTitle className="text-sm">Last Tick</CardTitle></CardHeader><CardContent><div className="text-lg font-semibold">{formatTime(monitorStatus?.lastTickAt)}</div><div className="text-xs text-muted-foreground">{monitorStatus?.lastError || 'No recent error'}</div></CardContent></Card>
-              <Card className="bg-background/70"><CardHeader className="pb-3"><CardTitle className="text-sm">Matched Window</CardTitle></CardHeader><CardContent><div className="text-sm font-medium">{monitorStatus?.matchedWindow?.WindowTitle || 'Waiting'}</div><div className="text-xs text-muted-foreground">{monitorStatus?.matchedWindow?.ProcessName || 'No process yet'}</div></CardContent></Card>
+              <Card className="bg-background/70"><CardHeader className="pb-3"><CardTitle className="text-sm">当前工作区 Active Workspace</CardTitle></CardHeader><CardContent><div className="text-lg font-semibold">{activeWorkspace?.metadata?.name || 'n/a'}</div><div className="text-xs text-muted-foreground">{workspaces.length} workspaces loaded</div></CardContent></Card>
+              <Card className="bg-background/70"><CardHeader className="pb-3"><CardTitle className="text-sm">最近轮询 Last Tick</CardTitle></CardHeader><CardContent><div className="text-lg font-semibold">{formatTime(monitorStatus?.lastTickAt)}</div><div className="text-xs text-muted-foreground">{monitorStatus?.lastError || 'No recent error'}</div></CardContent></Card>
+              <Card className="bg-background/70"><CardHeader className="pb-3"><CardTitle className="text-sm">命中窗口 Matched Window</CardTitle></CardHeader><CardContent><div className="text-sm font-medium">{monitorStatus?.matchedWindow?.WindowTitle || 'Waiting'}</div><div className="text-xs text-muted-foreground">{monitorStatus?.matchedWindow?.ProcessName || 'No process yet'}</div></CardContent></Card>
             </div>
 
             <div className="rounded-xl border border-border bg-background/60 p-4">
-              <div className="mb-3 flex items-center gap-2 text-sm font-medium"><LayoutGrid className="h-4 w-4" />Window Matches</div>
+              <div className="mb-3 flex items-center gap-2 text-sm font-medium"><LayoutGrid className="h-4 w-4" />窗口匹配 Window Matches</div>
               <div className="grid gap-2">
-                {(windowResults.length ? windowResults : monitorStatus?.matchedWindow ? [monitorStatus.matchedWindow] : []).map((item) => (
-                  <div key={`${item.ProcessId}-${item.WindowTitle}`} className="rounded-lg border border-border bg-slate-950/30 px-3 py-2">
-                    <div className="font-medium">{item.WindowTitle}</div>
-                    <div className="text-xs text-muted-foreground">{item.ProcessName}</div>
+                {effectiveWindows.map((item) => (
+                  <div key={`${item.ProcessId}-${item.WindowTitle}`} className="rounded-lg border border-border bg-slate-950/30 px-3 py-3">
+                    <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                      <div>
+                        <div className="font-medium">{item.WindowTitle}</div>
+                        <div className="text-xs text-muted-foreground">{item.ProcessName}</div>
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        <Button variant="secondary" onClick={() => setTitleRegex(escapeRegex(item.WindowTitle))}>使用精确标题 Use Exact Title</Button>
+                        <Button variant="outline" onClick={() => setTitleRegex(item.WindowTitle)}>使用原始正则 Use Raw Regex</Button>
+                      </div>
+                    </div>
                   </div>
                 ))}
-                {!windowResults.length && !monitorStatus?.matchedWindow ? <div className="text-sm text-muted-foreground">No matching window yet.</div> : null}
+                {!effectiveWindows.length ? <div className="text-sm text-muted-foreground">还没有匹配到窗口。可以先用 `Weixin|微信` 同时匹配进程名和中文聊天/群聊标题。</div> : null}
               </div>
             </div>
           </CardContent>
@@ -209,8 +285,8 @@ function MonitorPage(props) {
 
         <Card>
           <CardHeader>
-            <CardTitle>Live Log Stream</CardTitle>
-            <CardDescription>Main process pushes monitor state. Renderer only displays it.</CardDescription>
+            <CardTitle>实时日志 Live Log Stream</CardTitle>
+            <CardDescription>主进程推送监控状态，renderer 只负责显示。</CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
             {(monitorStatus?.logs || []).length ? monitorStatus.logs.map((entry) => (
@@ -221,9 +297,14 @@ function MonitorPage(props) {
                 </div>
                 <div className="mt-1 text-xs text-muted-foreground">{formatTime(entry.timestamp)}</div>
                 {entry.payload?.matched_rule ? <div className="mt-2 text-xs text-cyan-300">Matched rule: {entry.payload.matched_rule}</div> : null}
+                {entry.payload?.detectedByClassifier ? <div className="mt-2 text-xs text-cyan-300">Detected by classifier</div> : null}
                 {entry.payload?.action_type ? <div className="text-xs text-muted-foreground">Action: {entry.payload.action_type}</div> : null}
+                {entry.payload?.contentType ? <div className="text-xs text-muted-foreground">Type: {entry.payload.contentType}</div> : null}
+                {entry.payload?.ocrPreview ? <div className="text-xs text-muted-foreground">OCR: {entry.payload.ocrPreview}</div> : null}
+                {entry.payload?.contentSummary ? <div className="text-xs text-muted-foreground">Summary: {entry.payload.contentSummary}</div> : null}
+                {entry.payload?.validation_result?.action_applied === false && entry.payload?.matched_rule ? <div className="text-xs text-amber-300">Log-only run: no control write attempted.</div> : null}
               </div>
-            )) : <div className="rounded-xl border border-dashed border-border p-6 text-sm text-muted-foreground">Waiting for monitor events.</div>}
+            )) : <div className="rounded-xl border border-dashed border-border p-6 text-sm text-muted-foreground">等待监控事件 / Waiting for monitor events.</div>}
           </CardContent>
         </Card>
       </div>
@@ -231,8 +312,8 @@ function MonitorPage(props) {
       <div className="grid gap-4 xl:grid-cols-[0.9fr_1.1fr]">
         <Card>
           <CardHeader>
-            <CardTitle>Workspace Run History</CardTitle>
-            <CardDescription>Structured logs are stored under `userData/workspaces/&lt;id&gt;/logs/`.</CardDescription>
+            <CardTitle>工作区运行历史 Workspace Run History</CardTitle>
+            <CardDescription>结构化日志保存在 `userData/workspaces/&lt;id&gt;/logs/`。</CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
             {workspaceLogs.length ? workspaceLogs.map((item) => (
@@ -241,20 +322,41 @@ function MonitorPage(props) {
                 <div>{item.matchedRule || 'no-match'}</div>
                 <div>{item.actionType || 'n/a'}</div>
               </div>
-            )) : <div className="rounded-xl border border-dashed border-border p-6 text-sm text-muted-foreground">No persisted run records for this workspace yet.</div>}
+            )) : <div className="rounded-xl border border-dashed border-border p-6 text-sm text-muted-foreground">当前工作区还没有持久化运行记录。</div>}
           </CardContent>
         </Card>
 
         <div className="grid gap-4 lg:grid-cols-3">
-          <JsonPanel title="Target JSON" value={selectedTarget} />
-          <JsonPanel title="OCR Profile JSON" value={selectedProfile} />
-          <JsonPanel title="Scenario JSON" value={selectedScenario} />
+          <JsonPanel title="目标 JSON / Target JSON" value={selectedTarget} />
+          <JsonPanel title="OCR 配置 JSON / OCR Profile JSON" value={selectedProfile} />
+          <JsonPanel title="场景 JSON / Scenario JSON" value={selectedScenario} />
         </div>
       </div>
+
+      {inspectedControls ? (
+        <Card>
+          <CardHeader>
+            <CardTitle>控件检查 Control Inspection</CardTitle>
+            <CardDescription>对当前匹配窗口做只读 AHK 控件枚举。</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <div className="text-sm text-muted-foreground">Window: {inspectedControls.title || 'n/a'}</div>
+            <div className="text-sm text-muted-foreground">Focused: {inspectedControls.focused || 'n/a'}</div>
+            <div className="grid gap-2">
+              {(inspectedControls.controls || []).map((item) => (
+                <div key={`${item.control}-${item.textSample}`} className="rounded-lg border border-border bg-background/60 p-3">
+                  <div className="font-medium">{item.control || '(empty control id)'}</div>
+                  <div className="mt-1 text-xs text-muted-foreground">{item.textSample || 'no text sample'}</div>
+                </div>
+              ))}
+              {!inspectedControls.controls?.length ? <div className="text-sm text-muted-foreground">No controls returned.</div> : null}
+            </div>
+          </CardContent>
+        </Card>
+      ) : null}
     </div>
   );
 }
-
 function WorkspacePage({ activeWorkspace, activeWorkspaceId, deleteWorkspace, busy }) {
   const scenarios = activeWorkspace?.scenarios || [];
   const targets = activeWorkspace?.targets || [];
@@ -266,14 +368,14 @@ function WorkspacePage({ activeWorkspace, activeWorkspaceId, deleteWorkspace, bu
         <CardHeader className="flex flex-row items-start justify-between gap-4">
           <div>
             <CardTitle className="text-2xl">{activeWorkspace?.metadata?.name || 'Workspace'}</CardTitle>
-            <CardDescription>Default examples include WeChat monitor reply and text-only social interaction guidance.</CardDescription>
+            <CardDescription>默认示例包含微信监控回复和文本互动示例。</CardDescription>
           </div>
-          {activeWorkspaceId && activeWorkspaceId !== 'default-workspace' ? <Button variant="destructive" onClick={() => deleteWorkspace(activeWorkspaceId)} disabled={busy}>Delete Workspace</Button> : null}
+          {activeWorkspaceId && activeWorkspaceId !== 'default-workspace' ? <Button variant="destructive" onClick={() => deleteWorkspace(activeWorkspaceId)} disabled={busy}>删除工作区 Delete Workspace</Button> : null}
         </CardHeader>
         <CardContent className="grid gap-4 md:grid-cols-3">
-          <Card className="bg-background/60"><CardHeader className="pb-3"><CardTitle className="text-base">Scenarios</CardTitle></CardHeader><CardContent className="text-3xl font-semibold">{scenarios.length}</CardContent></Card>
-          <Card className="bg-background/60"><CardHeader className="pb-3"><CardTitle className="text-base">Targets</CardTitle></CardHeader><CardContent className="text-3xl font-semibold">{targets.length}</CardContent></Card>
-          <Card className="bg-background/60"><CardHeader className="pb-3"><CardTitle className="text-base">OCR Profiles</CardTitle></CardHeader><CardContent className="text-3xl font-semibold">{profiles.length}</CardContent></Card>
+          <Card className="bg-background/60"><CardHeader className="pb-3"><CardTitle className="text-base">场景 Scenarios</CardTitle></CardHeader><CardContent className="text-3xl font-semibold">{scenarios.length}</CardContent></Card>
+          <Card className="bg-background/60"><CardHeader className="pb-3"><CardTitle className="text-base">目标 Targets</CardTitle></CardHeader><CardContent className="text-3xl font-semibold">{targets.length}</CardContent></Card>
+          <Card className="bg-background/60"><CardHeader className="pb-3"><CardTitle className="text-base">OCR 配置 OCR Profiles</CardTitle></CardHeader><CardContent className="text-3xl font-semibold">{profiles.length}</CardContent></Card>
         </CardContent>
       </Card>
 
@@ -291,55 +393,55 @@ function SettingsPage({ settings, setSettings, saveSettings, busy }) {
     <div className="grid gap-6 xl:grid-cols-[0.9fr_1.1fr]">
       <Card className="bg-slate-950/50">
         <CardHeader>
-          <CardTitle className="text-2xl">Global Settings</CardTitle>
-          <CardDescription>Persisted in the main process: monitor interval, log retention, launch at login, and theme.</CardDescription>
+          <CardTitle className="text-2xl">全局设置 Global Settings</CardTitle>
+          <CardDescription>由主进程持久化保存监控间隔、日志保留、自启动和主题。</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="grid gap-4 md:grid-cols-2">
             <div className="space-y-2">
-              <label className="text-sm font-medium">Default Monitor Interval</label>
+              <label className="text-sm font-medium">默认监控间隔 Default Monitor Interval</label>
               <Input type="number" min="3" max="8" value={settings.monitorIntervalSeconds} onChange={(event) => setSettings((current) => ({ ...current, monitorIntervalSeconds: Number(event.target.value) }))} />
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium">Log Retention Days</label>
+              <label className="text-sm font-medium">日志保留天数 Log Retention Days</label>
               <Input type="number" min="1" max="365" value={settings.logRetentionDays} onChange={(event) => setSettings((current) => ({ ...current, logRetentionDays: Number(event.target.value) }))} />
             </div>
           </div>
 
           <div className="flex items-center justify-between rounded-xl border border-border bg-background/50 p-4">
-            <div><div className="font-medium">Launch At Login</div><div className="text-sm text-muted-foreground">Managed through Electron `app.setLoginItemSettings`.</div></div>
+            <div><div className="font-medium">开机自启 Launch At Login</div><div className="text-sm text-muted-foreground">通过 Electron `app.setLoginItemSettings` 管理。</div></div>
             <Switch checked={settings.launchAtLogin} onCheckedChange={(value) => setSettings((current) => ({ ...current, launchAtLogin: value }))} />
           </div>
 
           <div className="flex items-center justify-between rounded-xl border border-border bg-background/50 p-4">
-            <div><div className="font-medium">Theme</div><div className="text-sm text-muted-foreground">Tailwind dark mode is default. Toggle for lighter inspection.</div></div>
+            <div><div className="font-medium">主题 Theme</div><div className="text-sm text-muted-foreground">默认深色，可切换浅色用于检查日志。</div></div>
             <Button variant="secondary" onClick={() => setSettings((current) => ({ ...current, theme: current.theme === 'dark' ? 'light' : 'dark' }))}>
               {settings.theme === 'dark' ? <Sun className="mr-2 h-4 w-4" /> : <Moon className="mr-2 h-4 w-4" />}
-              {settings.theme === 'dark' ? 'Switch To Light' : 'Switch To Dark'}
+              {settings.theme === 'dark' ? '切换浅色 Switch To Light' : '切换深色 Switch To Dark'}
             </Button>
           </div>
 
-          <Button onClick={saveSettings} disabled={busy}>Save Settings</Button>
+          <Button onClick={saveSettings} disabled={busy}>保存设置 Save Settings</Button>
         </CardContent>
       </Card>
 
       <Card>
         <CardHeader>
-          <CardTitle>Safety Summary</CardTitle>
-          <CardDescription>Main process and Python enforce the execution boundary.</CardDescription>
+          <CardTitle>安全边界 Safety Summary</CardTitle>
+          <CardDescription>执行边界由主进程和 Python 双层强制执行。</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4 text-sm text-muted-foreground">
           <div className="flex items-start gap-3 rounded-xl border border-border bg-background/50 p-4">
             <ShieldCheck className="mt-0.5 h-5 w-5 text-cyan-300" />
-            <div><div className="font-medium text-foreground">Exactly 5 safe actions</div><div>`append_text`, `prepend_text`, `replace_text`, `write_if_missing`, `append_timestamped_note`</div></div>
+            <div><div className="font-medium text-foreground">固定 5 种安全动作 / Exactly 5 safe actions</div><div>`append_text`, `prepend_text`, `replace_text`, `write_if_missing`, `append_timestamped_note`</div></div>
           </div>
           <div className="flex items-start gap-3 rounded-xl border border-border bg-background/50 p-4">
             <BellRing className="mt-0.5 h-5 w-5 text-cyan-300" />
-            <div><div className="font-medium text-foreground">Main-process request sanitization</div><div>IPC inputs are cleaned before the monitor or execution layer sees them.</div></div>
+            <div><div className="font-medium text-foreground">主进程请求清洗 / Main-process sanitization</div><div>IPC 输入会先被清洗，renderer 不能直接越过执行边界。</div></div>
           </div>
           <div className="flex items-start gap-3 rounded-xl border border-border bg-background/50 p-4">
             <ShieldCheck className="mt-0.5 h-5 w-5 text-cyan-300" />
-            <div><div className="font-medium text-foreground">AutoHotkey restriction</div><div>Only control-targeted writes are allowed. `SendInput`, `Click`, and mouse primitives are blocked.</div></div>
+            <div><div className="font-medium text-foreground">AutoHotkey 限制 / AHK restriction</div><div>只允许 control-targeted 写入，`SendInput`、`Click` 和鼠标原语都被阻止。</div></div>
           </div>
         </CardContent>
       </Card>
@@ -357,6 +459,7 @@ export default function App() {
   const [workspaceLogs, setWorkspaceLogs] = useState([]);
   const [selectedScenarioId, setSelectedScenarioId] = useState('');
   const [windowResults, setWindowResults] = useState([]);
+  const [inspectedControls, setInspectedControls] = useState(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [settings, setSettings] = useState({
@@ -365,8 +468,14 @@ export default function App() {
     launchAtLogin: false,
     theme: 'dark',
   });
-  const [titleRegex, setTitleRegex] = useState('WeChat|微信');
+  const [titleRegex, setTitleRegex] = useState('Weixin|微信');
   const [intervalSeconds, setIntervalSeconds] = useState(5);
+  const [exportStatus, setExportStatus] = useState(null);
+
+  const activeScenario = useMemo(
+    () => activeWorkspace?.scenarios?.find((scenario) => scenario.id === selectedScenarioId) || activeWorkspace?.scenarios?.[0] || null,
+    [activeWorkspace, selectedScenarioId],
+  );
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', settings.theme === 'dark');
@@ -376,7 +485,8 @@ export default function App() {
     if (!api || !workspaceId) return;
     const workspace = await api.get(workspaceId);
     setActiveWorkspace(workspace);
-    setSelectedScenarioId(workspace.scenarios[0]?.id || '');
+    const nextScenarioId = workspace.scenarios[0]?.id || '';
+    setSelectedScenarioId(nextScenarioId);
     setWorkspaceLogs(await api.loadWorkspaceLogs(workspaceId));
     setMonitorStatus(await api.getMonitorStatus(workspaceId));
   }
@@ -414,6 +524,11 @@ export default function App() {
   }, [activeWorkspaceId]);
 
   useEffect(() => {
+    if (!activeScenario || titleRegex.trim()) return;
+    const fallbackTitle = activeScenario.name.includes('微信') ? 'Weixin|微信' : '.*';
+    setTitleRegex(fallbackTitle);
+  }, [activeScenario, titleRegex]);
+  useEffect(() => {
     if (!api) return undefined;
     const offStatus = api.onMonitorStatus((payload) => {
       if (payload.workspaceId === activeWorkspaceId) setMonitorStatus(payload);
@@ -431,7 +546,7 @@ export default function App() {
 
   async function createWorkspace() {
     if (!api) return;
-    const name = window.prompt('Workspace name', 'New Workspace');
+    const name = window.prompt('请输入工作区名称 / Workspace name', '新工作区');
     if (!name) return;
     setBusy(true);
     try {
@@ -447,7 +562,7 @@ export default function App() {
 
   async function deleteWorkspace(workspaceId) {
     if (!api || workspaceId === 'default-workspace') return;
-    if (!window.confirm('Delete this workspace?')) return;
+    if (!window.confirm('确认删除该工作区？ / Delete this workspace?')) return;
     setBusy(true);
     try {
       await api.delete(workspaceId);
@@ -464,7 +579,13 @@ export default function App() {
     setBusy(true);
     setError('');
     try {
-      setWindowResults(await api.listWindows(titleRegex || '.*'));
+      const results = await api.listWindows(titleRegex || '.*');
+      setWindowResults(results);
+      setInspectedControls(null);
+      setExportStatus(null);
+      if (results.length === 1 && !titleRegex) {
+        setTitleRegex(escapeRegex(results[0].WindowTitle));
+      }
     } catch (nextError) {
       setError(nextError.message);
     } finally {
@@ -473,7 +594,7 @@ export default function App() {
   }
 
   async function startMonitor() {
-    if (!api || !activeWorkspaceId || !selectedScenarioId) return;
+    if (!api || !activeWorkspaceId || !selectedScenarioId || !titleRegex.trim()) return;
     setBusy(true);
     setError('');
     try {
@@ -484,6 +605,7 @@ export default function App() {
       });
       setMonitorStatus(status);
       setWorkspaceLogs(await api.loadWorkspaceLogs(activeWorkspaceId));
+      setExportStatus(null);
     } catch (nextError) {
       setError(nextError.message);
     } finally {
@@ -514,6 +636,37 @@ export default function App() {
     }
   }
 
+  async function inspectControls() {
+    if (!api || !monitorStatus?.matchedWindow?.WindowTitle) return;
+    setBusy(true);
+    setError('');
+    try {
+      const result = await api.inspectWindowControls(monitorStatus.matchedWindow.WindowTitle);
+      setInspectedControls(result);
+    } catch (nextError) {
+      setError(nextError.message);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function exportCapturedContent() {
+    if (!api || !activeWorkspaceId) return;
+    setBusy(true);
+    setError('');
+    try {
+      setExportStatus(await api.exportCapturedContent(activeWorkspaceId));
+    } catch (nextError) {
+      setError(nextError.message);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  if (!api) {
+    return <BrowserFallback />;
+  }
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <div className="flex min-h-screen flex-col xl:flex-row">
@@ -531,21 +684,21 @@ export default function App() {
             <Card className="border-cyan-500/20 bg-gradient-to-r from-slate-950/80 via-slate-900/70 to-sky-950/60">
               <CardContent className="flex flex-col gap-4 p-6 md:flex-row md:items-center md:justify-between">
                 <div>
-                  <div className="flex items-center gap-2 text-sm text-cyan-300"><ShieldCheck className="h-4 w-4" />Main-process enforced execution policy</div>
-                  <h2 className="mt-2 text-3xl font-semibold tracking-tight">Workspace-driven desktop automation</h2>
-                  <p className="mt-2 max-w-3xl text-sm text-slate-300">Renderer requests only. Main process and Python execution layers enforce action whitelists, AHK restrictions, schema validation, and monitor scheduling.</p>
+                  <div className="flex items-center gap-2 text-sm text-cyan-300"><ShieldCheck className="h-4 w-4" />主进程强制执行安全策略 / Main-process enforced execution policy</div>
+                  <h2 className="mt-2 text-3xl font-semibold tracking-tight">工作区驱动的桌面自动化 / Workspace-driven desktop automation</h2>
+                  <p className="mt-2 max-w-3xl text-sm text-slate-300">renderer 只能发请求；主进程和 Python 执行层负责动作白名单、AHK 限制、schema 校验和监控调度。</p>
                 </div>
                 <div className="flex flex-wrap gap-3">
                   <Badge className="border-emerald-500/30 bg-emerald-500/15 text-emerald-300">5 safe actions</Badge>
                   <Badge className="border-cyan-500/30 bg-cyan-500/15 text-cyan-300">3-8s monitor loop</Badge>
-                  <Badge className="border-violet-500/30 bg-violet-500/15 text-violet-300">{settings.theme === 'dark' ? <Moon className="mr-1 h-3 w-3" /> : <Sun className="mr-1 h-3 w-3" />}{settings.theme}</Badge>
+                  <Badge className="border-violet-500/30 bg-violet-500/15 text-violet-300">{settings.theme === 'dark' ? <Moon className="mr-1 h-3 w-3" /> : <Sun className="mr-1 h-3 w-3" />}{settings.theme === 'dark' ? '深色 Dark' : '浅色 Light'}</Badge>
                 </div>
               </CardContent>
             </Card>
 
             {error ? <Card className="border-destructive/40 bg-destructive/10"><CardContent className="p-4 text-sm text-destructive-foreground">{error}</CardContent></Card> : null}
 
-            {activeTab === 'monitor' ? <MonitorPage workspaces={workspaces} activeWorkspace={activeWorkspace} activeWorkspaceId={activeWorkspaceId} selectedScenarioId={selectedScenarioId} setSelectedScenarioId={setSelectedScenarioId} titleRegex={titleRegex} setTitleRegex={setTitleRegex} intervalSeconds={intervalSeconds} setIntervalSeconds={setIntervalSeconds} refreshWindows={refreshWindows} startMonitor={startMonitor} stopMonitor={stopMonitor} monitorStatus={monitorStatus} windowResults={windowResults} workspaceLogs={workspaceLogs} busy={busy} /> : null}
+            {activeTab === 'monitor' ? <MonitorPage workspaces={workspaces} activeWorkspace={activeWorkspace} activeWorkspaceId={activeWorkspaceId} selectedScenarioId={selectedScenarioId} setSelectedScenarioId={setSelectedScenarioId} titleRegex={titleRegex} setTitleRegex={setTitleRegex} intervalSeconds={intervalSeconds} setIntervalSeconds={setIntervalSeconds} refreshWindows={refreshWindows} startMonitor={startMonitor} stopMonitor={stopMonitor} monitorStatus={monitorStatus} windowResults={windowResults} workspaceLogs={workspaceLogs} exportCapturedContent={exportCapturedContent} exportStatus={exportStatus} inspectedControls={inspectedControls} inspectControls={inspectControls} busy={busy} /> : null}
             {activeTab === 'workspaces' ? <WorkspacePage activeWorkspace={activeWorkspace} activeWorkspaceId={activeWorkspaceId} deleteWorkspace={deleteWorkspace} busy={busy} /> : null}
             {activeTab === 'settings' ? <SettingsPage settings={settings} setSettings={setSettings} saveSettings={persistSettings} busy={busy} /> : null}
           </div>

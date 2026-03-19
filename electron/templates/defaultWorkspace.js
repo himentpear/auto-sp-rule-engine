@@ -20,7 +20,7 @@ export function createDefaultWorkspacePayload({ id, name }) {
     metadata: {
       id,
       name,
-      version: 2,
+      version: 9,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       safeActions: SAFE_ACTIONS,
@@ -29,29 +29,29 @@ export function createDefaultWorkspacePayload({ id, name }) {
     targets: [
       {
         id: wechatTargetId,
-        name: 'WeChat Chat Input',
-        description: 'WeChat desktop chat input control used for safe preset replies after OCR keyword matches.',
+        name: 'WeChat Chat Monitor',
+        description: 'WeChat desktop monitor target for OCR-only detection and logging.',
         target_bundle: {
           name: wechatTargetId,
           window_matcher: {
-            window_title_substring: 'WeChat',
-            window_title: 'WeChat',
-            process_name: 'WeChat',
+            window_title_substring: '',
+            window_title: '',
+            process_name: 'Weixin',
           },
           focus_strategy: {
-            type: 'focus_control_direct',
+            type: 'activate_then_wait',
             wait_timeout_seconds: 1,
             settle_delay_ms: 100,
           },
           control_strategy: {
             type: 'control_text',
-            control_name: 'RichEdit50W1',
-            control_type: 'RichEdit',
+            control_name: '',
+            control_type: '',
           },
           readback_strategy: {
-            type: 'control_text',
+            type: 'window_text',
             focus_strategy: {
-              type: 'focus_control_direct',
+              type: 'activate_then_wait',
               wait_timeout_seconds: 1,
               settle_delay_ms: 100,
             },
@@ -59,10 +59,10 @@ export function createDefaultWorkspacePayload({ id, name }) {
           default_ocr_profile: wechatProfileId,
           roi_presets: {
             recent_message_region: {
-              x: 520,
-              y: 110,
-              width: 460,
-              height: 520,
+              x: 20,
+              y: 120,
+              width: 560,
+              height: 620,
             },
           },
         },
@@ -107,28 +107,31 @@ export function createDefaultWorkspacePayload({ id, name }) {
         name: 'WeChat Chat OCR',
         profile_key: wechatProfileId,
         roi: {
-          x: 520,
-          y: 110,
-          width: 460,
-          height: 520,
+          x: 20,
+          y: 120,
+          width: 560,
+          height: 620,
         },
         preprocessing: {
           grayscale: true,
           scale: 2.2,
           threshold: {
-            enabled: true,
-            value: 188,
+            enabled: false,
+            value: 180,
           },
           trim_border: {
-            enabled: true,
-            margin: 2,
+            enabled: false,
+            margin: 0,
           },
         },
         normalization: {
           collapse_whitespace: true,
-          preserve_line_breaks: false,
-          case: 'lower',
+          preserve_line_breaks: true,
+          case: 'none',
           simple_noise_cleanup: true,
+        },
+        behavior: {
+          fallback_to_full_window_on_empty: true,
         },
         watch: {
           enabled: true,
@@ -175,15 +178,61 @@ export function createDefaultWorkspacePayload({ id, name }) {
     scenarios: [
       {
         id: wechatScenarioId,
-        name: '\u5fae\u4fe1\u76d1\u63a7\u56de\u590d',
-        description: 'Monitor WeChat chat content. When OCR matches reply-oriented keywords, write a preset reply into the input control.',
+        name: '\u5fae\u4fe1\u76d1\u63a7\u65e5\u5fd7',
+        description: 'Monitor WeChat chat content and classify plain chat text, cards/articles, and image-like messages. Current WeChat desktop builds may not expose a safe control-targeted input field.',
         targetRef: wechatTargetId,
         ocrProfileRef: wechatProfileId,
+        logOnly: true,
         rules: [
           {
-            id: 'rule-wechat-reply',
-            name: '\u68c0\u6d4b\u5230\u56de\u590d\u5173\u952e\u8bcd\u540e\u5199\u5165\u9884\u8bbe\u56de\u590d',
+            id: 'rule-wechat-chat-text',
+            name: '\u68c0\u6d4b\u5230\u804a\u5929\u6b63\u6587\u540e\u8bb0\u5f55\u65e5\u5fd7',
             enabled: true,
+            logOnly: true,
+            condition: {
+              id: 'condition-wechat-chat-text',
+              type: 'regex',
+              pattern: '[\\u4e00-\\u9fff]{2,}',
+            },
+            action: {
+              id: 'action-wechat-chat-text',
+              type: 'append_timestamped_note',
+              text: '\u68c0\u6d4b\u5230\u804a\u5929\u6587\u672c',
+            },
+            targetRef: wechatTargetId,
+            ocrProfileRef: wechatProfileId,
+            match: {
+              type: 'regex',
+              pattern: '[\\u4e00-\\u9fff]{2,}',
+            },
+          },
+          {
+            id: 'rule-wechat-card-article',
+            name: '\u68c0\u6d4b\u5230\u5361\u7247\u6216\u516c\u4f17\u53f7\u6587\u7ae0\u540e\u8bb0\u5f55\u65e5\u5fd7',
+            enabled: true,
+            logOnly: true,
+            condition: {
+              id: 'condition-wechat-card-article',
+              type: 'regex',
+              pattern: '小程序|公众号|文章|名片|请查收|优惠券|卡片|查看全文|阅读',
+            },
+            action: {
+              id: 'action-wechat-card-article',
+              type: 'append_timestamped_note',
+              text: '\u68c0\u6d4b\u5230\u5361\u7247\u6216\u6587\u7ae0',
+            },
+            targetRef: wechatTargetId,
+            ocrProfileRef: wechatProfileId,
+            match: {
+              type: 'regex',
+              pattern: '小程序|公众号|文章|名片|请查收|优惠券|卡片|查看全文|阅读',
+            },
+          },
+          {
+            id: 'rule-wechat-reply',
+            name: '\u68c0\u6d4b\u5230\u56de\u590d\u5173\u952e\u8bcd\u540e\u8bb0\u5f55\u65e5\u5fd7',
+            enabled: true,
+            logOnly: true,
             condition: {
               id: 'condition-wechat-reply',
               type: 'contains_any',
@@ -191,8 +240,8 @@ export function createDefaultWorkspacePayload({ id, name }) {
             },
             action: {
               id: 'action-wechat-reply',
-              type: 'append_text',
-              text: '\u5df2\u6536\u5230\uff0c\u6211\u7a0d\u540e\u56de\u590d\u4f60\u3002',
+              type: 'append_timestamped_note',
+              text: '\u68c0\u6d4b\u5230\u56de\u590d\u5173\u952e\u8bcd',
             },
             targetRef: wechatTargetId,
             ocrProfileRef: wechatProfileId,
@@ -206,7 +255,7 @@ export function createDefaultWorkspacePayload({ id, name }) {
       {
         id: socialScenarioId,
         name: '\u81ea\u52a8\u70b9\u8d5e/\u4e92\u52a8',
-        description: 'Mouse-only likes remain blocked. If OCR detects interaction prompts on a text-capable surface, write "已赞" or a safe guidance note.',
+        description: 'Mouse-only likes remain blocked. If OCR detects interaction prompts on a text-capable surface, write "\u5df2\u8d5e" or a safe guidance note.',
         targetRef: socialTargetId,
         ocrProfileRef: socialProfileId,
         rules: [

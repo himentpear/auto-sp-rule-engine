@@ -2,12 +2,8 @@ import { spawn } from 'node:child_process';
 import fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { getWorkspace, getWorkspacesRoot } from './workspaces.js';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const repoRoot = path.resolve(__dirname, '..');
+import { getExternalRoot, getExternalScriptPath, getExternalVendorPath } from './runtimePaths.js';
 
 function normalizeName(value, fallback) {
   return String(value || fallback || '')
@@ -58,7 +54,7 @@ function buildExecutionConfig(workspace, ruleInput) {
   return {
     description: `Workspace execution for ${workspace.metadata.name}`,
     automation: {
-      ahk_exe: 'vendor/autohotkey/2.0.19/AutoHotkey64.exe',
+      ahk_exe: getExternalVendorPath('autohotkey', '2.0.19', 'AutoHotkey64.exe'),
     },
     target_bundle: target.target_bundle,
     target: target.target_bundle?.window_matcher || target.target || {},
@@ -78,6 +74,7 @@ function buildExecutionConfig(workspace, ruleInput) {
         name: rule.name,
         target: target.id,
         ocr_profile: selectedProfile.key,
+        dry_run: Boolean(rule.dryRun),
         match: rule.match,
         action: rule.action,
         target_override: rule.targetOverride || {},
@@ -96,9 +93,11 @@ function buildExecutionConfig(workspace, ruleInput) {
   };
 }
 
-function runPythonConfig(configPath, logsDir, screenshotsDir) {
+function runPythonConfig(configPath, logsDir, screenshotsDir, dryRun = false) {
+  const externalRoot = getExternalRoot();
+  const runRulesPath = getExternalScriptPath('run_rules.py');
   const candidates = [
-    { command: path.join(repoRoot, '.venv', 'Scripts', 'python.exe'), args: [] },
+    { command: path.join(externalRoot, '.venv', 'Scripts', 'python.exe'), args: [] },
     { command: 'python', args: [] },
     { command: 'py', args: ['-3'] },
   ];
@@ -115,15 +114,16 @@ function runPythonConfig(configPath, logsDir, screenshotsDir) {
         candidate.command,
         [
           ...candidate.args,
-          path.join(repoRoot, 'scripts', 'run_rules.py'),
+          runRulesPath,
           configPath,
+          ...(dryRun ? ['--dry-run'] : []),
           '--logs-dir',
           logsDir,
           '--screenshots-dir',
           screenshotsDir,
         ],
         {
-          cwd: repoRoot,
+          cwd: externalRoot,
           windowsHide: true,
         },
       );
@@ -168,7 +168,7 @@ export async function executeWorkspaceRule(userDataPath, workspaceId, ruleInput)
   await fs.mkdir(logsDir, { recursive: true });
   await fs.mkdir(screenshotsDir, { recursive: true });
   try {
-    return await runPythonConfig(configPath, logsDir, screenshotsDir);
+    return await runPythonConfig(configPath, logsDir, screenshotsDir, Boolean(ruleInput.dryRun));
   } finally {
     await fs.rm(tempDir, { recursive: true, force: true });
   }

@@ -109,7 +109,7 @@ export async function ensureDefaultWorkspace(userDataPath) {
 
   if (await pathExists(defaultMetadataPath)) {
     const metadata = await readJson(defaultMetadataPath);
-    if ((metadata?.version ?? 0) >= 2) {
+    if ((metadata?.version ?? 0) >= 9) {
       return rootDir;
     }
     const upgradedPayload = createDefaultWorkspacePayload({

@@ -4,7 +4,11 @@ SetTitleMatchMode 2
 ApplyFocusStrategy(strategyType, targetTitle, targetControl, waitTimeoutSeconds, settleDelayMs) {
     if (strategyType = "focus_control_direct") {
         if (targetControl != "") {
-            ControlFocus(targetControl, targetTitle)
+            try {
+                ControlFocus(targetControl, targetTitle)
+            } catch {
+                ExitApp(8)
+            }
         }
         Sleep(settleDelayMs)
         return
@@ -19,7 +23,11 @@ ApplyFocusStrategy(strategyType, targetTitle, targetControl, waitTimeoutSeconds,
     }
 
     if (targetControl != "") {
-        ControlFocus(targetControl, targetTitle)
+        try {
+            ControlFocus(targetControl, targetTitle)
+        } catch {
+            ExitApp(8)
+        }
     }
     Sleep(settleDelayMs)
 }
@@ -50,7 +58,11 @@ if (targetControl = "") {
 
 payload := FileRead(textFile, "UTF-8")
 ApplyFocusStrategy(focusStrategyType, targetTitle, targetControl, waitTimeoutSeconds, settleDelayMs)
-existingText := ControlGetText(targetControl, targetTitle)
+try {
+    existingText := ControlGetText(targetControl, targetTitle)
+} catch {
+    ExitApp(9)
+}
 
 if (actionType = "replace_text") {
     newText := payload
@@ -80,6 +92,10 @@ if (actionType = "replace_text") {
 }
 
 ; Hard stop: only control-targeted writes are allowed in this script.
-ControlSetText(newText, targetControl, targetTitle)
+try {
+    ControlSetText(newText, targetControl, targetTitle)
+} catch {
+    ExitApp(10)
+}
 Sleep(300)
 ExitApp(0)

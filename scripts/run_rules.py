@@ -70,6 +70,16 @@ SAFE_BOUNDARY = "capture -> OCR -> rule match -> control-targeted write"
 DESIGNER_DRAFT_SCHEMA_VERSION = "designer-draft/v1"
 DESIGNER_DRAFT_TEMPLATE_PATH = Path(__file__).resolve().parent.parent / "examples" / "drafts" / "valid-designer-draft.json"
 ALLOWED_AHK_WRITE_COMMANDS = ("ControlSetText(", "ControlSend(")
+AHK_EXIT_MESSAGES = {
+    2: "Target window not found.",
+    5: "Action payload file not found.",
+    6: "Unsupported action type reached AutoHotkey layer.",
+    7: "Target control name is missing.",
+    8: "Target control could not be focused.",
+    9: "Target control text could not be read.",
+    10: "Target control text could not be written.",
+    64: "AutoHotkey script received invalid arguments.",
+}
 BANNED_AHK_PATTERNS = (
     (re.compile(r"(?<!Control)SendInput\s*\(", re.IGNORECASE), "SendInput"),
     (re.compile(r"(?<!Control)SendEvent\s*\(", re.IGNORECASE), "SendEvent"),
@@ -236,7 +246,7 @@ def validate_execution_draft(rule: dict, target_bundle: dict, target: dict, cont
         raise_security_violation(logs_dir, "Execution draft schema version mismatch.", {"schema_version": draft["schema_version"]})
     if draft["safe_boundary"] != template["safe_boundary"]:
         raise_security_violation(logs_dir, "Execution draft boundary mismatch.", {"safe_boundary": draft["safe_boundary"]})
-    if not control.get("name"):
+    if not rule.get("dry_run") and not control.get("name"):
         raise_security_violation(logs_dir, "Control-targeted write requires a concrete control name.", {"rule_name": rule["name"]})
 
     validate_match_config(draft["rule_draft"]["match"], logs_dir, rule["name"])
@@ -253,6 +263,16 @@ def validate_ahk_write_script(trigger_script: Path, logs_dir: Path):
             "Unsafe AutoHotkey command detected. Only control-targeted writes are allowed.",
             {"trigger_script": str(trigger_script), "banned_tokens": banned_hits},
         )
+
+
+def raise_ahk_runtime_error(exit_code: int, control_name: str | None, window_title: str | None):
+    message = AHK_EXIT_MESSAGES.get(exit_code, f"AutoHotkey runtime failed with exit code {exit_code}.")
+    detail = f" Window: {window_title or 'n/a'}."
+    if control_name:
+        detail += f" Control: {control_name}."
+    if exit_code in (8, 9, 10):
+        detail += " The current app version may not expose a standard editable control for safe control-targeted writes."
+    raise RuntimeError(message + detail)
     if not any(command in script_text for command in ALLOWED_AHK_WRITE_COMMANDS):
         raise_security_violation(
             logs_dir,
@@ -446,6 +466,12 @@ def execute_readback_script(
         text=True,
     )
     current_text = readback_path.read_text(encoding="utf-8") if readback_path.exists() else None
+    if read_proc.returncode not in (0,):
+        raise_ahk_runtime_error(
+            read_proc.returncode,
+            readback_strategy.get("control_name") or resolved_control.get("name"),
+            resolved_target.get("window_title"),
+        )
     return read_proc.returncode, current_text
 
 
@@ -685,6 +711,12 @@ def evaluate_rules_for_ocr_text(
                 ]
                 action_proc = subprocess.run(trigger_cmd, capture_output=True, text=True)
                 ahk_exit_code = action_proc.returncode
+                if action_proc.returncode != 0:
+                    raise_ahk_runtime_error(
+                        action_proc.returncode,
+                        resolved_control.get("name"),
+                        resolved_target.get("window_title"),
+                    )
                 read_exit_code, current_text = read_target_text(
                     ahk_exe,
                     readback_script,

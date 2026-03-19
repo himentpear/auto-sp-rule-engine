@@ -21,10 +21,15 @@ DEFAULT_NORMALIZATION = {
     "simple_noise_cleanup": True,
 }
 
+DEFAULT_OCR_BEHAVIOR = {
+    "fallback_to_full_window_on_empty": False,
+}
+
 
 def run_winrt_ocr(image_path: Path):
     root = Path(__file__).resolve().parent
     impl = root / "Invoke-WinRtOcr.ps1"
+    preferred_languages = ["zh-CN", "zh-Hans", "en-US"]
     cmd = [
         "powershell",
         "-ExecutionPolicy",
@@ -34,6 +39,8 @@ def run_winrt_ocr(image_path: Path):
         "-ImagePath",
         str(image_path.resolve()),
     ]
+    for language in preferred_languages:
+        cmd.extend(["-PreferredLanguages", language])
     result = subprocess.run(
         cmd,
         capture_output=True,
@@ -185,17 +192,35 @@ def prepare_image(image_path: Path, ocr_cfg: dict | None, processed_out_path: Pa
 
 
 def run_ocr_pipeline(image_path: Path, ocr_cfg: dict | None, processed_out_path: Path | None = None):
-    prepared = prepare_image(image_path, ocr_cfg, processed_out_path)
-    ocr_target_path = Path(prepared["processed_image_path"]) if prepared["processed_image_path"] else image_path
-    if not prepared["processed_image_path"]:
-        temp_path = image_path.parent / f"{image_path.stem}-processed{image_path.suffix}"
-        prepared["processed_image_path"] = save_image(prepared["image"], temp_path)
-        ocr_target_path = temp_path
+    behavior_cfg = merge_dict(DEFAULT_OCR_BEHAVIOR, (ocr_cfg or {}).get("behavior"))
 
-    ocr_payload = run_winrt_ocr(Path(ocr_target_path))
-    normalized_text, normalization_cfg = normalize_text(
-        ocr_payload.get("Text", ""), (ocr_cfg or {}).get("normalization")
-    )
+    def execute_once(active_ocr_cfg: dict | None, out_path: Path | None):
+        prepared_local = prepare_image(image_path, active_ocr_cfg, out_path)
+        ocr_target_path_local = Path(prepared_local["processed_image_path"]) if prepared_local["processed_image_path"] else image_path
+        if not prepared_local["processed_image_path"]:
+            temp_path = image_path.parent / f"{image_path.stem}-processed{image_path.suffix}"
+            prepared_local["processed_image_path"] = save_image(prepared_local["image"], temp_path)
+            ocr_target_path_local = temp_path
+
+        ocr_payload_local = run_winrt_ocr(Path(ocr_target_path_local))
+        normalized_text_local, normalization_cfg_local = normalize_text(
+            ocr_payload_local.get("Text", ""), (active_ocr_cfg or {}).get("normalization")
+        )
+        return prepared_local, ocr_payload_local, normalized_text_local, normalization_cfg_local
+
+    prepared, ocr_payload, normalized_text, normalization_cfg = execute_once(ocr_cfg, processed_out_path)
+
+    if (
+        behavior_cfg.get("fallback_to_full_window_on_empty")
+        and prepared["roi_used"] is not None
+        and not normalized_text.strip()
+    ):
+        fallback_cfg = json.loads(json.dumps(ocr_cfg or {}))
+        fallback_cfg["roi"] = None
+        fallback_out_path = None
+        if processed_out_path is not None:
+            fallback_out_path = processed_out_path.parent / f"{processed_out_path.stem}-fallback{processed_out_path.suffix}"
+        prepared, ocr_payload, normalized_text, normalization_cfg = execute_once(fallback_cfg, fallback_out_path)
 
     return {
         "image_path": str(image_path.resolve()),
