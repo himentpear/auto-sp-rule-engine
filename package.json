@@ -2,13 +2,20 @@
   "name": "auto-sp-rule-engine",
   "private": true,
   "version": "0.2.0",
+  "description": "Electron desktop assistant for OCR-driven safe workspace automation on Windows.",
+  "author": "OpenAI Codex",
   "type": "module",
+  "main": "dist-electron/main/main.js",
   "scripts": {
     "dev": "node frontend/server.mjs",
     "build": "vite build frontend --outDir dist",
     "start": "NODE_ENV=production node frontend/server.mjs",
     "frontend:dev": "node frontend/server.mjs",
     "frontend:build": "vite build frontend --outDir dist",
+    "electron:dev": "electron-vite dev",
+    "electron:build": "electron-vite build",
+    "electron:preview": "electron-vite preview",
+    "desktop:dist": "electron-vite build && electron-builder",
     "repo:health": "powershell -ExecutionPolicy Bypass -File scripts/dev/repo_health.ps1",
     "evidence:index": "powershell -ExecutionPolicy Bypass -File scripts/dev/generate_evidence_index.ps1",
     "docs:check": "powershell -ExecutionPolicy Bypass -File scripts/dev/docs_sanity_check.ps1",
@@ -28,6 +35,58 @@
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^5.0.2",
+    "@radix-ui/react-slot": "^1.1.0",
+    "@swc/core": "^1.11.24",
+    "autoprefixer": "^10.4.20",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "electron": "37.10.3",
+    "electron-builder": "^25.1.8",
+    "electron-vite": "^5.0.0",
+    "lucide-react": "^0.511.0",
+    "postcss": "^8.4.49",
+    "tailwind-merge": "^2.5.5",
+    "tailwindcss": "^3.4.17",
     "vite": "^7.1.5"
+  },
+  "build": {
+    "appId": "com.autosp.ruleengine",
+    "productName": "Auto SP Rule Engine Assistant",
+    "compression": "store",
+    "asar": true,
+    "electronLanguages": [
+      "en-US",
+      "zh-CN"
+    ],
+    "directories": {
+      "output": "release"
+    },
+    "artifactName": "${productName}-${version}.${ext}",
+    "electronVersion": "37.10.3",
+    "electronDist": ".electron-binaries",
+    "files": [
+      "dist/**",
+      "dist-electron/**",
+      "electron/**",
+      "scripts/**",
+      "vendor/**",
+      "examples/**",
+      "package.json"
+    ],
+    "extraMetadata": {
+      "main": "dist-electron/main/main.js"
+    },
+    "win": {
+      "signAndEditExecutable": false,
+      "verifyUpdateCodeSignature": false,
+      "target": [
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    }
   }
 }

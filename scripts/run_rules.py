@@ -56,6 +56,35 @@ DEFAULT_TARGET_BUNDLE = {
     "default_roi_preset": None,
 }
 
+SAFE_ACTION_TYPES = {
+    "append_text",
+    "prepend_text",
+    "replace_text",
+    "write_if_missing",
+    "append_timestamped_note",
+}
+
+SAFE_MATCH_TYPES = {"contains", "contains_any", "contains_all", "not_contains", "regex"}
+SAFE_ACTION_FIELDS = {"type", "text"}
+SAFE_BOUNDARY = "capture -> OCR -> rule match -> control-targeted write"
+DESIGNER_DRAFT_SCHEMA_VERSION = "designer-draft/v1"
+DESIGNER_DRAFT_TEMPLATE_PATH = Path(__file__).resolve().parent.parent / "examples" / "drafts" / "valid-designer-draft.json"
+ALLOWED_AHK_WRITE_COMMANDS = ("ControlSetText(", "ControlSend(")
+BANNED_AHK_PATTERNS = (
+    (re.compile(r"(?<!Control)SendInput\s*\(", re.IGNORECASE), "SendInput"),
+    (re.compile(r"(?<!Control)SendEvent\s*\(", re.IGNORECASE), "SendEvent"),
+    (re.compile(r"(?<!Control)SendPlay\s*\(", re.IGNORECASE), "SendPlay"),
+    (re.compile(r"(?<!Control)SendText\s*\(", re.IGNORECASE), "SendText"),
+    (re.compile(r"(?<!Control)Send\s*\(", re.IGNORECASE), "Send"),
+    (re.compile(r"\bClick\s*\(", re.IGNORECASE), "Click"),
+    (re.compile(r"\bMouseMove\s*\(", re.IGNORECASE), "MouseMove"),
+    (re.compile(r"\bMouseClick\s*\(", re.IGNORECASE), "MouseClick"),
+)
+
+
+class UnsafeAutomationError(RuntimeError):
+    pass
+
 
 def run_cmd(cmd, check=True):
     return subprocess.run(cmd, capture_output=True, text=True, check=check)
@@ -72,6 +101,24 @@ def load_json(path: Path):
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def write_security_log(logs_dir: Path, message: str, context: dict | None = None) -> Path:
+    logs_dir.mkdir(parents=True, exist_ok=True)
+    record = {
+        "timestamp": datetime.now().strftime("%Y%m%d-%H%M%S"),
+        "category": "security_violation",
+        "message": message,
+        "context": context or {},
+    }
+    log_path = logs_dir / f"security-{record['timestamp']}.json"
+    log_path.write_text(json.dumps(record, ensure_ascii=True, indent=2), encoding="utf-8")
+    return log_path
+
+
+def raise_security_violation(logs_dir: Path, message: str, context: dict | None = None):
+    log_path = write_security_log(logs_dir, message, context)
+    raise UnsafeAutomationError(f"{message} (logged to {log_path})")
+
+
 def deep_merge(defaults: dict, override: dict | None):
     merged = json.loads(json.dumps(defaults))
     for key, value in (override or {}).items():
@@ -84,6 +131,134 @@ def deep_merge(defaults: dict, override: dict | None):
 
 def normalize_match_text(value: str):
     return value.lower()
+
+
+def validate_match_config(match_cfg: dict, logs_dir: Path, rule_name: str):
+    match_type = (match_cfg or {}).get("type")
+    if match_type not in SAFE_MATCH_TYPES:
+        raise_security_violation(
+            logs_dir,
+            "Unsupported match type requested.",
+            {"rule_name": rule_name, "match_type": match_type, "allowed_match_types": sorted(SAFE_MATCH_TYPES)},
+        )
+
+    if match_type in {"contains", "not_contains"} and not match_cfg.get("value"):
+        raise_security_violation(logs_dir, "Match config requires a non-empty value.", {"rule_name": rule_name, "match": match_cfg})
+    if match_type == "regex" and not match_cfg.get("pattern"):
+        raise_security_violation(logs_dir, "Regex match config requires a pattern.", {"rule_name": rule_name, "match": match_cfg})
+    if match_type in {"contains_any", "contains_all"}:
+        values = match_cfg.get("values")
+        if not isinstance(values, list) or not values or not all(isinstance(value, str) and value for value in values):
+            raise_security_violation(
+                logs_dir,
+                "List-based match config requires at least one non-empty string value.",
+                {"rule_name": rule_name, "match": match_cfg},
+            )
+
+
+def validate_action_config(action_cfg: dict, logs_dir: Path, rule_name: str):
+    action_type = (action_cfg or {}).get("type")
+    if action_type not in SAFE_ACTION_TYPES:
+        raise_security_violation(
+            logs_dir,
+            "Unsupported action type requested.",
+            {"rule_name": rule_name, "action_type": action_type, "allowed_action_types": sorted(SAFE_ACTION_TYPES)},
+        )
+
+    unexpected_fields = sorted(set((action_cfg or {}).keys()) - SAFE_ACTION_FIELDS)
+    if unexpected_fields:
+        raise_security_violation(
+            logs_dir,
+            "Action config contains unsupported fields. Low-level keyboard or mouse instructions are forbidden.",
+            {"rule_name": rule_name, "unexpected_fields": unexpected_fields},
+        )
+
+    if action_type != "append_timestamped_note" and not isinstance(action_cfg.get("text", ""), str):
+        raise_security_violation(logs_dir, "Action text must be a string.", {"rule_name": rule_name, "action": action_cfg})
+
+
+def load_designer_template():
+    return load_json(DESIGNER_DRAFT_TEMPLATE_PATH)
+
+
+def build_execution_draft(rule: dict, target_bundle: dict, target: dict, control: dict, ocr_profile_name: str, ocr_cfg: dict):
+    template = load_designer_template()
+    return {
+        "schema_version": DESIGNER_DRAFT_SCHEMA_VERSION,
+        "draft_only": True,
+        "export_only": True,
+        "non_executing": True,
+        "generated_from": "workspace-electron-executor",
+        "exported_at": datetime.now().isoformat(),
+        "safe_boundary": SAFE_BOUNDARY,
+        "target_bundle_ref": target_bundle.get("name") or rule.get("target") or "workspace_target",
+        "target_bundle": target_bundle,
+        "target": target,
+        "control": control,
+        "selected_ocr_profile_ref": ocr_profile_name,
+        "resolved_ocr_profile": ocr_cfg,
+        "applied_roi_preset": target_bundle.get("default_roi_preset"),
+        "template_metadata": {
+            "template_id": "execution-template",
+            "template_label": "Execution Validation Template",
+            "template_schema_version": template.get("schema_version"),
+            "source_template_file": str(DESIGNER_DRAFT_TEMPLATE_PATH),
+        },
+        "onboarding": template.get("onboarding"),
+        "rule_draft": {
+            "name": rule["name"],
+            "target": rule.get("target") or target_bundle.get("name") or "default",
+            "ocr_profile": ocr_profile_name,
+            "match": rule["match"],
+            "action": rule["action"],
+        },
+        "scenario_context": None,
+        "notes": {
+            "browser_designer_only": True,
+            "repository_writeback": False,
+            "frontend_execution_controls": False,
+            "source_template": str(DESIGNER_DRAFT_TEMPLATE_PATH),
+            "source_target_bundle": target_bundle.get("name"),
+            "source_ocr_profile": ocr_profile_name,
+            "source_scenario": None,
+        },
+    }
+
+
+def validate_execution_draft(rule: dict, target_bundle: dict, target: dict, control: dict, ocr_profile_name: str, ocr_cfg: dict, logs_dir: Path):
+    template = load_designer_template()
+    draft = build_execution_draft(rule, target_bundle, target, control, ocr_profile_name, ocr_cfg)
+
+    missing_keys = [key for key in template.keys() if key not in draft]
+    if missing_keys:
+        raise_security_violation(logs_dir, "Execution draft is missing required template keys.", {"missing_keys": missing_keys})
+    if draft["schema_version"] != template["schema_version"]:
+        raise_security_violation(logs_dir, "Execution draft schema version mismatch.", {"schema_version": draft["schema_version"]})
+    if draft["safe_boundary"] != template["safe_boundary"]:
+        raise_security_violation(logs_dir, "Execution draft boundary mismatch.", {"safe_boundary": draft["safe_boundary"]})
+    if not control.get("name"):
+        raise_security_violation(logs_dir, "Control-targeted write requires a concrete control name.", {"rule_name": rule["name"]})
+
+    validate_match_config(draft["rule_draft"]["match"], logs_dir, rule["name"])
+    validate_action_config(draft["rule_draft"]["action"], logs_dir, rule["name"])
+    return draft
+
+
+def validate_ahk_write_script(trigger_script: Path, logs_dir: Path):
+    script_text = trigger_script.read_text(encoding="utf-8")
+    banned_hits = [label for pattern, label in BANNED_AHK_PATTERNS if pattern.search(script_text)]
+    if banned_hits:
+        raise_security_violation(
+            logs_dir,
+            "Unsafe AutoHotkey command detected. Only control-targeted writes are allowed.",
+            {"trigger_script": str(trigger_script), "banned_tokens": banned_hits},
+        )
+    if not any(command in script_text for command in ALLOWED_AHK_WRITE_COMMANDS):
+        raise_security_violation(
+            logs_dir,
+            "AutoHotkey write script does not contain an allowed control-targeted write command.",
+            {"trigger_script": str(trigger_script), "allowed_commands": ALLOWED_AHK_WRITE_COMMANDS},
+        )
 
 
 def evaluate_match(match_cfg: dict, ocr_text: str):
@@ -121,6 +296,8 @@ def evaluate_match(match_cfg: dict, ocr_text: str):
 
 def build_action_payload(action_cfg: dict):
     action_type = action_cfg["type"]
+    if action_type not in SAFE_ACTION_TYPES:
+        raise UnsafeAutomationError(f"Unsupported action type: {action_type}")
     if action_type == "append_timestamped_note":
         ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         return f"[{ts}] {action_cfg['text']}"
@@ -135,6 +312,8 @@ def map_action_to_ahk_mode(action_type: str):
         "write_if_missing": "write_if_missing",
         "append_timestamped_note": "append_text",
     }
+    if action_type not in mapping:
+        raise UnsafeAutomationError(f"Unsupported action type for AHK mapping: {action_type}")
     return mapping[action_type]
 
 
@@ -559,6 +738,8 @@ def run_rule_pipeline(
 ):
     resolved_target, resolved_control, resolved_bundle = resolve_rule_target(config, rule)
     ocr_profile_name, ocr_cfg = resolve_rule_ocr_profile(config, rule, resolved_bundle)
+    validate_execution_draft(rule, resolved_bundle, resolved_target, resolved_control, ocr_profile_name, ocr_cfg, logs_dir)
+    validate_ahk_write_script(trigger_script, logs_dir)
 
     read_exit_code, current_text = read_target_text(
         ahk_exe,
@@ -738,17 +919,19 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("config_path")
     parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument("--logs-dir", default=None)
+    parser.add_argument("--screenshots-dir", default=None)
     args = parser.parse_args()
 
     root = Path(__file__).resolve().parent.parent
     config_path = resolve_from_root(root, args.config_path)
+    logs_dir = resolve_from_root(root, args.logs_dir) if args.logs_dir else root / "logs"
+    logs_dir.mkdir(parents=True, exist_ok=True)
+    screenshots_dir = resolve_from_root(root, args.screenshots_dir) if args.screenshots_dir else root / "screenshots"
+    screenshots_dir.mkdir(parents=True, exist_ok=True)
     config = load_json(config_path)
 
     timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-    logs_dir = root / "logs"
-    logs_dir.mkdir(parents=True, exist_ok=True)
-    screenshots_dir = root / "screenshots"
-    screenshots_dir.mkdir(parents=True, exist_ok=True)
 
     capture_script = root / "scripts" / "capture_window.ps1"
     trigger_script = root / "scripts" / "trigger_action.ahk"
@@ -781,46 +964,49 @@ def main() -> int:
     top_target_bundle_name = None
     top_validation = None
 
-    for rule in config["rules"]:
-        run_record = run_rule_pipeline(
-            root=root,
-            config=config,
-            rule=rule,
-            timestamp=timestamp,
-            prefix=prefix,
-            dry_run=args.dry_run,
-            recent_logs=recent_logs,
-            capture_script=capture_script,
-            trigger_script=trigger_script,
-            ahk_exe=ahk_exe,
-            readback_script=readback_script,
-            readback_path=readback_path,
-            logs_dir=logs_dir,
-            screenshots_dir=screenshots_dir,
-            cooldown_seconds=cooldown_seconds,
-        )
-        rule_runs.append(run_record)
+    try:
+        for rule in config["rules"]:
+            run_record = run_rule_pipeline(
+                root=root,
+                config=config,
+                rule=rule,
+                timestamp=timestamp,
+                prefix=prefix,
+                dry_run=args.dry_run,
+                recent_logs=recent_logs,
+                capture_script=capture_script,
+                trigger_script=trigger_script,
+                ahk_exe=ahk_exe,
+                readback_script=readback_script,
+                readback_path=readback_path,
+                logs_dir=logs_dir,
+                screenshots_dir=screenshots_dir,
+                cooldown_seconds=cooldown_seconds,
+            )
+            rule_runs.append(run_record)
 
-        if run_record["matched_rule"] and matched_rule is None:
-            matched_rule = run_record["matched_rule"]
-            action_type = run_record["action_type"]
-            action_payload = run_record["action_payload"]
-            ahk_exit_code = run_record["ahk_exit_code"]
-            top_target_window = run_record["resolved_target"]["window_title"]
-            top_target_control = run_record["resolved_control"]["name"]
-            top_screenshot_path = run_record["screenshot_path"]
-            top_roi_used = run_record["roi_used"]
-            top_preprocessing = run_record["preprocessing_settings"]
-            top_normalization = run_record["normalization_settings"]
-            top_raw_ocr = run_record["raw_ocr_output"]
-            top_normalized_ocr = run_record["normalized_ocr_output"]
-            top_ocr_profile = run_record["ocr_profile_used"]
-            top_focus_strategy = run_record["focus_strategy"]
-            top_readback_strategy = run_record["readback_strategy"]
-            top_target_bundle_name = run_record["target_bundle_name"]
-            top_validation = run_record["validation_result"]
-            if stop_after_first_match:
-                break
+            if run_record["matched_rule"] and matched_rule is None:
+                matched_rule = run_record["matched_rule"]
+                action_type = run_record["action_type"]
+                action_payload = run_record["action_payload"]
+                ahk_exit_code = run_record["ahk_exit_code"]
+                top_target_window = run_record["resolved_target"]["window_title"]
+                top_target_control = run_record["resolved_control"]["name"]
+                top_screenshot_path = run_record["screenshot_path"]
+                top_roi_used = run_record["roi_used"]
+                top_preprocessing = run_record["preprocessing_settings"]
+                top_normalization = run_record["normalization_settings"]
+                top_raw_ocr = run_record["raw_ocr_output"]
+                top_normalized_ocr = run_record["normalized_ocr_output"]
+                top_ocr_profile = run_record["ocr_profile_used"]
+                top_focus_strategy = run_record["focus_strategy"]
+                top_readback_strategy = run_record["readback_strategy"]
+                top_target_bundle_name = run_record["target_bundle_name"]
+                top_validation = run_record["validation_result"]
+                if stop_after_first_match:
+                    break
+    except UnsafeAutomationError:
+        raise
 
     log_record = {
         "timestamp": timestamp,

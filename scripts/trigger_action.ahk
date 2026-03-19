@@ -44,6 +44,10 @@ if !FileExist(textFile) {
     ExitApp(5)
 }
 
+if (targetControl = "") {
+    ExitApp(7)
+}
+
 payload := FileRead(textFile, "UTF-8")
 ApplyFocusStrategy(focusStrategyType, targetTitle, targetControl, waitTimeoutSeconds, settleDelayMs)
 existingText := ControlGetText(targetControl, targetTitle)
@@ -75,6 +79,7 @@ if (actionType = "replace_text") {
     ExitApp(6)
 }
 
+; Hard stop: only control-targeted writes are allowed in this script.
 ControlSetText(newText, targetControl, targetTitle)
 Sleep(300)
 ExitApp(0)
