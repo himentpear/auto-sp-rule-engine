@@ -1,69 +1,41 @@
 # auto-sp-rule-engine
 
-`auto-sp-rule-engine` is a local Windows rule engine for low-risk desktop automation on a narrow, validated path:
+Local Windows rule engine on a narrow validated path:
 
 `capture -> WinRT OCR -> normalization -> rule match -> AutoHotkey control-targeted write`
 
-The repository is intentionally bounded to what has actually been validated on this machine. It does not claim generic desktop automation, low-level keyboard simulation, mouse automation, or LLM-driven behavior.
+This repository is intentionally bounded. It does not claim mouse automation, low-level keyboard simulation, generic desktop automation, or LLM-driven execution.
 
-## What Is Validated
+## Open These First
 
-Validated on the current Notepad-based path:
-
-- window capture
-- WinRT OCR
-- OCR ROI, preprocessing, normalization, no-change skip, forced OCR fallback, and multi-frame confirmation
-- config-driven rule matching
-- safe action types:
-  - `append_text`
-  - `prepend_text`
-  - `replace_text`
-  - `write_if_missing`
-  - `append_timestamped_note`
-- per-rule target and control overrides
-- per-rule OCR profile selection
-- single-config multi-target scenarios
-
-## Start Here
-
+- Repo map: [repo-map.md](/C:/Users/jisub/Documents/GitHub/auto%20sp%20rule%20engine/docs/repo-map.md)
 - Project overview: [overview.md](/C:/Users/jisub/Documents/GitHub/auto%20sp%20rule%20engine/docs/overview.md)
-- Validation progression: [validation-path.md](/C:/Users/jisub/Documents/GitHub/auto%20sp%20rule%20engine/docs/validation-path.md)
 - Simplest verified run: [quickstart-notepad.md](/C:/Users/jisub/Documents/GitHub/auto%20sp%20rule%20engine/docs/quickstart-notepad.md)
+- Validation progression: [validation-path.md](/C:/Users/jisub/Documents/GitHub/auto%20sp%20rule%20engine/docs/validation-path.md)
+- Evidence index: [evidence-index.md](/C:/Users/jisub/Documents/GitHub/auto%20sp%20rule%20engine/docs/evidence-index.md)
 
-## Public Examples
+## Main Objects
 
-- Target bundles: [examples/targets](C:/Users/jisub/Documents/GitHub/auto%20sp%20rule%20engine/examples/targets)
+- Targets: [examples/targets](C:/Users/jisub/Documents/GitHub/auto%20sp%20rule%20engine/examples/targets)
 - OCR profiles: [examples/profiles](C:/Users/jisub/Documents/GitHub/auto%20sp%20rule%20engine/examples/profiles)
-- Scenario configs: [examples/scenarios](C:/Users/jisub/Documents/GitHub/auto%20sp%20rule%20engine/examples/scenarios)
-- Representative evidence: [examples/logs](C:/Users/jisub/Documents/GitHub/auto%20sp%20rule%20engine/examples/logs)
+- Scenarios: [examples/scenarios](C:/Users/jisub/Documents/GitHub/auto%20sp%20rule%20engine/examples/scenarios)
+- Examples index: [README.md](/C:/Users/jisub/Documents/GitHub/auto%20sp%20rule%20engine/examples/README.md)
+- Evidence logs: [examples/logs](C:/Users/jisub/Documents/GitHub/auto%20sp%20rule%20engine/examples/logs)
+- Representative screenshots: [examples](C:/Users/jisub/Documents/GitHub/auto%20sp%20rule%20engine/screenshots/examples)
 
-Main Phase 4 scenario:
+## Fast Commands
 
-- [single-config-multi-target.json](/C:/Users/jisub/Documents/GitHub/auto%20sp%20rule%20engine/examples/scenarios/single-config-multi-target.json)
+```powershell
+npm run frontend:dev
+npm run frontend:build
+npm run repo:health
+npm run evidence:index
+npm run docs:check
+npm run repo:refresh
+```
 
-## Safety Boundary
+## Release And Notes
 
-The validated execution boundary is still:
-
-- explicit window titles
-- explicit control names
-- OCR-based rule matching
-- AutoHotkey control-targeted writes
-
-Out of scope:
-
-- mouse automation
-- low-level keyboard simulation
-- arbitrary application coverage
-- autonomous agent behavior
-
-## Requirements
-
-- Windows
-- PowerShell
-- Python 3 available as `py -3`
-- modern Notepad
-- WinRT OCR available through Windows
-- `Pillow`
-
-Dependencies are listed in [requirements.txt](/C:/Users/jisub/Documents/GitHub/auto%20sp%20rule%20engine/requirements.txt).
+- Changelog: [CHANGELOG.md](/C:/Users/jisub/Documents/GitHub/auto%20sp%20rule%20engine/CHANGELOG.md)
+- Release readiness: [release-readiness-v0.1.0.md](/C:/Users/jisub/Documents/GitHub/auto%20sp%20rule%20engine/notes/release-readiness-v0.1.0.md)
+- Latest cleanup summary: [overnight-refactor-summary.md](/C:/Users/jisub/Documents/GitHub/auto%20sp%20rule%20engine/notes/overnight-refactor-summary.md)
