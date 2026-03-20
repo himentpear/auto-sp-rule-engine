@@ -1,5 +1,5 @@
 {
-  "name": "auto-sp-rule-engine",
+  "name": "openclose-desktop-ocr-assistant",
   "private": true,
   "version": "0.2.0",
   "description": "Electron desktop assistant for OCR-driven safe workspace automation on Windows.",
@@ -50,8 +50,8 @@
     "vite": "^7.1.5"
   },
   "build": {
-    "appId": "com.autosp.ruleengine",
-    "productName": "Auto SP Rule Engine Assistant",
+    "appId": "com.openclose.desktopocrassistant",
+    "productName": "OpenClose 桌面OCR助手",
     "compression": "store",
     "asar": true,
     "asarUnpack": [

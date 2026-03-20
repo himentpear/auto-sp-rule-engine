@@ -38,9 +38,9 @@ def run_winrt_ocr(image_path: Path):
         str(impl),
         "-ImagePath",
         str(image_path.resolve()),
+        "-PreferredLanguages",
+        ",".join(preferred_languages),
     ]
-    for language in preferred_languages:
-        cmd.extend(["-PreferredLanguages", language])
     result = subprocess.run(
         cmd,
         capture_output=True,

@@ -1,4 +1,4 @@
-# Auto SP Rule Engine Assistant
+# OpenClose 桌面OCR助手
 
 Windows desktop automation assistant built with Electron, Vite, React, WinRT OCR, and a hard-coded safe execution boundary.
 
@@ -230,6 +230,5 @@ Completed locally:
 
 Packaging status:
 
-- `release/win-unpacked/Auto SP Rule Engine Assistant.exe` was generated
+- `release/win-unpacked/OpenClose 桌面OCR助手.exe` was generated
 - the final portable single-file packaging step may take longer than the default command timeout on this machine
-

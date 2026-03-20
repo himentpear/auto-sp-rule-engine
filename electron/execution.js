@@ -158,7 +158,7 @@ function runPythonConfig(configPath, logsDir, screenshotsDir, dryRun = false) {
 export async function executeWorkspaceRule(userDataPath, workspaceId, ruleInput) {
   const workspace = await getWorkspace(userDataPath, workspaceId);
   const executionConfig = buildExecutionConfig(workspace, ruleInput);
-  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), 'auto-sp-rule-engine-'));
+  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), 'openclose-desktop-ocr-assistant-'));
   const configPath = path.join(tempDir, 'workspace-execution.json');
   const workspaceRoot = path.join(getWorkspacesRoot(userDataPath), workspaceId);
   const logsDir = path.join(workspaceRoot, 'logs');

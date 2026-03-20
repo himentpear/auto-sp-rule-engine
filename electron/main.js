@@ -40,7 +40,7 @@ async function createMainWindow() {
     minWidth: 1280,
     minHeight: 840,
     backgroundColor: '#ebe6dc',
-    title: 'Auto SP Rule Engine Assistant',
+    title: 'OpenClose 桌面OCR助手',
     webPreferences: {
       preload: preloadPath,
       contextIsolation: true,

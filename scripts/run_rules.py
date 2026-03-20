@@ -31,6 +31,27 @@ DEFAULT_OCR = {
         "forced_ocr_interval_seconds": 5.0,
         "consecutive_match_count": 1,
     },
+    "chat_scan": {
+        "enabled": False,
+        "stop_date": "",
+        "stop_date_patterns": [],
+        "max_scroll_steps": 12,
+        "scroll_notches_per_step": 6,
+        "scroll_settle_delay_ms": 450,
+        "anchor_mode": "roi_center",
+        "anchor_offset_x": 0,
+        "anchor_offset_y": 0,
+        "max_frames_retained": 12,
+        "max_aggregated_text_chars": 30000,
+        "max_per_frame_text_chars": 4000,
+        "stop_on_repeated_frames": 3,
+        "completion": {
+            "write_summary": False,
+            "summary_name": "wechat-chat-summary",
+            "shutdown_after_completion": False,
+            "shutdown_delay_seconds": 60,
+        },
+    },
 }
 
 DEFAULT_FOCUS_STRATEGY = {
@@ -90,6 +111,7 @@ BANNED_AHK_PATTERNS = (
     (re.compile(r"\bMouseMove\s*\(", re.IGNORECASE), "MouseMove"),
     (re.compile(r"\bMouseClick\s*\(", re.IGNORECASE), "MouseClick"),
 )
+ALLOWED_SCROLL_SCRIPT_PATTERNS = ("MouseMove(", 'Click("WheelUp")')
 
 
 class UnsafeAutomationError(RuntimeError):
@@ -141,6 +163,11 @@ def deep_merge(defaults: dict, override: dict | None):
 
 def normalize_match_text(value: str):
     return value.lower()
+
+
+def normalize_stop_text(value: str):
+    normalized = normalize_match_text(value or "")
+    return re.sub(r"[\s\-./年月日:]+", "", normalized)
 
 
 def validate_match_config(match_cfg: dict, logs_dir: Path, rule_name: str):
@@ -263,6 +290,35 @@ def validate_ahk_write_script(trigger_script: Path, logs_dir: Path):
             "Unsafe AutoHotkey command detected. Only control-targeted writes are allowed.",
             {"trigger_script": str(trigger_script), "banned_tokens": banned_hits},
         )
+    if not any(command in script_text for command in ALLOWED_AHK_WRITE_COMMANDS):
+        raise_security_violation(
+            logs_dir,
+            "AutoHotkey write script does not contain an allowed control-targeted write command.",
+            {"trigger_script": str(trigger_script), "allowed_commands": ALLOWED_AHK_WRITE_COMMANDS},
+        )
+
+
+def validate_ahk_scroll_script(scroll_script: Path, logs_dir: Path):
+    script_text = scroll_script.read_text(encoding="utf-8")
+    banned_patterns = (
+        (re.compile(r'Click\s*\(\s*"?(?!WheelUp\b)[^"]+"?\s*\)', re.IGNORECASE), "Click(non-wheel-up)"),
+        (re.compile(r"ControlSetText\s*\(", re.IGNORECASE), "ControlSetText"),
+        (re.compile(r"ControlSend\s*\(", re.IGNORECASE), "ControlSend"),
+        (re.compile(r"Send(Input|Event|Play|Text)?\s*\(", re.IGNORECASE), "Send"),
+    )
+    banned_hits = [label for pattern, label in banned_patterns if pattern.search(script_text)]
+    if banned_hits:
+        raise_security_violation(
+            logs_dir,
+            "Unsafe AutoHotkey scroll command detected. Only upward mouse wheel scrolling is allowed.",
+            {"scroll_script": str(scroll_script), "banned_tokens": banned_hits},
+        )
+    if not all(token in script_text for token in ALLOWED_SCROLL_SCRIPT_PATTERNS):
+        raise_security_violation(
+            logs_dir,
+            "Scroll script is missing required wheel-only primitives.",
+            {"scroll_script": str(scroll_script), "required_tokens": ALLOWED_SCROLL_SCRIPT_PATTERNS},
+        )
 
 
 def raise_ahk_runtime_error(exit_code: int, control_name: str | None, window_title: str | None):
@@ -273,12 +329,170 @@ def raise_ahk_runtime_error(exit_code: int, control_name: str | None, window_tit
     if exit_code in (8, 9, 10):
         detail += " The current app version may not expose a standard editable control for safe control-targeted writes."
     raise RuntimeError(message + detail)
-    if not any(command in script_text for command in ALLOWED_AHK_WRITE_COMMANDS):
-        raise_security_violation(
-            logs_dir,
-            "AutoHotkey write script does not contain an allowed control-targeted write command.",
-            {"trigger_script": str(trigger_script), "allowed_commands": ALLOWED_AHK_WRITE_COMMANDS},
+
+
+def truncate_text(value: str | None, max_chars: int):
+    if value is None:
+        return None
+    if max_chars <= 0 or len(value) <= max_chars:
+        return value
+    if max_chars <= 3:
+        return value[:max_chars]
+    return value[: max_chars - 3] + "..."
+
+
+def normalize_chat_scan_config(scan_cfg: dict | None):
+    normalized = deep_merge(DEFAULT_OCR["chat_scan"], scan_cfg or {})
+    normalized["enabled"] = bool(normalized.get("enabled", False))
+    normalized["max_scroll_steps"] = max(0, int(normalized.get("max_scroll_steps", 12)))
+    normalized["scroll_notches_per_step"] = max(1, int(normalized.get("scroll_notches_per_step", 6)))
+    normalized["scroll_settle_delay_ms"] = max(0, int(normalized.get("scroll_settle_delay_ms", 450)))
+    normalized["max_frames_retained"] = max(1, int(normalized.get("max_frames_retained", 12)))
+    normalized["max_aggregated_text_chars"] = max(1000, int(normalized.get("max_aggregated_text_chars", 30000)))
+    normalized["max_per_frame_text_chars"] = max(200, int(normalized.get("max_per_frame_text_chars", 4000)))
+    normalized["stop_on_repeated_frames"] = max(0, int(normalized.get("stop_on_repeated_frames", 3)))
+    normalized["anchor_mode"] = normalized.get("anchor_mode") or "roi_center"
+    normalized["anchor_offset_x"] = int(normalized.get("anchor_offset_x", 0))
+    normalized["anchor_offset_y"] = int(normalized.get("anchor_offset_y", 0))
+    normalized["stop_date"] = str(normalized.get("stop_date") or "").strip()
+    normalized["stop_date_patterns"] = [
+        str(pattern).strip()
+        for pattern in normalized.get("stop_date_patterns", [])
+        if str(pattern).strip()
+    ]
+    completion = deep_merge(DEFAULT_OCR["chat_scan"]["completion"], normalized.get("completion"))
+    completion["write_summary"] = bool(completion.get("write_summary", False))
+    completion["shutdown_after_completion"] = bool(completion.get("shutdown_after_completion", False))
+    completion["shutdown_delay_seconds"] = max(0, int(completion.get("shutdown_delay_seconds", 60)))
+    completion["summary_name"] = str(completion.get("summary_name") or "wechat-chat-summary").strip() or "wechat-chat-summary"
+    normalized["completion"] = completion
+    return normalized
+
+
+def build_scan_anchor(bounds: dict | None, roi_used: dict | None, scan_cfg: dict):
+    left = int((bounds or {}).get("Left", 0))
+    top = int((bounds or {}).get("Top", 0))
+    right = int((bounds or {}).get("Right", left + 1))
+    bottom = int((bounds or {}).get("Bottom", top + 1))
+    mode = scan_cfg.get("anchor_mode", "roi_center")
+
+    if mode == "roi_center" and roi_used:
+        x = left + int(roi_used["x"] + roi_used["width"] / 2)
+        y = top + int(roi_used["y"] + roi_used["height"] / 2)
+    else:
+        x = left + int((right - left) / 2)
+        y = top + int((bottom - top) / 2)
+
+    x += int(scan_cfg.get("anchor_offset_x", 0))
+    y += int(scan_cfg.get("anchor_offset_y", 0))
+    x = max(left + 1, min(right - 1, x))
+    y = max(top + 1, min(bottom - 1, y))
+    return {"x": x, "y": y}
+
+
+def append_capped_text(segments: list[str], value: str | None, max_chars: int):
+    if not value:
+        return False
+    text = value.strip()
+    if not text:
+        return False
+    if segments and segments[-1] == text:
+        return False
+    segments.append(text)
+    while sum(len(item) for item in segments) + max(0, len(segments) - 1) > max_chars and len(segments) > 1:
+        segments.pop(0)
+    if sum(len(item) for item in segments) + max(0, len(segments) - 1) > max_chars:
+        segments[0] = truncate_text(segments[0], max_chars)
+    return True
+
+
+def detect_stop_date(scan_cfg: dict, raw_ocr_text: str | None, normalized_ocr_text: str | None):
+    stop_date = scan_cfg.get("stop_date", "")
+    patterns = scan_cfg.get("stop_date_patterns", [])
+    combined = "\n".join(part for part in (raw_ocr_text or "", normalized_ocr_text or "") if part)
+    combined_normalized = normalize_stop_text(combined)
+
+    if stop_date:
+        target = normalize_stop_text(stop_date)
+        if target and target in combined_normalized:
+            return {"matched": True, "reason": f"stop_date:{stop_date}"}
+
+    for pattern in patterns:
+        if re.search(pattern, combined, flags=re.IGNORECASE):
+            return {"matched": True, "reason": f"stop_date_pattern:{pattern}"}
+
+    return {"matched": False, "reason": None}
+
+
+def retain_recent_frames(frames: list[dict], frame: dict, max_frames: int):
+    frames.append(frame)
+    dropped = 0
+    while len(frames) > max_frames:
+        frames.pop(0)
+        dropped += 1
+    return dropped
+
+
+def apply_scroll_step(
+    ahk_exe: Path,
+    scroll_script: Path,
+    resolved_target: dict,
+    anchor: dict,
+    scan_cfg: dict,
+):
+    scroll_proc = subprocess.run(
+        [
+            str(ahk_exe),
+            str(scroll_script),
+            resolved_target["window_title"],
+            str(anchor["x"]),
+            str(anchor["y"]),
+            str(scan_cfg["scroll_notches_per_step"]),
+            str(scan_cfg["scroll_settle_delay_ms"]),
+        ],
+        capture_output=True,
+        text=True,
+    )
+    if scroll_proc.returncode != 0:
+        raise RuntimeError(
+            f"AutoHotkey scroll runtime failed with exit code {scroll_proc.returncode}. Window: {resolved_target.get('window_title') or 'n/a'}."
         )
+
+
+def render_chat_summary(transcript_text: str, rule_name: str, resolved_target: dict, scan_summary: dict):
+    transcript_lines = []
+    seen = set()
+    for raw_line in transcript_text.replace("\r\n", "\n").split("\n"):
+        line = re.sub(r"\s+", " ", raw_line).strip()
+        if not line or len(line) < 2 or line in seen:
+            continue
+        seen.add(line)
+        transcript_lines.append(line)
+
+    header = [
+        f"Rule: {rule_name}",
+        f"Window: {resolved_target.get('window_title') or 'n/a'}",
+        f"Stop date: {scan_summary.get('stop_date') or 'n/a'}",
+        f"Stop reason: {scan_summary.get('stop_reason') or 'n/a'}",
+        f"Frames captured: {scan_summary.get('total_frames_captured') or 0}",
+        "",
+        "Transcript summary:",
+    ]
+    return "\n".join(header + transcript_lines).strip() + "\n"
+
+
+def write_chat_scan_summary(logs_dir: Path, prefix: str, timestamp: str, rule_name: str, resolved_target: dict, scan_summary: dict, transcript_text: str):
+    base_name = scan_summary.get("summary_name") or "wechat-chat-summary"
+    summary_path = logs_dir / f"{prefix}-{timestamp}-{base_name}.txt"
+    summary_path.write_text(
+        render_chat_summary(transcript_text, rule_name, resolved_target, scan_summary),
+        encoding="utf-8",
+    )
+    return summary_path
+
+
+def schedule_shutdown(delay_seconds: int):
+    subprocess.run(["shutdown", "/s", "/t", str(max(0, int(delay_seconds)))], check=True, capture_output=True, text=True)
 
 
 def evaluate_match(match_cfg: dict, ocr_text: str):
@@ -768,10 +982,13 @@ def run_rule_pipeline(
     screenshots_dir: Path,
     cooldown_seconds: int,
 ):
+    execution_dry_run = bool(dry_run or rule.get("dry_run"))
     resolved_target, resolved_control, resolved_bundle = resolve_rule_target(config, rule)
     ocr_profile_name, ocr_cfg = resolve_rule_ocr_profile(config, rule, resolved_bundle)
     validate_execution_draft(rule, resolved_bundle, resolved_target, resolved_control, ocr_profile_name, ocr_cfg, logs_dir)
     validate_ahk_write_script(trigger_script, logs_dir)
+    scroll_script = root / "scripts" / "ahk" / "scroll_mouse_wheel.ahk"
+    validate_ahk_scroll_script(scroll_script, logs_dir)
 
     read_exit_code, current_text = read_target_text(
         ahk_exe,
@@ -789,8 +1006,10 @@ def run_rule_pipeline(
         ocr_cfg,
     )
     watch_cfg = ocr_cfg["watch"]
+    scan_cfg = normalize_chat_scan_config(ocr_cfg.get("chat_scan"))
+    scan_enabled = scan_cfg["enabled"]
     watch_enabled = bool(watch_cfg.get("enabled", False))
-    max_checks = int(watch_cfg.get("max_checks", 1 if watch_enabled else 1))
+    max_checks = scan_cfg["max_scroll_steps"] + 1 if scan_enabled else int(watch_cfg.get("max_checks", 1 if watch_enabled else 1))
     poll_interval = float(watch_cfg.get("polling_interval_seconds", 1.0))
     change_threshold = float(watch_cfg.get("change_threshold", 0.005))
     forced_ocr_interval = float(watch_cfg.get("forced_ocr_interval_seconds", 5.0))
@@ -802,6 +1021,12 @@ def run_rule_pipeline(
     last_normalized_text = None
     consecutive_count = 0
     selected_ocr_payload = None
+    aggregated_raw_segments = []
+    aggregated_normalized_segments = []
+    total_frames_captured = 0
+    retained_frame_drops = 0
+    repeated_frame_count = 0
+    scan_stop_reason = None
 
     final_result = {
         "matched_rule": None,
@@ -817,23 +1042,41 @@ def run_rule_pipeline(
             "duplicate_reason": None,
             "post_action_control_text": current_text,
         },
+        "scan_summary": {
+            "enabled": scan_enabled,
+            "stop_date": scan_cfg["stop_date"] or None,
+            "summary_name": scan_cfg["completion"]["summary_name"],
+            "stop_reason": None,
+            "stop_date_detected": False,
+            "stop_date_reason": None,
+            "total_frames_captured": 0,
+            "retained_frame_limit": scan_cfg["max_frames_retained"],
+            "retained_frames_dropped": 0,
+            "retained_frames": 0,
+            "aggregated_text_limit": scan_cfg["max_aggregated_text_chars"],
+            "aggregated_text_truncated": False,
+            "summary_path": None,
+            "shutdown_scheduled": False,
+            "shutdown_delay_seconds": scan_cfg["completion"]["shutdown_delay_seconds"],
+        },
     }
 
     for check_index in range(1, max_checks + 1):
         screenshot_path = screenshots_dir / f"{prefix}-{timestamp}-{rule['name']}-check{check_index}.png"
         capture = capture_target_window(capture_script, resolved_target, screenshot_path)
+        total_frames_captured += 1
 
         change_ratio = None
         ocr_skipped = False
-        forced_ocr = check_index == 1
+        forced_ocr = True if scan_enabled else check_index == 1
         if previous_capture_path:
             change_ratio = compute_image_change_ratio(previous_capture_path, screenshot_path, ocr_cfg)
-            if not forced_ocr:
+            if not scan_enabled and not forced_ocr:
                 if forced_ocr_interval <= 0:
                     forced_ocr = True
                 elif last_ocr_monotonic is not None:
                     forced_ocr = (time.monotonic() - last_ocr_monotonic) >= forced_ocr_interval
-            if watch_enabled and not forced_ocr and change_ratio is not None and change_ratio < change_threshold:
+            if not scan_enabled and watch_enabled and not forced_ocr and change_ratio is not None and change_ratio < change_threshold:
                 ocr_skipped = True
 
         frame = {
@@ -851,6 +1094,10 @@ def run_rule_pipeline(
             "multi_frame_confirmation_count": consecutive_count,
             "multi_frame_confirmation_satisfied": False,
             "rule_evaluation_skipped_reason": None,
+            "scroll_applied": False,
+            "scroll_anchor": None,
+            "stop_date_detected": False,
+            "stop_date_reason": None,
         }
 
         if not ocr_skipped:
@@ -864,16 +1111,60 @@ def run_rule_pipeline(
             frame["roi_used"] = ocr_payload["roi_used"]
             frame["preprocessing_settings"] = ocr_payload["preprocessing_settings"]
             frame["normalization_settings"] = ocr_payload["normalization_settings"]
+            frame["raw_ocr_output"] = truncate_text(frame["raw_ocr_output"], scan_cfg["max_per_frame_text_chars"])
+            frame["normalized_ocr_output"] = truncate_text(frame["normalized_ocr_output"], scan_cfg["max_per_frame_text_chars"])
 
             normalized_text = ocr_payload["normalized_ocr_output"]
             if last_normalized_text == normalized_text:
                 consecutive_count += 1
+                repeated_frame_count += 1
             else:
                 consecutive_count = 1
+                repeated_frame_count = 0
             last_normalized_text = normalized_text
 
             frame["multi_frame_confirmation_count"] = consecutive_count
             frame["multi_frame_confirmation_satisfied"] = consecutive_count >= consecutive_required
+
+            if scan_enabled:
+                appended_normalized = append_capped_text(
+                    aggregated_normalized_segments,
+                    ocr_payload["normalized_ocr_output"],
+                    scan_cfg["max_aggregated_text_chars"],
+                )
+                appended_raw = append_capped_text(
+                    aggregated_raw_segments,
+                    ocr_payload["raw_ocr_output"],
+                    scan_cfg["max_aggregated_text_chars"],
+                )
+                if (not appended_normalized and aggregated_normalized_segments) or (not appended_raw and aggregated_raw_segments):
+                    final_result["scan_summary"]["aggregated_text_truncated"] = True
+
+                stop_state = detect_stop_date(scan_cfg, ocr_payload["raw_ocr_output"], ocr_payload["normalized_ocr_output"])
+                frame["stop_date_detected"] = stop_state["matched"]
+                frame["stop_date_reason"] = stop_state["reason"]
+
+                retained_frame_drops += retain_recent_frames(frames, frame, scan_cfg["max_frames_retained"])
+                previous_capture_path = screenshot_path
+
+                if stop_state["matched"]:
+                    final_result["scan_summary"]["stop_date_detected"] = True
+                    final_result["scan_summary"]["stop_date_reason"] = stop_state["reason"]
+                    scan_stop_reason = "stop_date_detected"
+                    break
+                if scan_cfg["stop_on_repeated_frames"] > 0 and repeated_frame_count >= scan_cfg["stop_on_repeated_frames"]:
+                    scan_stop_reason = f"repeated_frame_{repeated_frame_count}"
+                    break
+                if check_index >= max_checks:
+                    scan_stop_reason = "max_scroll_steps_reached"
+                    break
+
+                anchor = build_scan_anchor(capture.get("Bounds"), ocr_payload["roi_used"], scan_cfg)
+                frame["scroll_anchor"] = anchor
+                apply_scroll_step(ahk_exe, scroll_script, resolved_target, anchor, scan_cfg)
+                frame["scroll_applied"] = True
+                time.sleep(scan_cfg["scroll_settle_delay_ms"] / 1000.0)
+                continue
 
             if frame["multi_frame_confirmation_satisfied"]:
                 rule_eval = evaluate_rules_for_ocr_text(
@@ -881,7 +1172,7 @@ def run_rule_pipeline(
                     normalized_ocr_text=normalized_text,
                     current_text=current_text,
                     recent_logs=recent_logs,
-                    dry_run=dry_run,
+                    dry_run=execution_dry_run,
                     ahk_exe=ahk_exe,
                     trigger_script=trigger_script,
                     readback_script=readback_script,
@@ -920,6 +1211,73 @@ def run_rule_pipeline(
         if check_index < max_checks:
             time.sleep(poll_interval)
 
+    if scan_enabled:
+        aggregated_normalized_text = "\n".join(aggregated_normalized_segments).strip()
+        aggregated_raw_text = "\n".join(aggregated_raw_segments).strip()
+        if (
+            sum(len(item) for item in aggregated_normalized_segments) + max(0, len(aggregated_normalized_segments) - 1)
+            >= scan_cfg["max_aggregated_text_chars"]
+        ):
+            final_result["scan_summary"]["aggregated_text_truncated"] = True
+        final_result["scan_summary"]["stop_reason"] = scan_stop_reason or "completed"
+        final_result["scan_summary"]["total_frames_captured"] = total_frames_captured
+        final_result["scan_summary"]["retained_frames_dropped"] = retained_frame_drops
+        final_result["scan_summary"]["retained_frames"] = len(frames)
+
+        if aggregated_normalized_text:
+            rule_eval = evaluate_rules_for_ocr_text(
+                rule=rule,
+                normalized_ocr_text=aggregated_normalized_text,
+                current_text=current_text,
+                recent_logs=recent_logs,
+                dry_run=execution_dry_run,
+                ahk_exe=ahk_exe,
+                trigger_script=trigger_script,
+                readback_script=readback_script,
+                readback_path=readback_path,
+                logs_dir=logs_dir,
+                capture_script=capture_script,
+                screenshots_dir=screenshots_dir,
+                timestamp=timestamp,
+                prefix=prefix,
+                resolved_target=resolved_target,
+                resolved_control=resolved_control,
+                resolved_bundle=resolved_bundle,
+                ocr_cfg=ocr_cfg,
+                cooldown_seconds=cooldown_seconds,
+            )
+            final_result["matched_rule"] = rule["name"] if rule_eval["evaluation"]["match"]["matched"] else None
+            final_result["action_type"] = rule_eval["action_type"]
+            final_result["action_payload"] = rule_eval["action_payload"]
+            final_result["ahk_exit_code"] = rule_eval["ahk_exit_code"]
+            final_result["evaluated_rules"] = [rule_eval["evaluation"]]
+            final_result["validation_result"] = deep_merge(final_result["validation_result"], rule_eval["validation_result"])
+
+        if scan_cfg["completion"]["write_summary"] and aggregated_normalized_text:
+            summary_path = write_chat_scan_summary(
+                logs_dir,
+                prefix,
+                timestamp,
+                rule["name"],
+                resolved_target,
+                final_result["scan_summary"],
+                aggregated_normalized_text,
+            )
+            final_result["scan_summary"]["summary_path"] = str(summary_path.resolve())
+
+        if scan_cfg["completion"]["shutdown_after_completion"] and not dry_run:
+            schedule_shutdown(scan_cfg["completion"]["shutdown_delay_seconds"])
+            final_result["scan_summary"]["shutdown_scheduled"] = True
+
+        selected_ocr_payload = selected_ocr_payload or {
+            "roi_used": ocr_cfg.get("roi"),
+            "preprocessing_settings": ocr_cfg["preprocessing"],
+            "normalization_settings": ocr_cfg["normalization"],
+            "image_path": frames[-1]["screenshot_path"] if frames else None,
+        }
+        selected_ocr_payload["raw_ocr_output"] = aggregated_raw_text
+        selected_ocr_payload["normalized_ocr_output"] = aggregated_normalized_text
+
     return {
         "rule_name": rule["name"],
         "resolved_target": resolved_target,
@@ -943,6 +1301,7 @@ def run_rule_pipeline(
         "action_payload": final_result["action_payload"],
         "ahk_exit_code": final_result["ahk_exit_code"],
         "validation_result": final_result["validation_result"],
+        "scan_summary": final_result["scan_summary"],
         "frames": frames,
     }
 
@@ -995,6 +1354,7 @@ def main() -> int:
     top_readback_strategy = None
     top_target_bundle_name = None
     top_validation = None
+    top_scan_summary = None
 
     try:
         for rule in config["rules"]:
@@ -1035,8 +1395,24 @@ def main() -> int:
                 top_readback_strategy = run_record["readback_strategy"]
                 top_target_bundle_name = run_record["target_bundle_name"]
                 top_validation = run_record["validation_result"]
+                top_scan_summary = run_record.get("scan_summary")
                 if stop_after_first_match:
                     break
+            elif run_record.get("scan_summary") and top_scan_summary is None:
+                top_target_window = run_record["resolved_target"]["window_title"]
+                top_target_control = run_record["resolved_control"]["name"]
+                top_screenshot_path = run_record["screenshot_path"]
+                top_roi_used = run_record["roi_used"]
+                top_preprocessing = run_record["preprocessing_settings"]
+                top_normalization = run_record["normalization_settings"]
+                top_raw_ocr = run_record["raw_ocr_output"]
+                top_normalized_ocr = run_record["normalized_ocr_output"]
+                top_ocr_profile = run_record["ocr_profile_used"]
+                top_focus_strategy = run_record["focus_strategy"]
+                top_readback_strategy = run_record["readback_strategy"]
+                top_target_bundle_name = run_record["target_bundle_name"]
+                top_validation = run_record["validation_result"]
+                top_scan_summary = run_record.get("scan_summary")
     except UnsafeAutomationError:
         raise
 
@@ -1061,6 +1437,7 @@ def main() -> int:
         "action_payload": action_payload,
         "ahk_exit_code": ahk_exit_code,
         "validation_result": top_validation,
+        "scan_summary": top_scan_summary,
         "dry_run": args.dry_run,
         "rule_runs": rule_runs,
     }

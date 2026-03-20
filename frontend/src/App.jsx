@@ -98,7 +98,7 @@ function BrowserFallback() {
             <div>
               请运行：
               <pre className="mt-2 rounded-lg bg-slate-950/90 p-4 text-xs text-slate-100">{`npm run electron:dev
-release\\Auto SP Rule Engine Assistant-0.2.0.exe`}</pre>
+release\\OpenClose 桌面OCR助手-0.2.0.exe`}</pre>
             </div>
             <div>启动 Electron 后，请到监控页点击 `刷新窗口 / Refresh Windows`。</div>
           </CardContent>
@@ -116,7 +116,7 @@ function SidebarNav({ activeTab, onChange, workspaces, activeWorkspaceId, onSele
         <div className="flex items-start gap-3">
           <AppLogo />
           <div>
-            <h1 className="text-2xl font-semibold tracking-tight">自动化助手 Auto SP Assistant</h1>
+            <h1 className="text-2xl font-semibold tracking-tight">OpenClose 桌面OCR助手</h1>
             <p className="mt-2 text-sm text-muted-foreground">带隔离工作区和主进程安全边界的桌面自动化助手。</p>
           </div>
         </div>
