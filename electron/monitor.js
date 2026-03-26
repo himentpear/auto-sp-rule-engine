@@ -268,6 +268,8 @@ class MonitorManager extends EventEmitter {
 
   getOcrPreview(result) {
     const text =
+      result?.final_ocr_output ||
+      result?.rule_runs?.[0]?.final_ocr_output ||
       result?.postprocessed_ocr_output ||
       result?.ocr_text ||
       result?.normalized_ocr_output ||
@@ -283,6 +285,16 @@ class MonitorManager extends EventEmitter {
       result?.rule_runs?.[0]?.postprocessed_ocr_output ||
       '';
     return String(text).replace(/\s+/g, ' ').trim().slice(0, 80);
+  }
+
+  getPostprocessedLineStats(result) {
+    const lines = result?.postprocessed_lines || result?.rule_runs?.[0]?.postprocessed_lines || [];
+    return {
+      postprocessedLineCount: Array.isArray(lines) ? lines.length : 0,
+      firstPostprocessedLinePreview: Array.isArray(lines) && lines.length
+        ? String(lines[0]?.text || lines[0]?.raw_text || '').replace(/\s+/g, ' ').trim().slice(0, 80)
+        : '',
+    };
   }
 
   analyzeWechatContent(result, matchedWindow) {
@@ -385,12 +397,18 @@ class MonitorManager extends EventEmitter {
     const txtPath = path.join(dateFolder, `${baseName}.txt`);
     const fallbackTime = captureTimestamp.slice(11, 16);
     const sourceLines =
+      result?.postprocessed_lines ||
+      result?.rule_runs?.[0]?.postprocessed_lines ||
       result?.normalized_lines ||
       result?.rule_runs?.[0]?.normalized_lines ||
       [];
     const sourceText =
+      result?.final_ocr_output ||
+      result?.postprocessed_ocr_output ||
       result?.normalized_ocr_output ||
       result?.ocr_text ||
+      result?.rule_runs?.[0]?.final_ocr_output ||
+      result?.rule_runs?.[0]?.postprocessed_ocr_output ||
       result?.rule_runs?.[0]?.normalized_ocr_output ||
       payload?.contentSummary ||
       '';
@@ -539,6 +557,7 @@ class MonitorManager extends EventEmitter {
           });
           const ocrPreview = this.getOcrPreview(result);
           const postprocessedOcrPreview = this.getPostprocessedPreview(result);
+          const postprocessedLineStats = this.getPostprocessedLineStats(result);
           const contentAnalysis = this.analyzeWechatContent(result, matchedWindow);
           const persistence = await this.persistConversationLog(userDataPath, session, matchedWindow, result, {
             ...contentAnalysis,
@@ -552,6 +571,7 @@ class MonitorManager extends EventEmitter {
               ...result,
               ocrPreview,
               postprocessedOcrPreview,
+              ...postprocessedLineStats,
               ...contentAnalysis,
               conversationLog: persistence,
             },
@@ -584,6 +604,7 @@ class MonitorManager extends EventEmitter {
           const result = await executeWorkspaceRule(userDataPath, workspaceId, executionInput);
           const ocrPreview = this.getOcrPreview(result);
           const postprocessedOcrPreview = this.getPostprocessedPreview(result);
+          const postprocessedLineStats = this.getPostprocessedLineStats(result);
           const contentAnalysis = this.analyzeWechatContent(result, matchedWindow);
           const persistence = await this.persistConversationLog(userDataPath, session, matchedWindow, result, {
             ...contentAnalysis,
@@ -601,6 +622,7 @@ class MonitorManager extends EventEmitter {
               ...result,
               ocrPreview,
               postprocessedOcrPreview,
+              ...postprocessedLineStats,
               ...contentAnalysis,
               conversationLog: persistence,
               detectedByClassifier: Boolean(detectionMessage),

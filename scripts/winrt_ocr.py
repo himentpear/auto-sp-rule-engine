@@ -25,6 +25,8 @@ DEFAULT_NORMALIZATION = {
 DEFAULT_POSTPROCESS = {
     "chinese_repair": {
         "enabled": False,
+        "high_confidence_enabled": True,
+        "low_confidence_enabled": False,
     },
 }
 
@@ -32,12 +34,38 @@ DEFAULT_OCR_BEHAVIOR = {
     "fallback_to_full_window_on_empty": False,
 }
 
-CHINESE_REPAIR_MAP = {
-    "亻尔": "你",
-    "白勺": "的",
-    "口马": "吗",
-    "女子": "好",
+HIGH_CONFIDENCE_CHINESE_REPAIR_MAP = {
+    "\u4ebb\u5c14": "\u4f60",
+    "\u767d\u52fa": "\u7684",
+    "\u53e3\u9a6c": "\u5417",
 }
+
+LOW_CONFIDENCE_CHINESE_REPAIR_MAP = {
+    "\u5973\u5b50": "\u597d",
+    "\u5fc4\u9752": "\u60c5",
+}
+
+META_LINGUISTIC_KEYWORDS = (
+    "\u504f\u65c1",
+    "\u90e8\u9996",
+    "\u7ed3\u6784",
+    "\u5b57\u5f62",
+    "\u7ec4\u6210",
+    "\u7ec4\u5408",
+    "\u662f\u4ec0\u4e48\u504f\u65c1\u7ec4\u5408",
+    "\u662f\u4ec0\u4e48\u610f\u601d",
+    "\u4ec0\u4e48\u610f\u601d",
+    "\u5ff5",
+    "\u8bfb",
+    "\u600e\u4e48\u5199",
+)
+
+LOW_CONFIDENCE_BLOCK_PATTERNS = (
+    re.compile("\u5973\u5b50\u5b66\u6821"),
+    re.compile("\u5973\u5b50\u7ec4"),
+    re.compile("\u5973\u5b50\u8d5b"),
+    re.compile("\u53e4\u4ee3\u5973\u5b50"),
+)
 
 
 def run_winrt_ocr(image_path: Path):
@@ -241,6 +269,41 @@ def is_cjk_character(value: str):
     return bool(re.fullmatch(r"[\u3400-\u4dbf\u4e00-\u9fff]", value or ""))
 
 
+def is_meta_linguistic_context(text: str, index: int, window: int = 8):
+    left = max(0, index - window)
+    right = min(len(text), index + 2 + window)
+    snippet = text[left:right]
+    return any(keyword in snippet for keyword in META_LINGUISTIC_KEYWORDS)
+
+
+def should_apply_low_confidence_repair(text: str, index: int, pair: str, replacement: str):
+    del replacement
+    if is_meta_linguistic_context(text, index):
+        return False
+
+    for pattern in LOW_CONFIDENCE_BLOCK_PATTERNS:
+        if pattern.search(text):
+            return False
+
+    prev_char = text[index - 1] if index > 0 else ""
+    next_char = text[index + 2] if index + 2 < len(text) else ""
+
+    if is_cjk_character(prev_char) or is_cjk_character(next_char):
+        return False
+
+    if pair == "\u5973\u5b50":
+        return False
+
+    return True
+
+
+def should_apply_high_confidence_repair(text: str, index: int, pair: str):
+    del pair
+    if is_meta_linguistic_context(text, index):
+        return False
+    return True
+
+
 def apply_chinese_repair(text: str, repair_cfg: dict | None):
     cfg = merge_dict(DEFAULT_POSTPROCESS["chinese_repair"], repair_cfg)
     if not cfg.get("enabled", False) or not text:
@@ -252,12 +315,33 @@ def apply_chinese_repair(text: str, repair_cfg: dict | None):
 
     while index < len(text):
         pair = text[index : index + 2]
-        replacement = CHINESE_REPAIR_MAP.get(pair)
+        replacement = None
+        confidence = None
         if (
-            replacement
+            cfg.get("high_confidence_enabled", True)
+            and pair in HIGH_CONFIDENCE_CHINESE_REPAIR_MAP
             and len(pair) == 2
             and all(len(character) == 1 and is_cjk_character(character) for character in pair)
+            and should_apply_high_confidence_repair(text, index, pair)
         ):
+            replacement = HIGH_CONFIDENCE_CHINESE_REPAIR_MAP[pair]
+            confidence = "high"
+        elif (
+            cfg.get("low_confidence_enabled", False)
+            and pair in LOW_CONFIDENCE_CHINESE_REPAIR_MAP
+            and len(pair) == 2
+            and all(len(character) == 1 and is_cjk_character(character) for character in pair)
+            and should_apply_low_confidence_repair(
+                text,
+                index,
+                pair,
+                LOW_CONFIDENCE_CHINESE_REPAIR_MAP[pair],
+            )
+        ):
+            replacement = LOW_CONFIDENCE_CHINESE_REPAIR_MAP[pair]
+            confidence = "low"
+
+        if replacement:
             repaired_chars.append(replacement)
             repairs.append(
                 {
@@ -265,6 +349,7 @@ def apply_chinese_repair(text: str, repair_cfg: dict | None):
                     "replacement": replacement,
                     "start": index,
                     "end": index + 2,
+                    "confidence": confidence,
                 }
             )
             index += 2
@@ -284,6 +369,25 @@ def postprocess_text(normalized_text: str, postprocess_cfg: dict | None):
     )
     cfg["chinese_repair"] = chinese_repair_cfg
     return repaired_text, cfg, {"chinese_repairs": repairs}
+
+
+def postprocess_lines(normalized_lines: list[dict], postprocess_cfg: dict | None):
+    postprocessed_lines = []
+    line_repairs = []
+
+    for line in normalized_lines or []:
+        repaired_text, _, details = postprocess_text(line.get("text", ""), postprocess_cfg)
+        postprocessed_lines.append(
+            {
+                "text": repaired_text,
+                "raw_text": line.get("raw_text", ""),
+                "bounding_rect": line.get("bounding_rect"),
+                "words": line.get("words", []),
+            }
+        )
+        line_repairs.append(details.get("chinese_repairs", []))
+
+    return postprocessed_lines, {"line_repairs": line_repairs}
 
 
 def save_image(image: Image.Image, out_path: Path | None):
@@ -343,6 +447,11 @@ def run_ocr_pipeline(image_path: Path, ocr_cfg: dict | None, processed_out_path:
                     "words": line.get("Words", []),
                 }
             )
+        postprocessed_lines_local, postprocessed_line_details_local = postprocess_lines(
+            normalized_lines_local,
+            (active_ocr_cfg or {}).get("postprocess"),
+        )
+        postprocess_details_local["line_repairs"] = postprocessed_line_details_local["line_repairs"]
         return (
             prepared_local,
             ocr_payload_local,
@@ -352,6 +461,7 @@ def run_ocr_pipeline(image_path: Path, ocr_cfg: dict | None, processed_out_path:
             postprocess_cfg_local,
             postprocess_details_local,
             normalized_lines_local,
+            postprocessed_lines_local,
         )
 
     (
@@ -363,6 +473,7 @@ def run_ocr_pipeline(image_path: Path, ocr_cfg: dict | None, processed_out_path:
         postprocess_cfg,
         postprocess_details,
         normalized_lines,
+        postprocessed_lines,
     ) = execute_once(ocr_cfg, processed_out_path)
 
     if (
@@ -384,8 +495,10 @@ def run_ocr_pipeline(image_path: Path, ocr_cfg: dict | None, processed_out_path:
             postprocess_cfg,
             postprocess_details,
             normalized_lines,
+            postprocessed_lines,
         ) = execute_once(fallback_cfg, fallback_out_path)
 
+    final_ocr_output = postprocessed_text or normalized_text
     return {
         "image_path": str(image_path.resolve()),
         "processed_image_path": prepared["processed_image_path"],
@@ -396,9 +509,11 @@ def run_ocr_pipeline(image_path: Path, ocr_cfg: dict | None, processed_out_path:
         "raw_ocr_output": ocr_payload.get("Text", ""),
         "normalized_ocr_output": normalized_text,
         "postprocessed_ocr_output": postprocessed_text,
-        "ocr_text": postprocessed_text,
+        "final_ocr_output": final_ocr_output,
+        "ocr_text": final_ocr_output,
         "postprocess_details": postprocess_details,
         "normalized_lines": normalized_lines,
+        "postprocessed_lines": postprocessed_lines,
         "language": ocr_payload.get("Language"),
         "line_count": ocr_payload.get("LineCount"),
     }
