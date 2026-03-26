@@ -46,6 +46,7 @@ LOW_CONFIDENCE_CHINESE_REPAIR_MAP = {
 }
 
 META_LINGUISTIC_KEYWORDS = (
+    "\u8fd9\u4e2a\u5b57",
     "\u504f\u65c1",
     "\u90e8\u9996",
     "\u7ed3\u6784",
@@ -58,6 +59,10 @@ META_LINGUISTIC_KEYWORDS = (
     "\u5ff5",
     "\u8bfb",
     "\u600e\u4e48\u5199",
+    "\u72ec\u7acb\u5b57",
+    "\u600e\u4e48\u8bfb",
+    "\u8bed\u6c14\u8bcd",
+    "\u4ec0\u4e48\u5b57",
 )
 
 LOW_CONFIDENCE_BLOCK_PATTERNS = (
@@ -276,6 +281,31 @@ def is_meta_linguistic_context(text: str, index: int, window: int = 8):
     return any(keyword in snippet for keyword in META_LINGUISTIC_KEYWORDS)
 
 
+def should_block_high_confidence_repair(text: str, index: int, pair: str, replacement: str):
+    del replacement
+    if pair not in {"\u767d\u52fa", "\u53e3\u9a6c"}:
+        return False
+    left = max(0, index - 16)
+    right = min(len(text), index + 2 + 16)
+    snippet = text[left:right]
+    if pair == "\u767d\u52fa":
+        keywords = (
+            "\u8fd9\u4e2a\u5b57",
+            "\u504f\u65c1",
+            "\u90e8\u9996",
+            "\u7ed3\u6784",
+            "\u5b57\u5f62",
+            "\u7ec4\u6210",
+            "\u7ec4\u5408",
+            "\u72ec\u7acb\u5b57",
+            "\u4ec0\u4e48\u5b57",
+            "\u4ec0\u4e48\u610f\u601d",
+            "\u600e\u4e48\u5199",
+        )
+        return any(keyword in snippet for keyword in keywords)
+    return is_meta_linguistic_context(text, index, window=16)
+
+
 def should_apply_low_confidence_repair(text: str, index: int, pair: str, replacement: str):
     del replacement
     if is_meta_linguistic_context(text, index):
@@ -298,8 +328,7 @@ def should_apply_low_confidence_repair(text: str, index: int, pair: str, replace
 
 
 def should_apply_high_confidence_repair(text: str, index: int, pair: str):
-    del pair
-    if is_meta_linguistic_context(text, index):
+    if should_block_high_confidence_repair(text, index, pair, HIGH_CONFIDENCE_CHINESE_REPAIR_MAP.get(pair)):
         return False
     return True
 
