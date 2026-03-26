@@ -99,4 +99,74 @@ export function sanitizeMonitorOptions(options, workspace) {
   return { scenarioId, titleRegex, intervalSeconds, historyScanEnabled };
 }
 
+function sanitizeOptionalString(value) {
+  return typeof value === 'string' && value.trim() ? value.trim() : undefined;
+}
+
+function sanitizeRect(rect) {
+  if (!rect || typeof rect !== 'object') {
+    return undefined;
+  }
+  return {
+    x: Math.max(0, Number(rect.x) || 0),
+    y: Math.max(0, Number(rect.y) || 0),
+    width: Math.max(1, Number(rect.width) || 1),
+    height: Math.max(1, Number(rect.height) || 1),
+  };
+}
+
+function sanitizeMaskRegions(maskRegions) {
+  if (!Array.isArray(maskRegions)) {
+    return undefined;
+  }
+  const sanitized = maskRegions
+    .filter((item) => item && typeof item === 'object')
+    .slice(0, 8)
+    .map((item, index) => ({
+      id: sanitizeOptionalString(item.id) || `mask-${index + 1}`,
+      x: Math.max(0, Number(item.x) || 0),
+      y: Math.max(0, Number(item.y) || 0),
+      width: Math.max(1, Number(item.width) || 1),
+      height: Math.max(1, Number(item.height) || 1),
+    }));
+  return sanitized.length ? sanitized : undefined;
+}
+
+export function sanitizeChatScanInput(input, workspace) {
+  if (!input || typeof input !== 'object') {
+    throw new Error('Chat scan input must be an object.');
+  }
+
+  const scenarioId = assertString(input.scenarioId || workspace.scenarios[0]?.id, 'chatScan.scenarioId');
+  const windowTitle = assertString(input.windowTitle, 'chatScan.windowTitle');
+  const summaryName = sanitizeOptionalString(input.summaryName);
+  const maxScrollSteps = Math.max(1, Math.min(500, Number(input.maxScrollSteps) || 18));
+  const targetRef = sanitizeOptionalString(input.targetRef);
+  const ocrProfileRef = sanitizeOptionalString(input.ocrProfileRef);
+  const roi = sanitizeRect(input.ocrOverride?.roi);
+  const maskRegions = sanitizeMaskRegions(input.ocrOverride?.preprocessing?.mask_regions);
+  const ocrOverride = {
+    ...(roi ? { roi } : {}),
+    ...(
+      maskRegions
+        ? {
+            preprocessing: {
+              mask_regions: maskRegions,
+            },
+          }
+        : {}
+    ),
+  };
+
+  return {
+    scenarioId,
+    windowTitle,
+    ...(summaryName ? { summaryName } : {}),
+    ...(targetRef ? { targetRef } : {}),
+    ...(ocrProfileRef ? { ocrProfileRef } : {}),
+    maxScrollSteps,
+    ocrOverride,
+  };
+}
+
 export { SAFE_ACTION_TYPES, SAFE_MATCH_TYPES };

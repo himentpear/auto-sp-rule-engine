@@ -23,6 +23,11 @@ DEFAULT_OCR = {
         "case": "none",
         "simple_noise_cleanup": True,
     },
+    "postprocess": {
+        "chinese_repair": {
+            "enabled": False,
+        },
+    },
     "watch": {
         "enabled": False,
         "polling_interval_seconds": 1.0,
@@ -460,6 +465,16 @@ def detect_stop_date(scan_cfg: dict, raw_ocr_text: str | None, normalized_ocr_te
     return {"matched": False, "reason": None}
 
 
+def build_ocr_debug_delta(raw_ocr_text: str | None, normalized_ocr_text: str | None, postprocessed_ocr_text: str | None):
+    return {
+        "normalization_changed": (raw_ocr_text or "") != (normalized_ocr_text or ""),
+        "postprocess_changed": (normalized_ocr_text or "") != (postprocessed_ocr_text or ""),
+        "final_output_source": "postprocessed"
+        if postprocessed_ocr_text is not None and postprocessed_ocr_text != normalized_ocr_text
+        else "normalized",
+    }
+
+
 def retain_recent_frames(frames: list[dict], frame: dict, max_frames: int):
     frames.append(frame)
     dropped = 0
@@ -894,7 +909,7 @@ def resolve_rule_ocr_profile(config: dict, rule: dict, target_bundle: dict):
 
 def evaluate_rules_for_ocr_text(
     rule: dict,
-    normalized_ocr_text: str,
+    final_ocr_text: str,
     current_text: str | None,
     recent_logs: list,
     dry_run: bool,
@@ -915,7 +930,7 @@ def evaluate_rules_for_ocr_text(
 ):
     evaluation = {
         "name": rule["name"],
-        "match": evaluate_match(rule["match"], normalized_ocr_text),
+        "match": evaluate_match(rule["match"], final_ocr_text),
         "eligible_for_action": False,
         "duplicate_prevented": False,
         "duplicate_reason": None,
@@ -1059,6 +1074,7 @@ def run_rule_pipeline(
     selected_ocr_payload = None
     aggregated_raw_segments = []
     aggregated_normalized_segments = []
+    aggregated_postprocessed_segments = []
     aggregated_content_segments = []
     total_frames_captured = 0
     retained_frame_drops = 0
@@ -1125,9 +1141,12 @@ def run_rule_pipeline(
             "forced_ocr": forced_ocr,
             "raw_ocr_output": None,
             "normalized_ocr_output": None,
+            "postprocessed_ocr_output": None,
             "roi_used": None,
             "preprocessing_settings": ocr_cfg["preprocessing"],
             "normalization_settings": ocr_cfg["normalization"],
+            "postprocess_settings": ocr_cfg.get("postprocess"),
+            "ocr_debug_delta": None,
             "multi_frame_confirmation_count": consecutive_count,
             "multi_frame_confirmation_satisfied": False,
             "rule_evaluation_skipped_reason": None,
@@ -1145,20 +1164,28 @@ def run_rule_pipeline(
             frame["processed_image_path"] = ocr_payload["processed_image_path"]
             frame["raw_ocr_output"] = ocr_payload["raw_ocr_output"]
             frame["normalized_ocr_output"] = ocr_payload["normalized_ocr_output"]
+            frame["postprocessed_ocr_output"] = ocr_payload["postprocessed_ocr_output"]
             frame["roi_used"] = ocr_payload["roi_used"]
             frame["preprocessing_settings"] = ocr_payload["preprocessing_settings"]
             frame["normalization_settings"] = ocr_payload["normalization_settings"]
+            frame["postprocess_settings"] = ocr_payload["postprocess_settings"]
+            frame["ocr_debug_delta"] = build_ocr_debug_delta(
+                ocr_payload["raw_ocr_output"],
+                ocr_payload["normalized_ocr_output"],
+                ocr_payload["postprocessed_ocr_output"],
+            )
             frame["raw_ocr_output"] = truncate_text(frame["raw_ocr_output"], scan_cfg["max_per_frame_text_chars"])
             frame["normalized_ocr_output"] = truncate_text(frame["normalized_ocr_output"], scan_cfg["max_per_frame_text_chars"])
+            frame["postprocessed_ocr_output"] = truncate_text(frame["postprocessed_ocr_output"], scan_cfg["max_per_frame_text_chars"])
 
-            normalized_text = ocr_payload["normalized_ocr_output"]
-            if last_normalized_text == normalized_text:
+            final_ocr_text = ocr_payload["postprocessed_ocr_output"] or ocr_payload["normalized_ocr_output"]
+            if last_normalized_text == final_ocr_text:
                 consecutive_count += 1
                 repeated_frame_count += 1
             else:
                 consecutive_count = 1
                 repeated_frame_count = 0
-            last_normalized_text = normalized_text
+            last_normalized_text = final_ocr_text
 
             frame["multi_frame_confirmation_count"] = consecutive_count
             frame["multi_frame_confirmation_satisfied"] = consecutive_count >= consecutive_required
@@ -1168,6 +1195,11 @@ def run_rule_pipeline(
                 appended_normalized = append_capped_text(
                     aggregated_normalized_segments,
                     ocr_payload["normalized_ocr_output"],
+                    scan_cfg["max_aggregated_text_chars"],
+                )
+                appended_postprocessed = append_capped_text(
+                    aggregated_postprocessed_segments,
+                    ocr_payload["postprocessed_ocr_output"],
                     scan_cfg["max_aggregated_text_chars"],
                 )
                 appended_raw = append_capped_text(
@@ -1182,6 +1214,7 @@ def run_rule_pipeline(
                 )
                 if (
                     (not appended_normalized and aggregated_normalized_segments)
+                    or (not appended_postprocessed and aggregated_postprocessed_segments)
                     or (not appended_raw and aggregated_raw_segments)
                     or (extracted_content_text and not appended_content and aggregated_content_segments)
                 ):
@@ -1216,7 +1249,7 @@ def run_rule_pipeline(
             if frame["multi_frame_confirmation_satisfied"]:
                 rule_eval = evaluate_rules_for_ocr_text(
                     rule=rule,
-                    normalized_ocr_text=normalized_text,
+                    final_ocr_text=final_ocr_text,
                     current_text=current_text,
                     recent_logs=recent_logs,
                     dry_run=execution_dry_run,
@@ -1260,10 +1293,14 @@ def run_rule_pipeline(
 
     if scan_enabled:
         aggregated_normalized_text = "\n".join(aggregated_normalized_segments).strip()
+        aggregated_postprocessed_text = "\n".join(aggregated_postprocessed_segments).strip()
         aggregated_raw_text = "\n".join(aggregated_raw_segments).strip()
         aggregated_content_text = "\n".join(aggregated_content_segments).strip()
         if (
-            sum(len(item) for item in aggregated_normalized_segments) + max(0, len(aggregated_normalized_segments) - 1)
+            max(
+                sum(len(item) for item in aggregated_normalized_segments) + max(0, len(aggregated_normalized_segments) - 1),
+                sum(len(item) for item in aggregated_postprocessed_segments) + max(0, len(aggregated_postprocessed_segments) - 1),
+            )
             >= scan_cfg["max_aggregated_text_chars"]
         ):
             final_result["scan_summary"]["aggregated_text_truncated"] = True
@@ -1272,10 +1309,10 @@ def run_rule_pipeline(
         final_result["scan_summary"]["retained_frames_dropped"] = retained_frame_drops
         final_result["scan_summary"]["retained_frames"] = len(frames)
 
-        if aggregated_normalized_text:
+        if aggregated_postprocessed_text or aggregated_normalized_text:
             rule_eval = evaluate_rules_for_ocr_text(
                 rule=rule,
-                normalized_ocr_text=aggregated_normalized_text,
+                final_ocr_text=aggregated_postprocessed_text or aggregated_normalized_text,
                 current_text=current_text,
                 recent_logs=recent_logs,
                 dry_run=execution_dry_run,
@@ -1321,10 +1358,18 @@ def run_rule_pipeline(
             "roi_used": ocr_cfg.get("roi"),
             "preprocessing_settings": ocr_cfg["preprocessing"],
             "normalization_settings": ocr_cfg["normalization"],
+            "postprocess_settings": ocr_cfg.get("postprocess"),
             "image_path": frames[-1]["screenshot_path"] if frames else None,
         }
         selected_ocr_payload["raw_ocr_output"] = aggregated_raw_text
         selected_ocr_payload["normalized_ocr_output"] = aggregated_normalized_text
+        selected_ocr_payload["postprocessed_ocr_output"] = aggregated_postprocessed_text
+        selected_ocr_payload["ocr_text"] = aggregated_postprocessed_text or aggregated_normalized_text
+        selected_ocr_payload["ocr_debug_delta"] = build_ocr_debug_delta(
+            aggregated_raw_text,
+            aggregated_normalized_text,
+            aggregated_postprocessed_text,
+        )
 
     return {
         "rule_name": rule["name"],
@@ -1337,8 +1382,12 @@ def run_rule_pipeline(
         "roi_used": selected_ocr_payload["roi_used"] if selected_ocr_payload else ocr_cfg.get("roi"),
         "preprocessing_settings": selected_ocr_payload["preprocessing_settings"] if selected_ocr_payload else ocr_cfg["preprocessing"],
         "normalization_settings": selected_ocr_payload["normalization_settings"] if selected_ocr_payload else ocr_cfg["normalization"],
+        "postprocess_settings": selected_ocr_payload["postprocess_settings"] if selected_ocr_payload else ocr_cfg.get("postprocess"),
         "raw_ocr_output": selected_ocr_payload["raw_ocr_output"] if selected_ocr_payload else None,
         "normalized_ocr_output": selected_ocr_payload["normalized_ocr_output"] if selected_ocr_payload else None,
+        "postprocessed_ocr_output": selected_ocr_payload["postprocessed_ocr_output"] if selected_ocr_payload else None,
+        "ocr_text": selected_ocr_payload["ocr_text"] if selected_ocr_payload else None,
+        "ocr_debug_delta": selected_ocr_payload["ocr_debug_delta"] if selected_ocr_payload else None,
         "screenshot_path": selected_ocr_payload["image_path"] if selected_ocr_payload else (frames[-1]["screenshot_path"] if frames else None),
         "ocr_skipped_no_change": any(frame["ocr_skipped_no_change"] for frame in frames),
         "multi_frame_confirmation_required": consecutive_required,
@@ -1397,12 +1446,15 @@ def main() -> int:
     top_normalization = None
     top_raw_ocr = None
     top_normalized_ocr = None
+    top_postprocessed_ocr = None
     top_ocr_profile = None
     top_focus_strategy = None
     top_readback_strategy = None
     top_target_bundle_name = None
     top_validation = None
     top_scan_summary = None
+    top_postprocess = None
+    top_ocr_debug_delta = None
 
     try:
         for rule in config["rules"]:
@@ -1438,12 +1490,15 @@ def main() -> int:
                 top_normalization = run_record["normalization_settings"]
                 top_raw_ocr = run_record["raw_ocr_output"]
                 top_normalized_ocr = run_record["normalized_ocr_output"]
+                top_postprocessed_ocr = run_record["postprocessed_ocr_output"]
                 top_ocr_profile = run_record["ocr_profile_used"]
                 top_focus_strategy = run_record["focus_strategy"]
                 top_readback_strategy = run_record["readback_strategy"]
                 top_target_bundle_name = run_record["target_bundle_name"]
                 top_validation = run_record["validation_result"]
                 top_scan_summary = run_record.get("scan_summary")
+                top_postprocess = run_record["postprocess_settings"]
+                top_ocr_debug_delta = run_record["ocr_debug_delta"]
                 if stop_after_first_match:
                     break
             elif run_record.get("scan_summary") and top_scan_summary is None:
@@ -1455,12 +1510,15 @@ def main() -> int:
                 top_normalization = run_record["normalization_settings"]
                 top_raw_ocr = run_record["raw_ocr_output"]
                 top_normalized_ocr = run_record["normalized_ocr_output"]
+                top_postprocessed_ocr = run_record["postprocessed_ocr_output"]
                 top_ocr_profile = run_record["ocr_profile_used"]
                 top_focus_strategy = run_record["focus_strategy"]
                 top_readback_strategy = run_record["readback_strategy"]
                 top_target_bundle_name = run_record["target_bundle_name"]
                 top_validation = run_record["validation_result"]
                 top_scan_summary = run_record.get("scan_summary")
+                top_postprocess = run_record["postprocess_settings"]
+                top_ocr_debug_delta = run_record["ocr_debug_delta"]
     except UnsafeAutomationError:
         raise
 
@@ -1476,9 +1534,12 @@ def main() -> int:
         "roi_used": top_roi_used,
         "preprocessing_settings": top_preprocessing,
         "normalization_settings": top_normalization,
+        "postprocess_settings": top_postprocess,
         "raw_ocr_output": top_raw_ocr,
         "normalized_ocr_output": top_normalized_ocr,
-        "ocr_text": top_normalized_ocr,
+        "postprocessed_ocr_output": top_postprocessed_ocr,
+        "ocr_text": top_postprocessed_ocr or top_normalized_ocr,
+        "ocr_debug_delta": top_ocr_debug_delta,
         "evaluated_rules": [record["evaluated_rules"][0] for record in rule_runs if record["evaluated_rules"]],
         "matched_rule": matched_rule,
         "action_type": action_type,

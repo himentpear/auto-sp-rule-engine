@@ -22,8 +22,21 @@ DEFAULT_NORMALIZATION = {
     "simple_noise_cleanup": True,
 }
 
+DEFAULT_POSTPROCESS = {
+    "chinese_repair": {
+        "enabled": False,
+    },
+}
+
 DEFAULT_OCR_BEHAVIOR = {
     "fallback_to_full_window_on_empty": False,
+}
+
+CHINESE_REPAIR_MAP = {
+    "亻尔": "你",
+    "白勺": "的",
+    "口马": "吗",
+    "女子": "好",
 }
 
 
@@ -224,6 +237,55 @@ def normalize_text(raw_text: str, normalization_cfg: dict | None):
     return text, cfg
 
 
+def is_cjk_character(value: str):
+    return bool(re.fullmatch(r"[\u3400-\u4dbf\u4e00-\u9fff]", value or ""))
+
+
+def apply_chinese_repair(text: str, repair_cfg: dict | None):
+    cfg = merge_dict(DEFAULT_POSTPROCESS["chinese_repair"], repair_cfg)
+    if not cfg.get("enabled", False) or not text:
+        return text, cfg, []
+
+    repaired_chars = []
+    repairs = []
+    index = 0
+
+    while index < len(text):
+        pair = text[index : index + 2]
+        replacement = CHINESE_REPAIR_MAP.get(pair)
+        if (
+            replacement
+            and len(pair) == 2
+            and all(len(character) == 1 and is_cjk_character(character) for character in pair)
+        ):
+            repaired_chars.append(replacement)
+            repairs.append(
+                {
+                    "source": pair,
+                    "replacement": replacement,
+                    "start": index,
+                    "end": index + 2,
+                }
+            )
+            index += 2
+            continue
+
+        repaired_chars.append(text[index])
+        index += 1
+
+    return "".join(repaired_chars), cfg, repairs
+
+
+def postprocess_text(normalized_text: str, postprocess_cfg: dict | None):
+    cfg = merge_dict(DEFAULT_POSTPROCESS, postprocess_cfg)
+    repaired_text, chinese_repair_cfg, repairs = apply_chinese_repair(
+        normalized_text,
+        cfg.get("chinese_repair"),
+    )
+    cfg["chinese_repair"] = chinese_repair_cfg
+    return repaired_text, cfg, {"chinese_repairs": repairs}
+
+
 def save_image(image: Image.Image, out_path: Path | None):
     if not out_path:
         return None
@@ -265,6 +327,9 @@ def run_ocr_pipeline(image_path: Path, ocr_cfg: dict | None, processed_out_path:
         normalized_text_local, normalization_cfg_local = normalize_text(
             ocr_payload_local.get("Text", ""), (active_ocr_cfg or {}).get("normalization")
         )
+        postprocessed_text_local, postprocess_cfg_local, postprocess_details_local = postprocess_text(
+            normalized_text_local, (active_ocr_cfg or {}).get("postprocess")
+        )
         normalized_lines_local = []
         for line in ocr_payload_local.get("Lines", []) or []:
             normalized_line_text, _ = normalize_text(
@@ -278,21 +343,48 @@ def run_ocr_pipeline(image_path: Path, ocr_cfg: dict | None, processed_out_path:
                     "words": line.get("Words", []),
                 }
             )
-        return prepared_local, ocr_payload_local, normalized_text_local, normalization_cfg_local, normalized_lines_local
+        return (
+            prepared_local,
+            ocr_payload_local,
+            normalized_text_local,
+            postprocessed_text_local,
+            normalization_cfg_local,
+            postprocess_cfg_local,
+            postprocess_details_local,
+            normalized_lines_local,
+        )
 
-    prepared, ocr_payload, normalized_text, normalization_cfg, normalized_lines = execute_once(ocr_cfg, processed_out_path)
+    (
+        prepared,
+        ocr_payload,
+        normalized_text,
+        postprocessed_text,
+        normalization_cfg,
+        postprocess_cfg,
+        postprocess_details,
+        normalized_lines,
+    ) = execute_once(ocr_cfg, processed_out_path)
 
     if (
         behavior_cfg.get("fallback_to_full_window_on_empty")
         and prepared["roi_used"] is not None
-        and not normalized_text.strip()
+        and not postprocessed_text.strip()
     ):
         fallback_cfg = json.loads(json.dumps(ocr_cfg or {}))
         fallback_cfg["roi"] = None
         fallback_out_path = None
         if processed_out_path is not None:
             fallback_out_path = processed_out_path.parent / f"{processed_out_path.stem}-fallback{processed_out_path.suffix}"
-        prepared, ocr_payload, normalized_text, normalization_cfg, normalized_lines = execute_once(fallback_cfg, fallback_out_path)
+        (
+            prepared,
+            ocr_payload,
+            normalized_text,
+            postprocessed_text,
+            normalization_cfg,
+            postprocess_cfg,
+            postprocess_details,
+            normalized_lines,
+        ) = execute_once(fallback_cfg, fallback_out_path)
 
     return {
         "image_path": str(image_path.resolve()),
@@ -300,8 +392,12 @@ def run_ocr_pipeline(image_path: Path, ocr_cfg: dict | None, processed_out_path:
         "roi_used": prepared["roi_used"],
         "preprocessing_settings": prepared["preprocessing_settings"],
         "normalization_settings": normalization_cfg,
+        "postprocess_settings": postprocess_cfg,
         "raw_ocr_output": ocr_payload.get("Text", ""),
         "normalized_ocr_output": normalized_text,
+        "postprocessed_ocr_output": postprocessed_text,
+        "ocr_text": postprocessed_text,
+        "postprocess_details": postprocess_details,
         "normalized_lines": normalized_lines,
         "language": ocr_payload.get("Language"),
         "line_count": ocr_payload.get("LineCount"),

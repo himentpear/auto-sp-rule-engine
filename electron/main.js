@@ -12,7 +12,7 @@ import {
 import { executeWorkspaceChatScan, executeWorkspaceRule } from './execution.js';
 import { monitorManager } from './monitor.js';
 import { inspectWindowControls, listWindows } from './windows.js';
-import { sanitizeMonitorOptions, sanitizeRulePayload } from './security.js';
+import { sanitizeChatScanInput, sanitizeMonitorOptions, sanitizeRulePayload } from './security.js';
 import { applyLaunchAtLogin, cleanupOldWorkspaceLogs, getSettings, saveSettings } from './settings.js';
 import { getWorkspacesRoot } from './workspaces.js';
 
@@ -105,9 +105,11 @@ function registerWorkspaceIpc() {
     monitorManager.exportCapturedContent(app.getPath('userData'), workspaceId),
   );
   ipcMain.handle('monitor:emergency-stop', async () => monitorManager.stopAll());
-  ipcMain.handle('monitor:run-chat-scan', async (_event, workspaceId, input) =>
-    executeWorkspaceChatScan(app.getPath('userData'), workspaceId, input || {}),
-  );
+  ipcMain.handle('monitor:run-chat-scan', async (_event, workspaceId, input) => {
+    const workspace = await getWorkspace(app.getPath('userData'), workspaceId);
+    const sanitizedInput = sanitizeChatScanInput(input || {}, workspace);
+    return executeWorkspaceChatScan(app.getPath('userData'), workspaceId, sanitizedInput);
+  });
   ipcMain.handle('settings:get', async () => getSettings(app.getPath('userData')));
   ipcMain.handle('settings:save', async (_event, nextSettings) => {
     const saved = await saveSettings(app.getPath('userData'), nextSettings);

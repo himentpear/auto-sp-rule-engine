@@ -267,7 +267,21 @@ class MonitorManager extends EventEmitter {
   }
 
   getOcrPreview(result) {
-    const text = result?.normalized_ocr_output || result?.ocr_text || result?.rule_runs?.[0]?.normalized_ocr_output || '';
+    const text =
+      result?.postprocessed_ocr_output ||
+      result?.ocr_text ||
+      result?.normalized_ocr_output ||
+      result?.rule_runs?.[0]?.postprocessed_ocr_output ||
+      result?.rule_runs?.[0]?.normalized_ocr_output ||
+      '';
+    return String(text).replace(/\s+/g, ' ').trim().slice(0, 80);
+  }
+
+  getPostprocessedPreview(result) {
+    const text =
+      result?.postprocessed_ocr_output ||
+      result?.rule_runs?.[0]?.postprocessed_ocr_output ||
+      '';
     return String(text).replace(/\s+/g, ' ').trim().slice(0, 80);
   }
 
@@ -276,7 +290,12 @@ class MonitorManager extends EventEmitter {
       result?.raw_ocr_output || result?.normalized_ocr_output || result?.ocr_text || result?.rule_runs?.[0]?.raw_ocr_output || '',
     ).trim();
     const normalizedText = String(
-      result?.normalized_ocr_output || result?.ocr_text || result?.rule_runs?.[0]?.normalized_ocr_output || '',
+      result?.postprocessed_ocr_output ||
+      result?.ocr_text ||
+      result?.normalized_ocr_output ||
+      result?.rule_runs?.[0]?.postprocessed_ocr_output ||
+      result?.rule_runs?.[0]?.normalized_ocr_output ||
+      '',
     ).trim();
     const title = String(matchedWindow?.WindowTitle || '').trim();
     const cleaned = normalizedText
@@ -519,6 +538,7 @@ class MonitorManager extends EventEmitter {
             ocrOverride: wechatOcrOverride || {},
           });
           const ocrPreview = this.getOcrPreview(result);
+          const postprocessedOcrPreview = this.getPostprocessedPreview(result);
           const contentAnalysis = this.analyzeWechatContent(result, matchedWindow);
           const persistence = await this.persistConversationLog(userDataPath, session, matchedWindow, result, {
             ...contentAnalysis,
@@ -531,6 +551,7 @@ class MonitorManager extends EventEmitter {
             payload: {
               ...result,
               ocrPreview,
+              postprocessedOcrPreview,
               ...contentAnalysis,
               conversationLog: persistence,
             },
@@ -562,6 +583,7 @@ class MonitorManager extends EventEmitter {
 
           const result = await executeWorkspaceRule(userDataPath, workspaceId, executionInput);
           const ocrPreview = this.getOcrPreview(result);
+          const postprocessedOcrPreview = this.getPostprocessedPreview(result);
           const contentAnalysis = this.analyzeWechatContent(result, matchedWindow);
           const persistence = await this.persistConversationLog(userDataPath, session, matchedWindow, result, {
             ...contentAnalysis,
@@ -578,6 +600,7 @@ class MonitorManager extends EventEmitter {
             payload: {
               ...result,
               ocrPreview,
+              postprocessedOcrPreview,
               ...contentAnalysis,
               conversationLog: persistence,
               detectedByClassifier: Boolean(detectionMessage),
