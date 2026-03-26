@@ -95,7 +95,8 @@ export function sanitizeMonitorOptions(options, workspace) {
   const scenarioId = assertString(options.scenarioId || workspace.scenarios[0]?.id, 'monitor.scenarioId');
   const titleRegex = typeof options.titleRegex === 'string' && options.titleRegex.trim() ? options.titleRegex.trim() : '.*';
   const intervalSeconds = Math.max(3, Math.min(8, Number(options.intervalSeconds) || 5));
-  return { scenarioId, titleRegex, intervalSeconds };
+  const historyScanEnabled = Boolean(options.historyScanEnabled);
+  return { scenarioId, titleRegex, intervalSeconds, historyScanEnabled };
 }
 
 export { SAFE_ACTION_TYPES, SAFE_MATCH_TYPES };

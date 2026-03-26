@@ -83,9 +83,53 @@ if (-not $engine) {
 
 $ocrResult = Await-WinRt ($engine.RecognizeAsync($bitmap)) ([Windows.Media.Ocr.OcrResult])
 
+$lines = @()
+foreach ($line in $ocrResult.Lines) {
+    if (-not $line.Words -or $line.Words.Count -eq 0) {
+        continue
+    }
+    $left = [double]::PositiveInfinity
+    $top = [double]::PositiveInfinity
+    $right = [double]0
+    $bottom = [double]0
+    $words = @()
+
+    foreach ($word in $line.Words) {
+        $wordLeft = [double]$word.BoundingRect.X
+        $wordTop = [double]$word.BoundingRect.Y
+        $wordRight = [double]($word.BoundingRect.X + $word.BoundingRect.Width)
+        $wordBottom = [double]($word.BoundingRect.Y + $word.BoundingRect.Height)
+        if ($wordLeft -lt $left) { $left = $wordLeft }
+        if ($wordTop -lt $top) { $top = $wordTop }
+        if ($wordRight -gt $right) { $right = $wordRight }
+        if ($wordBottom -gt $bottom) { $bottom = $wordBottom }
+        $words += [PSCustomObject]@{
+            Text = ($word.Text -replace "`r", '')
+            BoundingRect = [PSCustomObject]@{
+                X = $wordLeft
+                Y = $wordTop
+                Width = [double]$word.BoundingRect.Width
+                Height = [double]$word.BoundingRect.Height
+            }
+        }
+    }
+
+    $lines += [PSCustomObject]@{
+        Text = ($line.Text -replace "`r", '')
+        BoundingRect = [PSCustomObject]@{
+            X = $left
+            Y = $top
+            Width = ($right - $left)
+            Height = ($bottom - $top)
+        }
+        Words = $words
+    }
+}
+
 [PSCustomObject]@{
     ImagePath = $resolvedImagePath
     Language = $engine.RecognizerLanguage.LanguageTag
     LineCount = [int]($ocrResult.Lines | Measure-Object).Count
     Text = ($ocrResult.Text -replace "`r", '')
-} | ConvertTo-Json -Depth 4
+    Lines = $lines
+} | ConvertTo-Json -Depth 6

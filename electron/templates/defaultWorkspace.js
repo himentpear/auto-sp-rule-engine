@@ -20,7 +20,7 @@ export function createDefaultWorkspacePayload({ id, name }) {
     metadata: {
       id,
       name,
-      version: 10,
+      version: 11,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       safeActions: SAFE_ACTIONS,
@@ -106,23 +106,34 @@ export function createDefaultWorkspacePayload({ id, name }) {
         id: wechatProfileId,
         name: 'WeChat Chat OCR',
         profile_key: wechatProfileId,
-        roi: {
-          x: 20,
-          y: 120,
-          width: 560,
-          height: 620,
-        },
+        roi: null,
         preprocessing: {
           grayscale: true,
-          scale: 2.2,
+          scale: 2.4,
           threshold: {
             enabled: false,
-            value: 180,
+            value: 188,
           },
           trim_border: {
             enabled: false,
             margin: 0,
           },
+          mask_regions: [
+            {
+              unit: 'ratio',
+              x: 0,
+              y: 0,
+              width: 1,
+              height: 0.155,
+            },
+            {
+              unit: 'ratio',
+              x: 0,
+              y: 0.895,
+              width: 1,
+              height: 0.105,
+            },
+          ],
         },
         normalization: {
           collapse_whitespace: true,

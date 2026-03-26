@@ -1,5 +1,5 @@
 ﻿
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
   BellRing,
   FolderKanban,
@@ -21,12 +21,33 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './com
 import { Input } from './components/ui/input.jsx';
 import { Select } from './components/ui/select.jsx';
 import { Switch } from './components/ui/switch.jsx';
+import wechatWorkbenchBg from './assets/wechat-workbench-bg.png';
 
 const pageTabs = [
   { id: 'monitor', label: '监控 Monitor', icon: MonitorPlay },
   { id: 'workspaces', label: '工作区 Workspaces', icon: FolderKanban },
   { id: 'settings', label: '设置 Settings', icon: Settings2 },
 ];
+
+const WECHAT_WORKBENCH_SIZE = { width: 1274, height: 1526 };
+
+function clampRect(rect, bounds = WECHAT_WORKBENCH_SIZE) {
+  const x = Math.max(0, Math.min(bounds.width - 1, Number(rect?.x) || 0));
+  const y = Math.max(0, Math.min(bounds.height - 1, Number(rect?.y) || 0));
+  const width = Math.max(1, Math.min(bounds.width - x, Number(rect?.width) || 1));
+  const height = Math.max(1, Math.min(bounds.height - y, Number(rect?.height) || 1));
+  return { x, y, width, height };
+}
+
+function rectToStyle(rect, bounds = WECHAT_WORKBENCH_SIZE) {
+  const safeRect = clampRect(rect, bounds);
+  return {
+    left: `${(safeRect.x / bounds.width) * 100}%`,
+    top: `${(safeRect.y / bounds.height) * 100}%`,
+    width: `${(safeRect.width / bounds.width) * 100}%`,
+    height: `${(safeRect.height / bounds.height) * 100}%`,
+  };
+}
 
 function AppLogo() {
   return (
@@ -194,6 +215,9 @@ function MonitorPage(props) {
     inspectedControls,
     inspectControls,
     busy,
+    historyScanEnabled,
+    setHistoryScanEnabled,
+    settings,
   } = props;
 
   const scenarios = activeWorkspace?.scenarios || [];
@@ -234,6 +258,14 @@ function MonitorPage(props) {
               </div>
             </div>
 
+            <div className="flex items-center justify-between rounded-xl border border-border bg-background/50 p-4">
+              <div>
+                <div className="font-medium">启动监控时向上翻页扫描历史消息</div>
+                <div className="text-sm text-muted-foreground">仅在启动监控时执行一次历史消息上翻扫描，平时轮询不会自动翻页。</div>
+              </div>
+              <Switch checked={historyScanEnabled} onCheckedChange={setHistoryScanEnabled} />
+            </div>
+
             <div className="flex flex-wrap gap-3">
               <Button onClick={refreshWindows} variant="secondary" disabled={busy}><RefreshCcw className="mr-2 h-4 w-4" />刷新窗口 Refresh Windows</Button>
               <Button onClick={startMonitor} disabled={!canStart}><Play className="mr-2 h-4 w-4" />启动监控 Start Monitor</Button>
@@ -257,7 +289,7 @@ function MonitorPage(props) {
             <div className="grid gap-4 md:grid-cols-3">
               <Card className="bg-background/70"><CardHeader className="pb-3"><CardTitle className="text-sm">当前工作区 Active Workspace</CardTitle></CardHeader><CardContent><div className="text-lg font-semibold">{activeWorkspace?.metadata?.name || 'n/a'}</div><div className="text-xs text-muted-foreground">{workspaces.length} workspaces loaded</div></CardContent></Card>
               <Card className="bg-background/70"><CardHeader className="pb-3"><CardTitle className="text-sm">最近轮询 Last Tick</CardTitle></CardHeader><CardContent><div className="text-lg font-semibold">{formatTime(monitorStatus?.lastTickAt)}</div><div className="text-xs text-muted-foreground">{monitorStatus?.lastError || 'No recent error'}</div></CardContent></Card>
-              <Card className="bg-background/70"><CardHeader className="pb-3"><CardTitle className="text-sm">命中窗口 Matched Window</CardTitle></CardHeader><CardContent><div className="text-sm font-medium">{monitorStatus?.matchedWindow?.WindowTitle || 'Waiting'}</div><div className="text-xs text-muted-foreground">{monitorStatus?.matchedWindow?.ProcessName || 'No process yet'}</div></CardContent></Card>
+              <Card className="bg-background/70"><CardHeader className="pb-3"><CardTitle className="text-sm">命中窗口 Matched Window</CardTitle></CardHeader><CardContent><div className="text-sm font-medium">{monitorStatus?.matchedWindow?.WindowTitle || 'Waiting'}</div><div className="text-xs text-muted-foreground">{monitorStatus?.matchedWindow?.ProcessName || 'No process yet'}</div><div className="mt-2 text-xs text-muted-foreground">历史上翻: {monitorStatus?.historyScanEnabled ? (monitorStatus?.historyScanCompleted ? '已完成' : '待执行') : '关闭'}</div><div className="text-xs text-muted-foreground">安全键: {settings.emergencyStopHotkey || 'CommandOrControl+Q'}</div></CardContent></Card>
             </div>
 
             <div className="rounded-xl border border-border bg-background/60 p-4">
@@ -357,10 +389,275 @@ function MonitorPage(props) {
     </div>
   );
 }
-function WorkspacePage({ activeWorkspace, activeWorkspaceId, deleteWorkspace, busy }) {
+
+function WechatWorkbench({ settings, setSettings, saveSettings, busy }) {
+  const boardRef = useRef(null);
+  const dragStateRef = useRef(null);
+  const [activeLayer, setActiveLayer] = useState('scan');
+
+  const masks = settings.wechatMaskRegions || [];
+
+  const applyRegionPatch = (layer, nextRect) => {
+    const safeRect = clampRect(nextRect);
+    setSettings((current) => {
+      if (layer === 'scan') {
+        return {
+          ...current,
+          wechatScanRegion: {
+            ...(current.wechatScanRegion || {}),
+            ...safeRect,
+            enabled: true,
+          },
+        };
+      }
+      const nextMasks = (current.wechatMaskRegions || []).map((item) =>
+        item.id === layer
+          ? {
+              ...item,
+              ...safeRect,
+              enabled: true,
+            }
+          : item,
+      );
+      return {
+        ...current,
+        wechatMaskRegions: nextMasks,
+      };
+    });
+  };
+
+  const handleBoardPointer = (event) => {
+    if (!boardRef.current) return null;
+    const rect = boardRef.current.getBoundingClientRect();
+    const x = ((event.clientX - rect.left) / rect.width) * WECHAT_WORKBENCH_SIZE.width;
+    const y = ((event.clientY - rect.top) / rect.height) * WECHAT_WORKBENCH_SIZE.height;
+    return {
+      x: Math.max(0, Math.min(WECHAT_WORKBENCH_SIZE.width, Math.round(x))),
+      y: Math.max(0, Math.min(WECHAT_WORKBENCH_SIZE.height, Math.round(y))),
+    };
+  };
+
+  const handlePointerDown = (event) => {
+    const point = handleBoardPointer(event);
+    if (!point) return;
+    dragStateRef.current = {
+      layer: activeLayer,
+      start: point,
+    };
+  };
+
+  const handlePointerMove = (event) => {
+    if (!dragStateRef.current) return;
+    const point = handleBoardPointer(event);
+    if (!point) return;
+    const { start, layer } = dragStateRef.current;
+    const left = Math.min(start.x, point.x);
+    const top = Math.min(start.y, point.y);
+    const width = Math.max(1, Math.abs(point.x - start.x));
+    const height = Math.max(1, Math.abs(point.y - start.y));
+    applyRegionPatch(layer, { x: left, y: top, width, height });
+  };
+
+  const handlePointerUp = () => {
+    if (dragStateRef.current) {
+      const { start, layer } = dragStateRef.current;
+      const currentRect =
+        layer === 'scan'
+          ? settings.wechatScanRegion
+          : (settings.wechatMaskRegions || []).find((item) => item.id === layer);
+      if (!currentRect || currentRect.width < 12 || currentRect.height < 12) {
+        applyRegionPatch(layer, {
+          x: start.x,
+          y: start.y,
+          width: layer === 'scan' ? 640 : 320,
+          height: layer === 'scan' ? 720 : 120,
+        });
+      }
+    }
+    dragStateRef.current = null;
+  };
+
+  const workbenchLayers = [
+    {
+      id: 'scan',
+      label: '识别区',
+      color: 'border-emerald-400 bg-emerald-500/20 text-emerald-100',
+      rect: settings.wechatScanRegion,
+    },
+    ...masks.map((item, index) => ({
+      id: item.id,
+      label: item.label || `遮盖区 ${index + 1}`,
+      color: 'border-rose-400 bg-rose-500/20 text-rose-100',
+      rect: item,
+    })),
+  ];
+
+  return (
+    <Card className="bg-slate-950/50">
+      <CardHeader>
+        <CardTitle className="text-2xl">微信监控总工作台 WeChat Monitor Workbench</CardTitle>
+        <CardDescription>把历史上翻、识别区、遮盖区和安全停止统一放在一个可视化面板里。拖拽背景图即可调整识别区或遮盖区。</CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-6">
+        <div className="grid gap-4 xl:grid-cols-[1.1fr_0.9fr]">
+          <div className="space-y-4">
+            <div className="flex flex-wrap gap-2">
+              {workbenchLayers.map((layer) => (
+                <Button
+                  key={layer.id}
+                  type="button"
+                  variant={activeLayer === layer.id ? 'default' : 'outline'}
+                  onClick={() => setActiveLayer(layer.id)}
+                  className="min-w-24"
+                >
+                  {layer.label}
+                </Button>
+              ))}
+            </div>
+            <div
+              ref={boardRef}
+              className="relative overflow-hidden rounded-2xl border border-border bg-slate-900"
+              onMouseDown={handlePointerDown}
+              onMouseMove={handlePointerMove}
+              onMouseUp={handlePointerUp}
+              onMouseLeave={handlePointerUp}
+              style={{ aspectRatio: `${WECHAT_WORKBENCH_SIZE.width} / ${WECHAT_WORKBENCH_SIZE.height}` }}
+            >
+              <img src={wechatWorkbenchBg} alt="WeChat workbench background" className="h-full w-full object-cover select-none" draggable="false" />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-slate-950/10 via-transparent to-slate-950/10" />
+              {workbenchLayers.map((layer) => (
+                <div
+                  key={layer.id}
+                  className={`pointer-events-none absolute rounded-xl border-2 ${layer.color} ${activeLayer === layer.id ? 'ring-2 ring-white/60' : ''} ${layer.rect?.enabled === false ? 'opacity-40' : ''}`}
+                  style={rectToStyle(layer.rect)}
+                >
+                  <div className="absolute left-2 top-2 rounded-md bg-slate-950/80 px-2 py-1 text-[10px] font-medium text-white">
+                    {layer.label}
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="text-xs text-muted-foreground">
+              背景使用微信监控截图。当前激活层：`{workbenchLayers.find((item) => item.id === activeLayer)?.label || '识别区'}`。按住鼠标拖拽即可重新划定范围。
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="flex items-center justify-between rounded-xl border border-border bg-background/50 p-4">
+                <div>
+                  <div className="font-medium">默认历史上翻</div>
+                  <div className="text-sm text-muted-foreground">启动监控时默认启用历史消息上翻扫描。</div>
+                </div>
+                <Switch
+                  checked={Boolean(settings.historyScanDefaultEnabled)}
+                  onCheckedChange={(value) => setSettings((current) => ({ ...current, historyScanDefaultEnabled: value }))}
+                />
+              </div>
+              <div className="rounded-xl border border-border bg-background/50 p-4">
+                <label className="text-sm font-medium">安全停止热键</label>
+                <Input
+                  className="mt-2"
+                  value={settings.emergencyStopHotkey || ''}
+                  onChange={(event) => setSettings((current) => ({ ...current, emergencyStopHotkey: event.target.value }))}
+                />
+              </div>
+            </div>
+
+            <div className="rounded-xl border border-border bg-background/50 p-4">
+              <div className="mb-3 flex items-center justify-between">
+                <div className="font-medium">识别区</div>
+                <Switch
+                  checked={Boolean(settings.wechatScanRegion?.enabled)}
+                  onCheckedChange={(value) =>
+                    setSettings((current) => ({
+                      ...current,
+                      wechatScanRegion: {
+                        ...(current.wechatScanRegion || {}),
+                        enabled: value,
+                      },
+                    }))
+                  }
+                />
+              </div>
+              <div className="grid gap-3 md:grid-cols-4">
+                {['x', 'y', 'width', 'height'].map((field) => (
+                  <div key={field} className="space-y-2">
+                    <label className="text-sm font-medium">{field.toUpperCase()}</label>
+                    <Input
+                      type="number"
+                      min={field === 'width' || field === 'height' ? '1' : '0'}
+                      value={settings.wechatScanRegion?.[field] ?? 0}
+                      onChange={(event) =>
+                        setSettings((current) => ({
+                          ...current,
+                          wechatScanRegion: {
+                            ...(current.wechatScanRegion || {}),
+                            [field]: Number(event.target.value),
+                          },
+                        }))
+                      }
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="space-y-3 rounded-xl border border-border bg-background/50 p-4">
+              <div className="font-medium">遮盖区</div>
+              {masks.map((mask) => (
+                <div key={mask.id} className="rounded-xl border border-border bg-slate-950/30 p-3">
+                  <div className="mb-3 flex items-center justify-between">
+                    <div className="font-medium">{mask.label}</div>
+                    <Switch
+                      checked={Boolean(mask.enabled)}
+                      onCheckedChange={(value) =>
+                        setSettings((current) => ({
+                          ...current,
+                          wechatMaskRegions: (current.wechatMaskRegions || []).map((item) =>
+                            item.id === mask.id ? { ...item, enabled: value } : item,
+                          ),
+                        }))
+                      }
+                    />
+                  </div>
+                  <div className="grid gap-3 md:grid-cols-4">
+                    {['x', 'y', 'width', 'height'].map((field) => (
+                      <div key={field} className="space-y-2">
+                        <label className="text-sm font-medium">{field.toUpperCase()}</label>
+                        <Input
+                          type="number"
+                          min={field === 'width' || field === 'height' ? '1' : '0'}
+                          value={mask[field] ?? 0}
+                          onChange={(event) =>
+                            setSettings((current) => ({
+                              ...current,
+                              wechatMaskRegions: (current.wechatMaskRegions || []).map((item) =>
+                                item.id === mask.id ? { ...item, [field]: Number(event.target.value) } : item,
+                              ),
+                            }))
+                          }
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <Button onClick={saveSettings} disabled={busy}>保存微信工作台设置 Save WeChat Workbench</Button>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+function WorkspacePage({ activeWorkspace, activeWorkspaceId, deleteWorkspace, busy, settings, setSettings, saveSettings }) {
   const scenarios = activeWorkspace?.scenarios || [];
   const targets = activeWorkspace?.targets || [];
   const profiles = activeWorkspace?.profiles || [];
+  const hasWechatWorkspace = targets.some((target) => target?.target_bundle?.window_matcher?.process_name === 'Weixin');
 
   return (
     <div className="space-y-6">
@@ -379,6 +676,8 @@ function WorkspacePage({ activeWorkspace, activeWorkspaceId, deleteWorkspace, bu
         </CardContent>
       </Card>
 
+      {hasWechatWorkspace ? <WechatWorkbench settings={settings} setSettings={setSettings} saveSettings={saveSettings} busy={busy} /> : null}
+
       <div className="grid gap-4 xl:grid-cols-3">
         <JsonPanel title="Targets" value={targets} />
         <JsonPanel title="Profiles" value={profiles} />
@@ -394,7 +693,7 @@ function SettingsPage({ settings, setSettings, saveSettings, busy }) {
       <Card className="bg-slate-950/50">
         <CardHeader>
           <CardTitle className="text-2xl">全局设置 Global Settings</CardTitle>
-          <CardDescription>由主进程持久化保存监控间隔、日志保留、自启动和主题。</CardDescription>
+          <CardDescription>由主进程持久化保存监控间隔、日志保留、自启动、主题和群聊日志路径。</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="grid gap-4 md:grid-cols-2">
@@ -419,6 +718,116 @@ function SettingsPage({ settings, setSettings, saveSettings, busy }) {
               {settings.theme === 'dark' ? <Sun className="mr-2 h-4 w-4" /> : <Moon className="mr-2 h-4 w-4" />}
               {settings.theme === 'dark' ? '切换浅色 Switch To Light' : '切换深色 Switch To Dark'}
             </Button>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-medium">群聊日志路径 Conversation Log Path</label>
+            <Input
+              value={settings.conversationLogRoot || ''}
+              onChange={(event) => setSettings((current) => ({ ...current, conversationLogRoot: event.target.value }))}
+            />
+            <div className="text-xs text-muted-foreground">默认路径：文档\\OpenClose\\Log。监听任务会按日期自动建文件夹，并按群名写入 `txt` 与 `jsonl`。</div>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-medium">安全停止热键 Emergency Stop Hotkey</label>
+            <Input
+              value={settings.emergencyStopHotkey || ''}
+              onChange={(event) => setSettings((current) => ({ ...current, emergencyStopHotkey: event.target.value }))}
+            />
+            <div className="text-xs text-muted-foreground">默认 `Ctrl+Q`。保存后由主进程注册为全局热键，用于立即停止所有监控会话。</div>
+          </div>
+
+          <div className="space-y-4 rounded-xl border border-border bg-background/50 p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <div className="font-medium">微信扫描范围 WeChat Scan Region</div>
+                <div className="text-sm text-muted-foreground">按当前微信窗口截图坐标手动划定 OCR 区域。启用后会覆盖默认禁扫边界。</div>
+              </div>
+              <Switch
+                checked={Boolean(settings.wechatScanRegion?.enabled)}
+                onCheckedChange={(value) =>
+                  setSettings((current) => ({
+                    ...current,
+                    wechatScanRegion: {
+                      ...(current.wechatScanRegion || {}),
+                      enabled: value,
+                    },
+                  }))
+                }
+              />
+            </div>
+            <div className="grid gap-4 md:grid-cols-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium">X</label>
+                <Input
+                  type="number"
+                  min="0"
+                  value={settings.wechatScanRegion?.x ?? 0}
+                  onChange={(event) =>
+                    setSettings((current) => ({
+                      ...current,
+                      wechatScanRegion: {
+                        ...(current.wechatScanRegion || {}),
+                        x: Number(event.target.value),
+                      },
+                    }))
+                  }
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Y</label>
+                <Input
+                  type="number"
+                  min="0"
+                  value={settings.wechatScanRegion?.y ?? 0}
+                  onChange={(event) =>
+                    setSettings((current) => ({
+                      ...current,
+                      wechatScanRegion: {
+                        ...(current.wechatScanRegion || {}),
+                        y: Number(event.target.value),
+                      },
+                    }))
+                  }
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Width</label>
+                <Input
+                  type="number"
+                  min="1"
+                  value={settings.wechatScanRegion?.width ?? 1}
+                  onChange={(event) =>
+                    setSettings((current) => ({
+                      ...current,
+                      wechatScanRegion: {
+                        ...(current.wechatScanRegion || {}),
+                        width: Number(event.target.value),
+                      },
+                    }))
+                  }
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Height</label>
+                <Input
+                  type="number"
+                  min="1"
+                  value={settings.wechatScanRegion?.height ?? 1}
+                  onChange={(event) =>
+                    setSettings((current) => ({
+                      ...current,
+                      wechatScanRegion: {
+                        ...(current.wechatScanRegion || {}),
+                        height: Number(event.target.value),
+                      },
+                    }))
+                  }
+                />
+              </div>
+            </div>
+            <div className="text-xs text-muted-foreground">坐标原点是当前截图窗口左上角。建议把范围压到聊天正文区域，不包含群名、置顶、昵称栏和输入框。</div>
           </div>
 
           <Button onClick={saveSettings} disabled={busy}>保存设置 Save Settings</Button>
@@ -467,10 +876,21 @@ export default function App() {
     logRetentionDays: 14,
     launchAtLogin: false,
     theme: 'dark',
+    conversationLogRoot: '',
+    historyScanDefaultEnabled: false,
+    emergencyStopHotkey: 'CommandOrControl+Q',
+    wechatScanRegion: {
+      enabled: false,
+      x: 0,
+      y: 220,
+      width: 1274,
+      height: 936,
+    },
   });
   const [titleRegex, setTitleRegex] = useState('Weixin|微信');
   const [intervalSeconds, setIntervalSeconds] = useState(5);
   const [exportStatus, setExportStatus] = useState(null);
+  const [historyScanEnabled, setHistoryScanEnabled] = useState(false);
 
   const activeScenario = useMemo(
     () => activeWorkspace?.scenarios?.find((scenario) => scenario.id === selectedScenarioId) || activeWorkspace?.scenarios?.[0] || null,
@@ -502,6 +922,7 @@ export default function App() {
         setWorkspaces(workspaceItems);
         setSettings(nextSettings);
         setIntervalSeconds(nextSettings.monitorIntervalSeconds);
+        setHistoryScanEnabled(Boolean(nextSettings.historyScanDefaultEnabled));
         const firstWorkspaceId = workspaceItems[0]?.id || null;
         setActiveWorkspaceId(firstWorkspaceId);
         if (firstWorkspaceId) {
@@ -602,6 +1023,7 @@ export default function App() {
         scenarioId: selectedScenarioId,
         titleRegex,
         intervalSeconds,
+        historyScanEnabled,
       });
       setMonitorStatus(status);
       setWorkspaceLogs(await api.loadWorkspaceLogs(activeWorkspaceId));
@@ -631,6 +1053,7 @@ export default function App() {
       const saved = await api.saveSettings(settings);
       setSettings(saved);
       setIntervalSeconds(saved.monitorIntervalSeconds);
+      setHistoryScanEnabled(Boolean(saved.historyScanDefaultEnabled));
     } finally {
       setBusy(false);
     }
@@ -698,8 +1121,8 @@ export default function App() {
 
             {error ? <Card className="border-destructive/40 bg-destructive/10"><CardContent className="p-4 text-sm text-destructive-foreground">{error}</CardContent></Card> : null}
 
-            {activeTab === 'monitor' ? <MonitorPage workspaces={workspaces} activeWorkspace={activeWorkspace} activeWorkspaceId={activeWorkspaceId} selectedScenarioId={selectedScenarioId} setSelectedScenarioId={setSelectedScenarioId} titleRegex={titleRegex} setTitleRegex={setTitleRegex} intervalSeconds={intervalSeconds} setIntervalSeconds={setIntervalSeconds} refreshWindows={refreshWindows} startMonitor={startMonitor} stopMonitor={stopMonitor} monitorStatus={monitorStatus} windowResults={windowResults} workspaceLogs={workspaceLogs} exportCapturedContent={exportCapturedContent} exportStatus={exportStatus} inspectedControls={inspectedControls} inspectControls={inspectControls} busy={busy} /> : null}
-            {activeTab === 'workspaces' ? <WorkspacePage activeWorkspace={activeWorkspace} activeWorkspaceId={activeWorkspaceId} deleteWorkspace={deleteWorkspace} busy={busy} /> : null}
+            {activeTab === 'monitor' ? <MonitorPage workspaces={workspaces} activeWorkspace={activeWorkspace} activeWorkspaceId={activeWorkspaceId} selectedScenarioId={selectedScenarioId} setSelectedScenarioId={setSelectedScenarioId} titleRegex={titleRegex} setTitleRegex={setTitleRegex} intervalSeconds={intervalSeconds} setIntervalSeconds={setIntervalSeconds} refreshWindows={refreshWindows} startMonitor={startMonitor} stopMonitor={stopMonitor} monitorStatus={monitorStatus} windowResults={windowResults} workspaceLogs={workspaceLogs} exportCapturedContent={exportCapturedContent} exportStatus={exportStatus} inspectedControls={inspectedControls} inspectControls={inspectControls} busy={busy} historyScanEnabled={historyScanEnabled} setHistoryScanEnabled={setHistoryScanEnabled} settings={settings} /> : null}
+            {activeTab === 'workspaces' ? <WorkspacePage activeWorkspace={activeWorkspace} activeWorkspaceId={activeWorkspaceId} deleteWorkspace={deleteWorkspace} busy={busy} settings={settings} setSettings={setSettings} saveSettings={persistSettings} /> : null}
             {activeTab === 'settings' ? <SettingsPage settings={settings} setSettings={setSettings} saveSettings={persistSettings} busy={busy} /> : null}
           </div>
         </main>

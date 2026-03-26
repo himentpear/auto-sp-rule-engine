@@ -60,6 +60,12 @@ Phase 13 compatibility guidance:
 
 - `compatibility/phase13-compatibility-matrix.json`
 
+WeChat OCR sample assets:
+
+- `profiles/wechat-vertical-dense-chat.json`
+- `logs/wechat-ocr-sample-suite.json`
+- `logs/wechat-ocr-samples/`
+
 Related read-only entrypoints:
 
 - `docs/evidence-index.md`

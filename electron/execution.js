@@ -13,6 +13,25 @@ function normalizeName(value, fallback) {
     .replace(/^_+|_+$/g, '') || fallback;
 }
 
+function deepMerge(base, override) {
+  const source = base && typeof base === 'object' ? JSON.parse(JSON.stringify(base)) : {};
+  for (const [key, value] of Object.entries(override || {})) {
+    if (
+      value &&
+      typeof value === 'object' &&
+      !Array.isArray(value) &&
+      source[key] &&
+      typeof source[key] === 'object' &&
+      !Array.isArray(source[key])
+    ) {
+      source[key] = deepMerge(source[key], value);
+    } else {
+      source[key] = value;
+    }
+  }
+  return source;
+}
+
 function toProfileRecord(profile) {
   const { id, name, profile_key, ...rest } = profile;
   return {
@@ -78,6 +97,7 @@ function buildExecutionConfig(workspace, ruleInput) {
         match: rule.match,
         action: rule.action,
         target_override: rule.targetOverride || {},
+        ocr_override: rule.ocrOverride || rule.ocr_override || {},
       },
     ],
     targets: {
@@ -172,4 +192,67 @@ export async function executeWorkspaceRule(userDataPath, workspaceId, ruleInput)
   } finally {
     await fs.rm(tempDir, { recursive: true, force: true });
   }
+}
+
+export async function executeWorkspaceChatScan(userDataPath, workspaceId, input) {
+  const workspace = await getWorkspace(userDataPath, workspaceId);
+  const scenario =
+    workspace.scenarios.find((item) => item.id === input.scenarioId) ||
+    workspace.scenarios[0];
+
+  if (!scenario) {
+    throw new Error('Workspace has no scenario available for chat scan.');
+  }
+
+  const targetRef = scenario.targetRef || input.targetRef;
+  const ocrProfileRef = scenario.ocrProfileRef || input.ocrProfileRef;
+  const windowTitle = String(input.windowTitle || '').trim();
+  if (!targetRef || !ocrProfileRef || !windowTitle) {
+    throw new Error('Chat scan requires scenario target, OCR profile, and a concrete window title.');
+  }
+
+  const summaryName = normalizeName(input.summaryName || `${windowTitle}-chat-scan`, 'wechat-chat-scan');
+  const maxScrollSteps = Math.max(1, Math.min(500, Number(input.maxScrollSteps) || 18));
+
+  return executeWorkspaceRule(userDataPath, workspaceId, {
+    name: `chat-scan-${summaryName}`,
+    targetRef,
+    ocrProfileRef,
+    dryRun: true,
+    match: {
+      type: 'regex',
+      pattern: '[\\s\\S]+',
+    },
+    action: {
+      type: 'append_timestamped_note',
+      text: 'chat scan',
+    },
+    targetOverride: {
+      window_title: windowTitle,
+      window_title_substring: windowTitle,
+    },
+    ocrOverride: deepMerge(
+      {
+        normalization: {
+          collapse_whitespace: true,
+          preserve_line_breaks: true,
+          case: 'none',
+          simple_noise_cleanup: true,
+        },
+        behavior: {
+          fallback_to_full_window_on_empty: true,
+        },
+        chat_scan: {
+          enabled: true,
+          max_scroll_steps: maxScrollSteps,
+          completion: {
+            write_summary: true,
+            shutdown_after_completion: false,
+            summary_name: summaryName,
+          },
+        },
+      },
+      input.ocrOverride || {},
+    ),
+  });
 }

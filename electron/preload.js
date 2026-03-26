@@ -14,8 +14,10 @@ const workspaceApi = {
   getMonitorStatus: (workspaceId) => ipcRenderer.invoke('monitor:status', workspaceId),
   loadWorkspaceLogs: (workspaceId) => ipcRenderer.invoke('monitor:logs', workspaceId),
   exportCapturedContent: (workspaceId) => ipcRenderer.invoke('monitor:export-captures', workspaceId),
+  runChatScan: (workspaceId, input) => ipcRenderer.invoke('monitor:run-chat-scan', workspaceId, input),
   getSettings: () => ipcRenderer.invoke('settings:get'),
   saveSettings: (settings) => ipcRenderer.invoke('settings:save', settings),
+  emergencyStop: () => ipcRenderer.invoke('monitor:emergency-stop'),
   onMonitorStatus: (callback) => {
     const listener = (_event, payload) => callback(payload);
     ipcRenderer.on('monitor:status', listener);

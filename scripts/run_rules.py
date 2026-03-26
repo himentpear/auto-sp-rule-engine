@@ -165,6 +165,42 @@ def normalize_match_text(value: str):
     return value.lower()
 
 
+def normalize_chat_content_line(value: str):
+    text = re.sub(r"\s+", " ", str(value or "")).strip()
+    if not text:
+        return ""
+    if re.fullmatch(r"(?:[01]?\d|2[0-3])\s*[:：]\s*[0-5]\d", text):
+        return ""
+    if re.fullmatch(r"(?:\d{4}\s*年\s*\d{1,2}\s*月\s*\d{1,2}\s*日|\d{1,2}\s*月\s*\d{1,2}\s*日|星期[一二三四五六日天]|周[一二三四五六日天])", text):
+        return ""
+    if re.fullmatch(r"共\s*\d+\s*条", text):
+        return ""
+    return text
+
+
+def extract_chat_content_lines(ocr_payload: dict):
+    extracted = []
+    seen = set()
+    normalized_lines = ocr_payload.get("normalized_lines") or []
+
+    if normalized_lines:
+        for line in normalized_lines:
+            text = normalize_chat_content_line(line.get("text") or line.get("raw_text") or "")
+            if not text or text in seen:
+                continue
+            seen.add(text)
+            extracted.append(text)
+        return extracted
+
+    for raw_line in str(ocr_payload.get("normalized_ocr_output") or "").replace("\r", "\n").split("\n"):
+        text = normalize_chat_content_line(raw_line)
+        if not text or text in seen:
+            continue
+        seen.add(text)
+        extracted.append(text)
+    return extracted
+
+
 def normalize_stop_text(value: str):
     normalized = normalize_match_text(value or "")
     return re.sub(r"[\s\-./年月日:]+", "", normalized)
@@ -1023,6 +1059,7 @@ def run_rule_pipeline(
     selected_ocr_payload = None
     aggregated_raw_segments = []
     aggregated_normalized_segments = []
+    aggregated_content_segments = []
     total_frames_captured = 0
     retained_frame_drops = 0
     repeated_frame_count = 0
@@ -1127,6 +1164,7 @@ def run_rule_pipeline(
             frame["multi_frame_confirmation_satisfied"] = consecutive_count >= consecutive_required
 
             if scan_enabled:
+                extracted_content_text = "\n".join(extract_chat_content_lines(ocr_payload)).strip()
                 appended_normalized = append_capped_text(
                     aggregated_normalized_segments,
                     ocr_payload["normalized_ocr_output"],
@@ -1137,7 +1175,16 @@ def run_rule_pipeline(
                     ocr_payload["raw_ocr_output"],
                     scan_cfg["max_aggregated_text_chars"],
                 )
-                if (not appended_normalized and aggregated_normalized_segments) or (not appended_raw and aggregated_raw_segments):
+                appended_content = append_capped_text(
+                    aggregated_content_segments,
+                    extracted_content_text,
+                    scan_cfg["max_aggregated_text_chars"],
+                )
+                if (
+                    (not appended_normalized and aggregated_normalized_segments)
+                    or (not appended_raw and aggregated_raw_segments)
+                    or (extracted_content_text and not appended_content and aggregated_content_segments)
+                ):
                     final_result["scan_summary"]["aggregated_text_truncated"] = True
 
                 stop_state = detect_stop_date(scan_cfg, ocr_payload["raw_ocr_output"], ocr_payload["normalized_ocr_output"])
@@ -1214,6 +1261,7 @@ def run_rule_pipeline(
     if scan_enabled:
         aggregated_normalized_text = "\n".join(aggregated_normalized_segments).strip()
         aggregated_raw_text = "\n".join(aggregated_raw_segments).strip()
+        aggregated_content_text = "\n".join(aggregated_content_segments).strip()
         if (
             sum(len(item) for item in aggregated_normalized_segments) + max(0, len(aggregated_normalized_segments) - 1)
             >= scan_cfg["max_aggregated_text_chars"]
@@ -1253,7 +1301,7 @@ def run_rule_pipeline(
             final_result["evaluated_rules"] = [rule_eval["evaluation"]]
             final_result["validation_result"] = deep_merge(final_result["validation_result"], rule_eval["validation_result"])
 
-        if scan_cfg["completion"]["write_summary"] and aggregated_normalized_text:
+        if scan_cfg["completion"]["write_summary"] and aggregated_content_text:
             summary_path = write_chat_scan_summary(
                 logs_dir,
                 prefix,
@@ -1261,7 +1309,7 @@ def run_rule_pipeline(
                 rule["name"],
                 resolved_target,
                 final_result["scan_summary"],
-                aggregated_normalized_text,
+                aggregated_content_text,
             )
             final_result["scan_summary"]["summary_path"] = str(summary_path.resolve())
 

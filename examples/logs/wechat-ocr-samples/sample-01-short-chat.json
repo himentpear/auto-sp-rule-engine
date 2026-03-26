@@ -1,0 +1,994 @@
+{
+  "sampleId": "sample-01-short-chat",
+  "sourceImagePath": "C:\\Users\\jisub\\Desktop\\screenshoot\\短信息.png",
+  "sourceImageName": "短信息.png",
+  "imageSize": {
+    "width": 1274,
+    "height": 1526
+  },
+  "profilePath": "C:\\Users\\jisub\\Documents\\GitHub\\auto sp rule engine\\examples\\profiles\\wechat-vertical-dense-chat.json",
+  "profileName": "wechat_vertical_dense_chat",
+  "result": {
+    "image_path": "C:\\Users\\jisub\\Desktop\\screenshoot\\短信息.png",
+    "processed_image_path": "C:\\Users\\jisub\\Documents\\GitHub\\auto sp rule engine\\examples\\logs\\wechat-ocr-samples\\sample-01-short-chat-processed.png",
+    "roi_used": null,
+    "preprocessing_settings": {
+      "grayscale": true,
+      "scale": 2.4,
+      "threshold": {
+        "enabled": false,
+        "value": 188
+      },
+      "trim_border": {
+        "enabled": false,
+        "margin": 0
+      },
+      "mask_regions": [
+        {
+          "x": 0,
+          "y": 0,
+          "width": 1274,
+          "height": 221
+        },
+        {
+          "x": 0,
+          "y": 1157,
+          "width": 1274,
+          "height": 369
+        }
+      ]
+    },
+    "normalization_settings": {
+      "collapse_whitespace": true,
+      "preserve_line_breaks": true,
+      "case": "none",
+      "simple_noise_cleanup": true
+    },
+    "raw_ocr_output": "这 是 第 一 次 聊 天 0 TO C KA 这 是 耳 亻 也 人 的 聊 天 TO C KA 尝 试 多 条 聊 天 0 TO C KA 亻 尔 好 ， 亻 尔 是 不 是 个 机 器 人 0 TO C KA @H P 给 我 擦 皮 鞋 TO C KA 后置艾特你@H P \"TOCKA\" 撤 回 了 一 条 消 息 0 TO C KA TOCKA 不 要 这 样",
+    "normalized_ocr_output": "这 是 第 一 次 聊 天 0 TO C KA 这 是 耳 亻 也 人 的 聊 天 TO C KA 尝 试 多 条 聊 天 0 TO C KA 亻 尔 好 ， 亻 尔 是 不 是 个 机 器 人 0 TO C KA @H P 给 我 擦 皮 鞋 TO C KA 后置艾特你@H P \"TOCKA\" 撤 回 了 一 条 消 息 0 TO C KA TOCKA 不 要 这 样",
+    "normalized_lines": [
+      {
+        "text": "这 是 第 一 次 聊 天",
+        "raw_text": "这 是 第 一 次 聊 天",
+        "bounding_rect": {
+          "X": 2414,
+          "Y": 580,
+          "Width": 352,
+          "Height": 52
+        },
+        "words": [
+          {
+            "Text": "这",
+            "BoundingRect": {
+              "X": 2414,
+              "Y": 583,
+              "Width": 49,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "是",
+            "BoundingRect": {
+              "X": 2464,
+              "Y": 585,
+              "Width": 50,
+              "Height": 44
+            }
+          },
+          {
+            "Text": "第",
+            "BoundingRect": {
+              "X": 2515,
+              "Y": 580,
+              "Width": 49,
+              "Height": 50
+            }
+          },
+          {
+            "Text": "一",
+            "BoundingRect": {
+              "X": 2565,
+              "Y": 604,
+              "Width": 50,
+              "Height": 4
+            }
+          },
+          {
+            "Text": "次",
+            "BoundingRect": {
+              "X": 2616,
+              "Y": 580,
+              "Width": 49,
+              "Height": 50
+            }
+          },
+          {
+            "Text": "聊",
+            "BoundingRect": {
+              "X": 2666,
+              "Y": 583,
+              "Width": 49,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "天",
+            "BoundingRect": {
+              "X": 2716,
+              "Y": 585,
+              "Width": 50,
+              "Height": 45
+            }
+          }
+        ]
+      },
+      {
+        "text": "0",
+        "raw_text": "0",
+        "bounding_rect": {
+          "X": 69,
+          "Y": 741,
+          "Width": 123,
+          "Height": 122
+        },
+        "words": [
+          {
+            "Text": "0",
+            "BoundingRect": {
+              "X": 69,
+              "Y": 741,
+              "Width": 123,
+              "Height": 122
+            }
+          }
+        ]
+      },
+      {
+        "text": "TO C KA",
+        "raw_text": "TO C KA",
+        "bounding_rect": {
+          "X": 243,
+          "Y": 755,
+          "Width": 144,
+          "Height": 35
+        },
+        "words": [
+          {
+            "Text": "TO",
+            "BoundingRect": {
+              "X": 243,
+              "Y": 755,
+              "Width": 55,
+              "Height": 35
+            }
+          },
+          {
+            "Text": "C",
+            "BoundingRect": {
+              "X": 303,
+              "Y": 755,
+              "Width": 25,
+              "Height": 35
+            }
+          },
+          {
+            "Text": "KA",
+            "BoundingRect": {
+              "X": 333,
+              "Y": 755,
+              "Width": 54,
+              "Height": 35
+            }
+          }
+        ]
+      },
+      {
+        "text": "这 是 耳 亻 也 人 的 聊 天",
+        "raw_text": "这 是 耳 亻 也 人 的 聊 天",
+        "bounding_rect": {
+          "X": 286,
+          "Y": 858,
+          "Width": 403,
+          "Height": 52
+        },
+        "words": [
+          {
+            "Text": "这",
+            "BoundingRect": {
+              "X": 286,
+              "Y": 861,
+              "Width": 49,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "是",
+            "BoundingRect": {
+              "X": 336,
+              "Y": 863,
+              "Width": 50,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "耳",
+            "BoundingRect": {
+              "X": 387,
+              "Y": 858,
+              "Width": 50,
+              "Height": 50
+            }
+          },
+          {
+            "Text": "亻",
+            "BoundingRect": {
+              "X": 437,
+              "Y": 861,
+              "Width": 16,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "也",
+            "BoundingRect": {
+              "X": 450,
+              "Y": 861,
+              "Width": 37,
+              "Height": 44
+            }
+          },
+          {
+            "Text": "人",
+            "BoundingRect": {
+              "X": 488,
+              "Y": 861,
+              "Width": 49,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "的",
+            "BoundingRect": {
+              "X": 539,
+              "Y": 861,
+              "Width": 47,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "聊",
+            "BoundingRect": {
+              "X": 588,
+              "Y": 861,
+              "Width": 49,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "天",
+            "BoundingRect": {
+              "X": 639,
+              "Y": 863,
+              "Width": 50,
+              "Height": 45
+            }
+          }
+        ]
+      },
+      {
+        "text": "TO C KA",
+        "raw_text": "TO C KA",
+        "bounding_rect": {
+          "X": 243,
+          "Y": 1034,
+          "Width": 144,
+          "Height": 34
+        },
+        "words": [
+          {
+            "Text": "TO",
+            "BoundingRect": {
+              "X": 243,
+              "Y": 1034,
+              "Width": 55,
+              "Height": 34
+            }
+          },
+          {
+            "Text": "C",
+            "BoundingRect": {
+              "X": 303,
+              "Y": 1034,
+              "Width": 25,
+              "Height": 34
+            }
+          },
+          {
+            "Text": "KA",
+            "BoundingRect": {
+              "X": 333,
+              "Y": 1034,
+              "Width": 54,
+              "Height": 34
+            }
+          }
+        ]
+      },
+      {
+        "text": "尝 试 多 条 聊 天",
+        "raw_text": "尝 试 多 条 聊 天",
+        "bounding_rect": {
+          "X": 286,
+          "Y": 1134,
+          "Width": 302,
+          "Height": 52
+        },
+        "words": [
+          {
+            "Text": "尝",
+            "BoundingRect": {
+              "X": 286,
+              "Y": 1137,
+              "Width": 49,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "试",
+            "BoundingRect": {
+              "X": 336,
+              "Y": 1137,
+              "Width": 50,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "多",
+            "BoundingRect": {
+              "X": 388,
+              "Y": 1137,
+              "Width": 46,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "条",
+            "BoundingRect": {
+              "X": 437,
+              "Y": 1134,
+              "Width": 49,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "聊",
+            "BoundingRect": {
+              "X": 488,
+              "Y": 1137,
+              "Width": 48,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "天",
+            "BoundingRect": {
+              "X": 538,
+              "Y": 1139,
+              "Width": 50,
+              "Height": 45
+            }
+          }
+        ]
+      },
+      {
+        "text": "0",
+        "raw_text": "0",
+        "bounding_rect": {
+          "X": 69,
+          "Y": 1295,
+          "Width": 123,
+          "Height": 123
+        },
+        "words": [
+          {
+            "Text": "0",
+            "BoundingRect": {
+              "X": 69,
+              "Y": 1295,
+              "Width": 123,
+              "Height": 123
+            }
+          }
+        ]
+      },
+      {
+        "text": "TO C KA",
+        "raw_text": "TO C KA",
+        "bounding_rect": {
+          "X": 243,
+          "Y": 1310,
+          "Width": 144,
+          "Height": 34
+        },
+        "words": [
+          {
+            "Text": "TO",
+            "BoundingRect": {
+              "X": 243,
+              "Y": 1310,
+              "Width": 55,
+              "Height": 34
+            }
+          },
+          {
+            "Text": "C",
+            "BoundingRect": {
+              "X": 303,
+              "Y": 1310,
+              "Width": 25,
+              "Height": 34
+            }
+          },
+          {
+            "Text": "KA",
+            "BoundingRect": {
+              "X": 333,
+              "Y": 1310,
+              "Width": 54,
+              "Height": 34
+            }
+          }
+        ]
+      },
+      {
+        "text": "亻 尔 好 ， 亻 尔 是 不 是 个 机 器 人",
+        "raw_text": "亻 尔 好 ， 亻 尔 是 不 是 个 机 器 人",
+        "bounding_rect": {
+          "X": 286,
+          "Y": 1415,
+          "Width": 554,
+          "Height": 50
+        },
+        "words": [
+          {
+            "Text": "亻",
+            "BoundingRect": {
+              "X": 286,
+              "Y": 1415,
+              "Width": 17,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "尔",
+            "BoundingRect": {
+              "X": 301,
+              "Y": 1415,
+              "Width": 35,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "好",
+            "BoundingRect": {
+              "X": 336,
+              "Y": 1415,
+              "Width": 51,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "，",
+            "BoundingRect": {
+              "X": 393,
+              "Y": 1451,
+              "Width": 9,
+              "Height": 14
+            }
+          },
+          {
+            "Text": "亻",
+            "BoundingRect": {
+              "X": 437,
+              "Y": 1415,
+              "Width": 17,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "尔",
+            "BoundingRect": {
+              "X": 452,
+              "Y": 1415,
+              "Width": 35,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "是",
+            "BoundingRect": {
+              "X": 487,
+              "Y": 1417,
+              "Width": 51,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "不",
+            "BoundingRect": {
+              "X": 538,
+              "Y": 1417,
+              "Width": 50,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "是",
+            "BoundingRect": {
+              "X": 588,
+              "Y": 1418,
+              "Width": 51,
+              "Height": 44
+            }
+          },
+          {
+            "Text": "个",
+            "BoundingRect": {
+              "X": 639,
+              "Y": 1415,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "机",
+            "BoundingRect": {
+              "X": 689,
+              "Y": 1415,
+              "Width": 51,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "器",
+            "BoundingRect": {
+              "X": 740,
+              "Y": 1418,
+              "Width": 50,
+              "Height": 44
+            }
+          },
+          {
+            "Text": "人",
+            "BoundingRect": {
+              "X": 790,
+              "Y": 1415,
+              "Width": 50,
+              "Height": 47
+            }
+          }
+        ]
+      },
+      {
+        "text": "0",
+        "raw_text": "0",
+        "bounding_rect": {
+          "X": 69,
+          "Y": 1574,
+          "Width": 123,
+          "Height": 122
+        },
+        "words": [
+          {
+            "Text": "0",
+            "BoundingRect": {
+              "X": 69,
+              "Y": 1574,
+              "Width": 123,
+              "Height": 122
+            }
+          }
+        ]
+      },
+      {
+        "text": "TO C KA",
+        "raw_text": "TO C KA",
+        "bounding_rect": {
+          "X": 243,
+          "Y": 1588,
+          "Width": 144,
+          "Height": 35
+        },
+        "words": [
+          {
+            "Text": "TO",
+            "BoundingRect": {
+              "X": 243,
+              "Y": 1588,
+              "Width": 55,
+              "Height": 35
+            }
+          },
+          {
+            "Text": "C",
+            "BoundingRect": {
+              "X": 303,
+              "Y": 1588,
+              "Width": 25,
+              "Height": 35
+            }
+          },
+          {
+            "Text": "KA",
+            "BoundingRect": {
+              "X": 333,
+              "Y": 1588,
+              "Width": 54,
+              "Height": 35
+            }
+          }
+        ]
+      },
+      {
+        "text": "@H P 给 我 擦 皮 鞋",
+        "raw_text": "@H P 给 我 擦 皮 鞋",
+        "bounding_rect": {
+          "X": 290,
+          "Y": 1689,
+          "Width": 382,
+          "Height": 52
+        },
+        "words": [
+          {
+            "Text": "@H",
+            "BoundingRect": {
+              "X": 290,
+              "Y": 1693,
+              "Width": 83,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "P",
+            "BoundingRect": {
+              "X": 381,
+              "Y": 1694,
+              "Width": 25,
+              "Height": 39
+            }
+          },
+          {
+            "Text": "给",
+            "BoundingRect": {
+              "X": 420,
+              "Y": 1691,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "我",
+            "BoundingRect": {
+              "X": 471,
+              "Y": 1691,
+              "Width": 49,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "擦",
+            "BoundingRect": {
+              "X": 521,
+              "Y": 1689,
+              "Width": 49,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "皮",
+            "BoundingRect": {
+              "X": 571,
+              "Y": 1691,
+              "Width": 51,
+              "Height": 50
+            }
+          },
+          {
+            "Text": "鞋",
+            "BoundingRect": {
+              "X": 622,
+              "Y": 1691,
+              "Width": 50,
+              "Height": 50
+            }
+          }
+        ]
+      },
+      {
+        "text": "TO C KA",
+        "raw_text": "TO C KA",
+        "bounding_rect": {
+          "X": 243,
+          "Y": 1864,
+          "Width": 144,
+          "Height": 35
+        },
+        "words": [
+          {
+            "Text": "TO",
+            "BoundingRect": {
+              "X": 243,
+              "Y": 1864,
+              "Width": 55,
+              "Height": 35
+            }
+          },
+          {
+            "Text": "C",
+            "BoundingRect": {
+              "X": 303,
+              "Y": 1864,
+              "Width": 25,
+              "Height": 35
+            }
+          },
+          {
+            "Text": "KA",
+            "BoundingRect": {
+              "X": 333,
+              "Y": 1864,
+              "Width": 54,
+              "Height": 35
+            }
+          }
+        ]
+      },
+      {
+        "text": "后置艾特你@H P",
+        "raw_text": "后置艾特你@H P",
+        "bounding_rect": {
+          "X": 285,
+          "Y": 1967,
+          "Width": 373,
+          "Height": 52
+        },
+        "words": [
+          {
+            "Text": "后置艾特你@H",
+            "BoundingRect": {
+              "X": 285,
+              "Y": 1967,
+              "Width": 340,
+              "Height": 52
+            }
+          },
+          {
+            "Text": "P",
+            "BoundingRect": {
+              "X": 633,
+              "Y": 1972,
+              "Width": 25,
+              "Height": 40
+            }
+          }
+        ]
+      },
+      {
+        "text": "\"TOCKA\" 撤 回 了 一 条 消 息",
+        "raw_text": "\"TOCKA\" 撤 回 了 一 条 消 息",
+        "bounding_rect": {
+          "X": 1285,
+          "Y": 2138,
+          "Width": 494,
+          "Height": 44
+        },
+        "words": [
+          {
+            "Text": "\"TOCKA\"",
+            "BoundingRect": {
+              "X": 1285,
+              "Y": 2143,
+              "Width": 174,
+              "Height": 34
+            }
+          },
+          {
+            "Text": "撤",
+            "BoundingRect": {
+              "X": 1476,
+              "Y": 2140,
+              "Width": 43,
+              "Height": 42
+            }
+          },
+          {
+            "Text": "回",
+            "BoundingRect": {
+              "X": 1522,
+              "Y": 2143,
+              "Width": 38,
+              "Height": 39
+            }
+          },
+          {
+            "Text": "了",
+            "BoundingRect": {
+              "X": 1564,
+              "Y": 2142,
+              "Width": 39,
+              "Height": 37
+            }
+          },
+          {
+            "Text": "一",
+            "BoundingRect": {
+              "X": 1606,
+              "Y": 2157,
+              "Width": 43,
+              "Height": 3
+            }
+          },
+          {
+            "Text": "条",
+            "BoundingRect": {
+              "X": 1650,
+              "Y": 2138,
+              "Width": 42,
+              "Height": 41
+            }
+          },
+          {
+            "Text": "消",
+            "BoundingRect": {
+              "X": 1693,
+              "Y": 2140,
+              "Width": 40,
+              "Height": 42
+            }
+          },
+          {
+            "Text": "息",
+            "BoundingRect": {
+              "X": 1736,
+              "Y": 2141,
+              "Width": 43,
+              "Height": 38
+            }
+          }
+        ]
+      },
+      {
+        "text": "0",
+        "raw_text": "0",
+        "bounding_rect": {
+          "X": 69,
+          "Y": 2246,
+          "Width": 123,
+          "Height": 122
+        },
+        "words": [
+          {
+            "Text": "0",
+            "BoundingRect": {
+              "X": 69,
+              "Y": 2246,
+              "Width": 123,
+              "Height": 122
+            }
+          }
+        ]
+      },
+      {
+        "text": "TO C KA",
+        "raw_text": "TO C KA",
+        "bounding_rect": {
+          "X": 243,
+          "Y": 2260,
+          "Width": 144,
+          "Height": 35
+        },
+        "words": [
+          {
+            "Text": "TO",
+            "BoundingRect": {
+              "X": 243,
+              "Y": 2260,
+              "Width": 55,
+              "Height": 35
+            }
+          },
+          {
+            "Text": "C",
+            "BoundingRect": {
+              "X": 303,
+              "Y": 2260,
+              "Width": 25,
+              "Height": 35
+            }
+          },
+          {
+            "Text": "KA",
+            "BoundingRect": {
+              "X": 333,
+              "Y": 2260,
+              "Width": 54,
+              "Height": 35
+            }
+          }
+        ]
+      },
+      {
+        "text": "TOCKA",
+        "raw_text": "TOCKA",
+        "bounding_rect": {
+          "X": 243,
+          "Y": 2538,
+          "Width": 144,
+          "Height": 35
+        },
+        "words": [
+          {
+            "Text": "TOCKA",
+            "BoundingRect": {
+              "X": 243,
+              "Y": 2538,
+              "Width": 144,
+              "Height": 35
+            }
+          }
+        ]
+      },
+      {
+        "text": "不 要 这 样",
+        "raw_text": "不 要 这 样",
+        "bounding_rect": {
+          "X": 285,
+          "Y": 2641,
+          "Width": 203,
+          "Height": 50
+        },
+        "words": [
+          {
+            "Text": "不",
+            "BoundingRect": {
+              "X": 285,
+              "Y": 2644,
+              "Width": 52,
+              "Height": 44
+            }
+          },
+          {
+            "Text": "要",
+            "BoundingRect": {
+              "X": 336,
+              "Y": 2644,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "这",
+            "BoundingRect": {
+              "X": 387,
+              "Y": 2641,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "样",
+            "BoundingRect": {
+              "X": 437,
+              "Y": 2641,
+              "Width": 51,
+              "Height": 47
+            }
+          }
+        ]
+      }
+    ],
+    "language": "zh-Hans-CN",
+    "line_count": 19
+  },
+  "preview": "这 是 第 一 次 聊 天 | 0 | TO C KA | 这 是 耳 亻 也 人 的 聊 天 | TO C KA | 尝 试 多 条 聊 天"
+}

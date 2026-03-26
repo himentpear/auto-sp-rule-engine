@@ -1,0 +1,469 @@
+{
+  "sampleId": "sample-02-wechat",
+  "sourceImagePath": "C:\\Users\\jisub\\Desktop\\screenshoot\\禁止扫描区.png",
+  "sourceImageName": "禁止扫描区.png",
+  "imageSize": {
+    "width": 1293,
+    "height": 1526
+  },
+  "profilePath": "C:\\Users\\jisub\\Documents\\GitHub\\auto sp rule engine\\examples\\profiles\\wechat-vertical-dense-chat.json",
+  "profileName": "wechat_vertical_dense_chat",
+  "result": {
+    "image_path": "C:\\Users\\jisub\\Desktop\\screenshoot\\禁止扫描区.png",
+    "processed_image_path": "C:\\Users\\jisub\\Documents\\GitHub\\auto sp rule engine\\examples\\logs\\wechat-ocr-samples\\sample-02-wechat-processed.png",
+    "roi_used": null,
+    "preprocessing_settings": {
+      "grayscale": true,
+      "scale": 2.4,
+      "threshold": {
+        "enabled": false,
+        "value": 188
+      },
+      "trim_border": {
+        "enabled": false,
+        "margin": 0
+      },
+      "mask_regions": [
+        {
+          "x": 0,
+          "y": 0,
+          "width": 1293,
+          "height": 221
+        },
+        {
+          "x": 0,
+          "y": 1157,
+          "width": 1293,
+          "height": 369
+        }
+      ]
+    },
+    "normalization_settings": {
+      "collapse_whitespace": true,
+      "preserve_line_breaks": true,
+      "case": "none",
+      "simple_noise_cleanup": true
+    },
+    "raw_ocr_output": "堪 比 老 兵 烧 烤 和 宝 妈 奶 茶 了 1 6 ： 02 怎 么 识 另 刂 成 这 样 了 哦 原 来 时 群 置 顶 1 6 ： 08 李 峥",
+    "normalized_ocr_output": "堪 比 老 兵 烧 烤 和 宝 妈 奶 茶 了 1 6 ： 02 怎 么 识 另 刂 成 这 样 了 哦 原 来 时 群 置 顶 1 6 ： 08 李 峥",
+    "normalized_lines": [
+      {
+        "text": "堪 比 老 兵 烧 烤 和 宝 妈 奶 茶 了",
+        "raw_text": "堪 比 老 兵 烧 烤 和 宝 妈 奶 茶 了",
+        "bounding_rect": {
+          "X": 288,
+          "Y": 580,
+          "Width": 602,
+          "Height": 52
+        },
+        "words": [
+          {
+            "Text": "堪",
+            "BoundingRect": {
+              "X": 288,
+              "Y": 582,
+              "Width": 50,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "比",
+            "BoundingRect": {
+              "X": 341,
+              "Y": 580,
+              "Width": 47,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "老",
+            "BoundingRect": {
+              "X": 389,
+              "Y": 583,
+              "Width": 49,
+              "Height": 44
+            }
+          },
+          {
+            "Text": "兵",
+            "BoundingRect": {
+              "X": 440,
+              "Y": 582,
+              "Width": 49,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "烧",
+            "BoundingRect": {
+              "X": 489,
+              "Y": 580,
+              "Width": 50,
+              "Height": 52
+            }
+          },
+          {
+            "Text": "烤",
+            "BoundingRect": {
+              "X": 540,
+              "Y": 583,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "和",
+            "BoundingRect": {
+              "X": 591,
+              "Y": 582,
+              "Width": 48,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "宝",
+            "BoundingRect": {
+              "X": 641,
+              "Y": 580,
+              "Width": 49,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "妈",
+            "BoundingRect": {
+              "X": 691,
+              "Y": 583,
+              "Width": 49,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "奶",
+            "BoundingRect": {
+              "X": 741,
+              "Y": 583,
+              "Width": 49,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "茶",
+            "BoundingRect": {
+              "X": 792,
+              "Y": 583,
+              "Width": 50,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "了",
+            "BoundingRect": {
+              "X": 844,
+              "Y": 585,
+              "Width": 46,
+              "Height": 42
+            }
+          }
+        ]
+      },
+      {
+        "text": "1 6 ： 02",
+        "raw_text": "1 6 ： 02",
+        "bounding_rect": {
+          "X": 1502,
+          "Y": 1567,
+          "Width": 106,
+          "Height": 34
+        },
+        "words": [
+          {
+            "Text": "1",
+            "BoundingRect": {
+              "X": 1502,
+              "Y": 1567,
+              "Width": 12,
+              "Height": 34
+            }
+          },
+          {
+            "Text": "6",
+            "BoundingRect": {
+              "X": 1526,
+              "Y": 1567,
+              "Width": 21,
+              "Height": 34
+            }
+          },
+          {
+            "Text": "：",
+            "BoundingRect": {
+              "X": 1551,
+              "Y": 1577,
+              "Width": 6,
+              "Height": 24
+            }
+          },
+          {
+            "Text": "02",
+            "BoundingRect": {
+              "X": 1560,
+              "Y": 1567,
+              "Width": 48,
+              "Height": 34
+            }
+          }
+        ]
+      },
+      {
+        "text": "怎 么 识 另 刂 成 这 样 了",
+        "raw_text": "怎 么 识 另 刂 成 这 样 了",
+        "bounding_rect": {
+          "X": 2409,
+          "Y": 2123,
+          "Width": 399,
+          "Height": 47
+        },
+        "words": [
+          {
+            "Text": "怎",
+            "BoundingRect": {
+              "X": 2409,
+              "Y": 2123,
+              "Width": 49,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "么",
+            "BoundingRect": {
+              "X": 2460,
+              "Y": 2123,
+              "Width": 48,
+              "Height": 46
+            }
+          },
+          {
+            "Text": "识",
+            "BoundingRect": {
+              "X": 2509,
+              "Y": 2123,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "另",
+            "BoundingRect": {
+              "X": 2560,
+              "Y": 2126,
+              "Width": 27,
+              "Height": 44
+            }
+          },
+          {
+            "Text": "刂",
+            "BoundingRect": {
+              "X": 2591,
+              "Y": 2123,
+              "Width": 16,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "成",
+            "BoundingRect": {
+              "X": 2610,
+              "Y": 2123,
+              "Width": 50,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "这",
+            "BoundingRect": {
+              "X": 2661,
+              "Y": 2123,
+              "Width": 49,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "样",
+            "BoundingRect": {
+              "X": 2711,
+              "Y": 2123,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "了",
+            "BoundingRect": {
+              "X": 2763,
+              "Y": 2125,
+              "Width": 45,
+              "Height": 43
+            }
+          }
+        ]
+      },
+      {
+        "text": "哦 原 来 时 群 置 顶",
+        "raw_text": "哦 原 来 时 群 置 顶",
+        "bounding_rect": {
+          "X": 2460,
+          "Y": 2322,
+          "Width": 351,
+          "Height": 52
+        },
+        "words": [
+          {
+            "Text": "哦",
+            "BoundingRect": {
+              "X": 2460,
+              "Y": 2325,
+              "Width": 49,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "原",
+            "BoundingRect": {
+              "X": 2509,
+              "Y": 2327,
+              "Width": 50,
+              "Height": 42
+            }
+          },
+          {
+            "Text": "来",
+            "BoundingRect": {
+              "X": 2560,
+              "Y": 2322,
+              "Width": 50,
+              "Height": 52
+            }
+          },
+          {
+            "Text": "时",
+            "BoundingRect": {
+              "X": 2612,
+              "Y": 2325,
+              "Width": 48,
+              "Height": 44
+            }
+          },
+          {
+            "Text": "群",
+            "BoundingRect": {
+              "X": 2661,
+              "Y": 2325,
+              "Width": 49,
+              "Height": 46
+            }
+          },
+          {
+            "Text": "置",
+            "BoundingRect": {
+              "X": 2711,
+              "Y": 2327,
+              "Width": 50,
+              "Height": 42
+            }
+          },
+          {
+            "Text": "顶",
+            "BoundingRect": {
+              "X": 2761,
+              "Y": 2327,
+              "Width": 50,
+              "Height": 47
+            }
+          }
+        ]
+      },
+      {
+        "text": "1 6 ： 08",
+        "raw_text": "1 6 ： 08",
+        "bounding_rect": {
+          "X": 1502,
+          "Y": 2512,
+          "Width": 106,
+          "Height": 35
+        },
+        "words": [
+          {
+            "Text": "1",
+            "BoundingRect": {
+              "X": 1502,
+              "Y": 2512,
+              "Width": 12,
+              "Height": 34
+            }
+          },
+          {
+            "Text": "6",
+            "BoundingRect": {
+              "X": 1526,
+              "Y": 2512,
+              "Width": 21,
+              "Height": 34
+            }
+          },
+          {
+            "Text": "：",
+            "BoundingRect": {
+              "X": 1551,
+              "Y": 2522,
+              "Width": 6,
+              "Height": 24
+            }
+          },
+          {
+            "Text": "08",
+            "BoundingRect": {
+              "X": 1560,
+              "Y": 2512,
+              "Width": 48,
+              "Height": 35
+            }
+          }
+        ]
+      },
+      {
+        "text": "李 峥",
+        "raw_text": "李 峥",
+        "bounding_rect": {
+          "X": 245,
+          "Y": 2644,
+          "Width": 86,
+          "Height": 42
+        },
+        "words": [
+          {
+            "Text": "李",
+            "BoundingRect": {
+              "X": 245,
+              "Y": 2644,
+              "Width": 42,
+              "Height": 42
+            }
+          },
+          {
+            "Text": "峥",
+            "BoundingRect": {
+              "X": 288,
+              "Y": 2644,
+              "Width": 43,
+              "Height": 42
+            }
+          }
+        ]
+      }
+    ],
+    "language": "zh-Hans-CN",
+    "line_count": 6
+  },
+  "preview": "堪 比 老 兵 烧 烤 和 宝 妈 奶 茶 了 | 1 6 ： 02 | 怎 么 识 另 刂 成 这 样 了 | 哦 原 来 时 群 置 顶 | 1 6 ： 08 | 李 峥"
+}

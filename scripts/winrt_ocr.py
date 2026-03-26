@@ -12,6 +12,7 @@ DEFAULT_PREPROCESSING = {
     "scale": 1.0,
     "threshold": {"enabled": False, "value": 180},
     "trim_border": {"enabled": False, "margin": 0},
+    "mask_regions": [],
 }
 
 DEFAULT_NORMALIZATION = {
@@ -108,9 +109,66 @@ def trim_border(image: Image.Image, margin: int):
     return image.crop((left, top, right, bottom))
 
 
+def clamp_mask_region(image: Image.Image, region_cfg: dict | None):
+    if not region_cfg:
+        return None
+    unit = str(region_cfg.get("unit", "pixels")).lower()
+    if unit == "ratio":
+        x = int(round(float(region_cfg.get("x", 0.0)) * image.width))
+        y = int(round(float(region_cfg.get("y", 0.0)) * image.height))
+        width = int(round(float(region_cfg.get("width", 1.0)) * image.width))
+        height = int(round(float(region_cfg.get("height", 1.0)) * image.height))
+    else:
+        x = int(region_cfg.get("x", 0))
+        y = int(region_cfg.get("y", 0))
+        width = int(region_cfg.get("width", image.width - x))
+        height = int(region_cfg.get("height", image.height - y))
+
+    x = max(0, x)
+    y = max(0, y)
+    width = max(1, width)
+    height = max(1, height)
+    right = min(image.width, x + width)
+    bottom = min(image.height, y + height)
+    if right <= x or bottom <= y:
+        return None
+    return {
+        "x": x,
+        "y": y,
+        "width": right - x,
+        "height": bottom - y,
+    }
+
+
+def apply_mask_regions(image: Image.Image, preprocessing_cfg: dict | None):
+    cfg = merge_dict(DEFAULT_PREPROCESSING, preprocessing_cfg)
+    regions = cfg.get("mask_regions") or []
+    if not regions:
+        return image.copy(), []
+
+    masked = image.copy()
+    fill_value = 255 if masked.mode == "L" else tuple(255 for _ in masked.getbands())
+    applied = []
+    for region in regions:
+        clamped = clamp_mask_region(masked, region)
+        if not clamped:
+            continue
+        masked.paste(
+            fill_value,
+            (
+                clamped["x"],
+                clamped["y"],
+                clamped["x"] + clamped["width"],
+                clamped["y"] + clamped["height"],
+            ),
+        )
+        applied.append(clamped)
+    return masked, applied
+
+
 def preprocess_image(image: Image.Image, preprocessing_cfg: dict | None):
     cfg = merge_dict(DEFAULT_PREPROCESSING, preprocessing_cfg)
-    processed = image.copy()
+    processed, applied_mask_regions = apply_mask_regions(image, cfg)
 
     if cfg.get("grayscale", True):
         processed = processed.convert("L")
@@ -134,6 +192,7 @@ def preprocess_image(image: Image.Image, preprocessing_cfg: dict | None):
     if trim_cfg.get("enabled"):
         processed = trim_border(processed, int(trim_cfg.get("margin", 0)))
 
+    cfg["mask_regions"] = applied_mask_regions
     return processed, cfg
 
 
@@ -206,9 +265,22 @@ def run_ocr_pipeline(image_path: Path, ocr_cfg: dict | None, processed_out_path:
         normalized_text_local, normalization_cfg_local = normalize_text(
             ocr_payload_local.get("Text", ""), (active_ocr_cfg or {}).get("normalization")
         )
-        return prepared_local, ocr_payload_local, normalized_text_local, normalization_cfg_local
+        normalized_lines_local = []
+        for line in ocr_payload_local.get("Lines", []) or []:
+            normalized_line_text, _ = normalize_text(
+                line.get("Text", ""), (active_ocr_cfg or {}).get("normalization")
+            )
+            normalized_lines_local.append(
+                {
+                    "text": normalized_line_text,
+                    "raw_text": line.get("Text", ""),
+                    "bounding_rect": line.get("BoundingRect"),
+                    "words": line.get("Words", []),
+                }
+            )
+        return prepared_local, ocr_payload_local, normalized_text_local, normalization_cfg_local, normalized_lines_local
 
-    prepared, ocr_payload, normalized_text, normalization_cfg = execute_once(ocr_cfg, processed_out_path)
+    prepared, ocr_payload, normalized_text, normalization_cfg, normalized_lines = execute_once(ocr_cfg, processed_out_path)
 
     if (
         behavior_cfg.get("fallback_to_full_window_on_empty")
@@ -220,7 +292,7 @@ def run_ocr_pipeline(image_path: Path, ocr_cfg: dict | None, processed_out_path:
         fallback_out_path = None
         if processed_out_path is not None:
             fallback_out_path = processed_out_path.parent / f"{processed_out_path.stem}-fallback{processed_out_path.suffix}"
-        prepared, ocr_payload, normalized_text, normalization_cfg = execute_once(fallback_cfg, fallback_out_path)
+        prepared, ocr_payload, normalized_text, normalization_cfg, normalized_lines = execute_once(fallback_cfg, fallback_out_path)
 
     return {
         "image_path": str(image_path.resolve()),
@@ -230,6 +302,7 @@ def run_ocr_pipeline(image_path: Path, ocr_cfg: dict | None, processed_out_path:
         "normalization_settings": normalization_cfg,
         "raw_ocr_output": ocr_payload.get("Text", ""),
         "normalized_ocr_output": normalized_text,
+        "normalized_lines": normalized_lines,
         "language": ocr_payload.get("Language"),
         "line_count": ocr_payload.get("LineCount"),
     }
@@ -239,6 +312,7 @@ def build_change_detection_image(image_path: Path, ocr_cfg: dict | None):
     with Image.open(image_path) as source:
         source = source.convert("L")
         roi_image, _ = apply_roi(source, (ocr_cfg or {}).get("roi"))
+        roi_image, _ = apply_mask_regions(roi_image, (ocr_cfg or {}).get("preprocessing"))
         reduced = roi_image.resize((64, 64), Image.Resampling.BILINEAR)
         return reduced.copy()
 

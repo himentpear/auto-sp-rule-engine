@@ -1,0 +1,49 @@
+{
+  "name": "wechat_vertical_dense_chat",
+  "roi": null,
+  "preprocessing": {
+    "grayscale": true,
+    "scale": 2.4,
+    "threshold": {
+      "enabled": false,
+      "value": 188
+    },
+    "trim_border": {
+      "enabled": false,
+      "margin": 0
+    },
+    "mask_regions": [
+      {
+        "unit": "ratio",
+        "x": 0.0,
+        "y": 0.0,
+        "width": 1.0,
+        "height": 0.145
+      },
+      {
+        "unit": "ratio",
+        "x": 0.0,
+        "y": 0.758,
+        "width": 1.0,
+        "height": 0.242
+      }
+    ]
+  },
+  "normalization": {
+    "collapse_whitespace": true,
+    "preserve_line_breaks": true,
+    "case": "none",
+    "simple_noise_cleanup": true
+  },
+  "behavior": {
+    "fallback_to_full_window_on_empty": true
+  },
+  "watch": {
+    "enabled": false,
+    "polling_interval_seconds": 0.5,
+    "max_checks": 1,
+    "change_threshold": 0.004,
+    "forced_ocr_interval_seconds": 5.0,
+    "consecutive_match_count": 1
+  }
+}

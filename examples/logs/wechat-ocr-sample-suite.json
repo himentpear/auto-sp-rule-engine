@@ -1,0 +1,79 @@
+{
+  "generatedAt": "2026-03-20T00:00:00Z",
+  "inputDir": "C:\\Users\\jisub\\Desktop\\screenshoot",
+  "profilePath": "C:\\Users\\jisub\\Documents\\GitHub\\auto sp rule engine\\examples\\profiles\\wechat-vertical-dense-chat.json",
+  "profileName": "wechat_vertical_dense_chat",
+  "sampleCount": 5,
+  "samples": [
+    {
+      "sampleId": "sample-01-short-chat",
+      "sourceImageName": "短信息.png",
+      "sourceImagePath": "C:\\Users\\jisub\\Desktop\\screenshoot\\短信息.png",
+      "imageSize": {
+        "width": 1274,
+        "height": 1526
+      },
+      "lineCount": 19,
+      "roiUsed": null,
+      "processedImagePath": "C:\\Users\\jisub\\Documents\\GitHub\\auto sp rule engine\\examples\\logs\\wechat-ocr-samples\\sample-01-short-chat-processed.png",
+      "outputPath": "C:\\Users\\jisub\\Documents\\GitHub\\auto sp rule engine\\examples\\logs\\wechat-ocr-samples\\sample-01-short-chat.json",
+      "preview": "这 是 第 一 次 聊 天 | 0 | TO C KA | 这 是 耳 亻 也 人 的 聊 天 | TO C KA | 尝 试 多 条 聊 天"
+    },
+    {
+      "sampleId": "sample-02-wechat",
+      "sourceImageName": "禁止扫描区.png",
+      "sourceImagePath": "C:\\Users\\jisub\\Desktop\\screenshoot\\禁止扫描区.png",
+      "imageSize": {
+        "width": 1293,
+        "height": 1526
+      },
+      "lineCount": 6,
+      "roiUsed": null,
+      "processedImagePath": "C:\\Users\\jisub\\Documents\\GitHub\\auto sp rule engine\\examples\\logs\\wechat-ocr-samples\\sample-02-wechat-processed.png",
+      "outputPath": "C:\\Users\\jisub\\Documents\\GitHub\\auto sp rule engine\\examples\\logs\\wechat-ocr-samples\\sample-02-wechat.json",
+      "preview": "堪 比 老 兵 烧 烤 和 宝 妈 奶 茶 了 | 1 6 ： 02 | 怎 么 识 另 刂 成 这 样 了 | 哦 原 来 时 群 置 顶 | 1 6 ： 08 | 李 峥"
+    },
+    {
+      "sampleId": "sample-03-sticker",
+      "sourceImageName": "表情包.png",
+      "sourceImagePath": "C:\\Users\\jisub\\Desktop\\screenshoot\\表情包.png",
+      "imageSize": {
+        "width": 1274,
+        "height": 1526
+      },
+      "lineCount": 3,
+      "roiUsed": null,
+      "processedImagePath": "C:\\Users\\jisub\\Documents\\GitHub\\auto sp rule engine\\examples\\logs\\wechat-ocr-samples\\sample-03-sticker-processed.png",
+      "outputPath": "C:\\Users\\jisub\\Documents\\GitHub\\auto sp rule engine\\examples\\logs\\wechat-ocr-samples\\sample-03-sticker.json",
+      "preview": "TO C KA | TO C KA | Chr;S(h1dS"
+    },
+    {
+      "sampleId": "sample-04-long-chat-top",
+      "sourceImageName": "长信息（上）.png",
+      "sourceImagePath": "C:\\Users\\jisub\\Desktop\\screenshoot\\长信息（上）.png",
+      "imageSize": {
+        "width": 1274,
+        "height": 1526
+      },
+      "lineCount": 30,
+      "roiUsed": null,
+      "processedImagePath": "C:\\Users\\jisub\\Documents\\GitHub\\auto sp rule engine\\examples\\logs\\wechat-ocr-samples\\sample-04-long-chat-top-processed.png",
+      "outputPath": "C:\\Users\\jisub\\Documents\\GitHub\\auto sp rule engine\\examples\\logs\\wechat-ocr-samples\\sample-04-long-chat-top.json",
+      "preview": "杲 一 篇 关 于 俄 罗 斯 著 名 电 影 导 演 和 演 员 尼 基 塔 ， 米 哈 尔 科 夫 | (HL•1KMTa MmxaJlKOB) 的 俄 文 传 记 阅 读 材 料 。 以 下 是 文 章 的 中 文 翻 | 尼 基 塔 ． 米 哈 尔 科 夫 (HVlKVITa M VI)GJIKOB) | 尼 基 塔 ， 谢 尔 盖 耶 维 奇 ， 米 哈 尔 科 夫 于 1945 年 10 月 21 日 出 生 在 莫 斯 科 的 | 一 个 著 名 家 庭 。 他 的 父 亲 澍 尔 盖 ． 米 哈 尔 科 夫 是 著 名 的 丿 L 童 文 学 作 家 ； | 母 亲 娜 塔 莉 亚 ． 康 查 洛 夫 斯 卡 娅 是 翻 译 家 ， 她 是 画 家 彼 得 · 康 查 洛 夫 斯"
+    },
+    {
+      "sampleId": "sample-05-long-chat-bottom",
+      "sourceImageName": "长信息（下）.png",
+      "sourceImagePath": "C:\\Users\\jisub\\Desktop\\screenshoot\\长信息（下）.png",
+      "imageSize": {
+        "width": 1274,
+        "height": 1526
+      },
+      "lineCount": 32,
+      "roiUsed": null,
+      "processedImagePath": "C:\\Users\\jisub\\Documents\\GitHub\\auto sp rule engine\\examples\\logs\\wechat-ocr-samples\\sample-05-long-chat-bottom-processed.png",
+      "outputPath": "C:\\Users\\jisub\\Documents\\GitHub\\auto sp rule engine\\examples\\logs\\wechat-ocr-samples\\sample-05-long-chat-bottom.json",
+      "preview": "尼 基 塔 14 岁 便 开 始 涉 足 电 影 表 演 。 18 岁 时 ， 他 在 格 奥 尔 基 ， 达 涅 利 亚 | 的 电 影 《 我 氵 曼 步 在 莫 斯 科 》 中 担 任 了 主 角 之 一 ， 并 在 片 中 演 唱 了 同 名 | 流 行 歌 曲 。 此 后 ， 年 轻 的 米 哈 尔 科 夫 立 刻 成 为 了 一 亻 立 深 受 全 国 人 民 喜 | 爱 且 非 常 著 名 的 演 员 。 | 然 而 ， 在 21 岁 时 ， 他 被 他 所 就 读 的 休 金 戏 剧 学 院 开 除 。 原 因 是 当 时 学 | 生 不 被 允 许 去 拍 电 影 ， 而 米 哈 尔 科 夫 却 多 次 违 反 了 这 一 禁 专 。 于 是 他"
+    }
+  ]
+}

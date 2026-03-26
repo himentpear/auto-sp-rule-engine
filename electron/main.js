@@ -1,6 +1,6 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { app, BrowserWindow, ipcMain } from 'electron';
+import { app, BrowserWindow, globalShortcut, ipcMain } from 'electron';
 import {
   createWorkspace,
   deleteWorkspace,
@@ -9,7 +9,7 @@ import {
   listWorkspaces,
   saveWorkspace,
 } from './workspaces.js';
-import { executeWorkspaceRule } from './execution.js';
+import { executeWorkspaceChatScan, executeWorkspaceRule } from './execution.js';
 import { monitorManager } from './monitor.js';
 import { inspectWindowControls, listWindows } from './windows.js';
 import { sanitizeMonitorOptions, sanitizeRulePayload } from './security.js';
@@ -19,6 +19,7 @@ import { getWorkspacesRoot } from './workspaces.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 let mainWindow = null;
+let registeredEmergencyStopHotkey = null;
 
 function getRendererEntry() {
   if (process.env.VITE_DEV_SERVER_URL) {
@@ -30,6 +31,24 @@ function getRendererEntry() {
 
 function getPreloadPath() {
   return path.join(__dirname, '../preload/preload.cjs');
+}
+
+function registerEmergencyStopHotkey(accelerator) {
+  if (registeredEmergencyStopHotkey) {
+    globalShortcut.unregister(registeredEmergencyStopHotkey);
+    registeredEmergencyStopHotkey = null;
+  }
+  const value = String(accelerator || '').trim();
+  if (!value) {
+    return false;
+  }
+  const registered = globalShortcut.register(value, () => {
+    void monitorManager.stopAll(`Emergency stop via ${value}`);
+  });
+  if (registered) {
+    registeredEmergencyStopHotkey = value;
+  }
+  return registered;
 }
 
 async function createMainWindow() {
@@ -85,14 +104,23 @@ function registerWorkspaceIpc() {
   ipcMain.handle('monitor:export-captures', async (_event, workspaceId) =>
     monitorManager.exportCapturedContent(app.getPath('userData'), workspaceId),
   );
+  ipcMain.handle('monitor:emergency-stop', async () => monitorManager.stopAll());
+  ipcMain.handle('monitor:run-chat-scan', async (_event, workspaceId, input) =>
+    executeWorkspaceChatScan(app.getPath('userData'), workspaceId, input || {}),
+  );
   ipcMain.handle('settings:get', async () => getSettings(app.getPath('userData')));
-  ipcMain.handle('settings:save', async (_event, nextSettings) => saveSettings(app.getPath('userData'), nextSettings));
+  ipcMain.handle('settings:save', async (_event, nextSettings) => {
+    const saved = await saveSettings(app.getPath('userData'), nextSettings);
+    registerEmergencyStopHotkey(saved.emergencyStopHotkey);
+    return saved;
+  });
 }
 
 app.whenReady().then(async () => {
   await ensureDefaultWorkspace(app.getPath('userData'));
   const settings = await getSettings(app.getPath('userData'));
   applyLaunchAtLogin(settings.launchAtLogin);
+  registerEmergencyStopHotkey(settings.emergencyStopHotkey);
   await cleanupOldWorkspaceLogs(getWorkspacesRoot(app.getPath('userData')), settings.logRetentionDays);
   registerWorkspaceIpc();
   monitorManager.on('status', (payload) => {
@@ -115,6 +143,7 @@ app.whenReady().then(async () => {
 });
 
 app.on('window-all-closed', () => {
+  globalShortcut.unregisterAll();
   if (process.platform !== 'darwin') {
     app.quit();
   }

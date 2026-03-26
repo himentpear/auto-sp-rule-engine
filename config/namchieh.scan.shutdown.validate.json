@@ -21,7 +21,7 @@
       "control_type": ""
     },
     "readback_strategy": {
-      "type": "window_text",
+      "type": "ocr_readback",
       "focus_strategy": {
         "type": "activate_then_wait",
         "wait_timeout_seconds": 1,
@@ -32,23 +32,34 @@
   "ocr_profile": "wechat-chat-ocr",
   "ocr_profiles": {
     "wechat-chat-ocr": {
-      "roi": {
-        "x": 20,
-        "y": 120,
-        "width": 560,
-        "height": 760
-      },
+      "roi": null,
       "preprocessing": {
         "grayscale": true,
-        "scale": 2.2,
+        "scale": 2.4,
         "threshold": {
           "enabled": false,
-          "value": 180
+          "value": 188
         },
         "trim_border": {
           "enabled": false,
           "margin": 0
-        }
+        },
+        "mask_regions": [
+          {
+            "unit": "ratio",
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 0.155
+          },
+          {
+            "unit": "ratio",
+            "x": 0,
+            "y": 0.895,
+            "width": 1,
+            "height": 0.105
+          }
+        ]
       },
       "normalization": {
         "collapse_whitespace": true,

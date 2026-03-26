@@ -1,0 +1,154 @@
+{
+  "sampleId": "sample-03-sticker",
+  "sourceImagePath": "C:\\Users\\jisub\\Desktop\\screenshoot\\表情包.png",
+  "sourceImageName": "表情包.png",
+  "imageSize": {
+    "width": 1274,
+    "height": 1526
+  },
+  "profilePath": "C:\\Users\\jisub\\Documents\\GitHub\\auto sp rule engine\\examples\\profiles\\wechat-vertical-dense-chat.json",
+  "profileName": "wechat_vertical_dense_chat",
+  "result": {
+    "image_path": "C:\\Users\\jisub\\Desktop\\screenshoot\\表情包.png",
+    "processed_image_path": "C:\\Users\\jisub\\Documents\\GitHub\\auto sp rule engine\\examples\\logs\\wechat-ocr-samples\\sample-03-sticker-processed.png",
+    "roi_used": null,
+    "preprocessing_settings": {
+      "grayscale": true,
+      "scale": 2.4,
+      "threshold": {
+        "enabled": false,
+        "value": 188
+      },
+      "trim_border": {
+        "enabled": false,
+        "margin": 0
+      },
+      "mask_regions": [
+        {
+          "x": 0,
+          "y": 0,
+          "width": 1274,
+          "height": 221
+        },
+        {
+          "x": 0,
+          "y": 1157,
+          "width": 1274,
+          "height": 369
+        }
+      ]
+    },
+    "normalization_settings": {
+      "collapse_whitespace": true,
+      "preserve_line_breaks": true,
+      "case": "none",
+      "simple_noise_cleanup": true
+    },
+    "raw_ocr_output": "TO C KA TO C KA Chr;S(h1dS",
+    "normalized_ocr_output": "TO C KA TO C KA Chr;S(h1dS",
+    "normalized_lines": [
+      {
+        "text": "TO C KA",
+        "raw_text": "TO C KA",
+        "bounding_rect": {
+          "X": 243,
+          "Y": 583,
+          "Width": 144,
+          "Height": 34
+        },
+        "words": [
+          {
+            "Text": "TO",
+            "BoundingRect": {
+              "X": 243,
+              "Y": 583,
+              "Width": 55,
+              "Height": 34
+            }
+          },
+          {
+            "Text": "C",
+            "BoundingRect": {
+              "X": 303,
+              "Y": 583,
+              "Width": 25,
+              "Height": 34
+            }
+          },
+          {
+            "Text": "KA",
+            "BoundingRect": {
+              "X": 333,
+              "Y": 583,
+              "Width": 54,
+              "Height": 34
+            }
+          }
+        ]
+      },
+      {
+        "text": "TO C KA",
+        "raw_text": "TO C KA",
+        "bounding_rect": {
+          "X": 243,
+          "Y": 1207,
+          "Width": 144,
+          "Height": 34
+        },
+        "words": [
+          {
+            "Text": "TO",
+            "BoundingRect": {
+              "X": 243,
+              "Y": 1207,
+              "Width": 55,
+              "Height": 34
+            }
+          },
+          {
+            "Text": "C",
+            "BoundingRect": {
+              "X": 303,
+              "Y": 1207,
+              "Width": 25,
+              "Height": 34
+            }
+          },
+          {
+            "Text": "KA",
+            "BoundingRect": {
+              "X": 333,
+              "Y": 1207,
+              "Width": 54,
+              "Height": 34
+            }
+          }
+        ]
+      },
+      {
+        "text": "Chr;S(h1dS",
+        "raw_text": "Chr;S(h1dS",
+        "bounding_rect": {
+          "X": 2391,
+          "Y": 2455,
+          "Width": 363,
+          "Height": 91
+        },
+        "words": [
+          {
+            "Text": "Chr;S(h1dS",
+            "BoundingRect": {
+              "X": 2391,
+              "Y": 2455,
+              "Width": 363,
+              "Height": 91
+            }
+          }
+        ]
+      }
+    ],
+    "language": "zh-Hans-CN",
+    "line_count": 3
+  },
+  "preview": "TO C KA | TO C KA | Chr;S(h1dS"
+}

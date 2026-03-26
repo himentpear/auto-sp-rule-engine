@@ -1,0 +1,7972 @@
+{
+  "sampleId": "sample-05-long-chat-bottom",
+  "sourceImagePath": "C:\\Users\\jisub\\Desktop\\screenshoot\\长信息（下）.png",
+  "sourceImageName": "长信息（下）.png",
+  "imageSize": {
+    "width": 1274,
+    "height": 1526
+  },
+  "profilePath": "C:\\Users\\jisub\\Documents\\GitHub\\auto sp rule engine\\examples\\profiles\\wechat-vertical-dense-chat.json",
+  "profileName": "wechat_vertical_dense_chat",
+  "result": {
+    "image_path": "C:\\Users\\jisub\\Desktop\\screenshoot\\长信息（下）.png",
+    "processed_image_path": "C:\\Users\\jisub\\Documents\\GitHub\\auto sp rule engine\\examples\\logs\\wechat-ocr-samples\\sample-05-long-chat-bottom-processed.png",
+    "roi_used": null,
+    "preprocessing_settings": {
+      "grayscale": true,
+      "scale": 2.4,
+      "threshold": {
+        "enabled": false,
+        "value": 188
+      },
+      "trim_border": {
+        "enabled": false,
+        "margin": 0
+      },
+      "mask_regions": [
+        {
+          "x": 0,
+          "y": 0,
+          "width": 1274,
+          "height": 221
+        },
+        {
+          "x": 0,
+          "y": 1157,
+          "width": 1274,
+          "height": 369
+        }
+      ]
+    },
+    "normalization_settings": {
+      "collapse_whitespace": true,
+      "preserve_line_breaks": true,
+      "case": "none",
+      "simple_noise_cleanup": true
+    },
+    "raw_ocr_output": "尼 基 塔 14 岁 便 开 始 涉 足 电 影 表 演 。 18 岁 时 ， 他 在 格 奥 尔 基 ， 达 涅 利 亚 的 电 影 《 我 氵 曼 步 在 莫 斯 科 》 中 担 任 了 主 角 之 一 ， 并 在 片 中 演 唱 了 同 名 流 行 歌 曲 。 此 后 ， 年 轻 的 米 哈 尔 科 夫 立 刻 成 为 了 一 亻 立 深 受 全 国 人 民 喜 爱 且 非 常 著 名 的 演 员 。 然 而 ， 在 21 岁 时 ， 他 被 他 所 就 读 的 休 金 戏 剧 学 院 开 除 。 原 因 是 当 时 学 生 不 被 允 许 去 拍 电 影 ， 而 米 哈 尔 科 夫 却 多 次 违 反 了 这 一 禁 专 。 于 是 他 转 入 了 全 俄 国 立 电 影 学 院 (VGIK) 导 演 系 二 年 级 。 1974 年 ， 米 哈 尔 科 夫 执 导 的 首 部 电 影 《 敌 营 战 友 》 （ 或 译 《 在 陌 生 人 中 是 自 己 人 ， 在 自 己 人 中 是 陌 生 人 》 ） 在 全 国 上 映 。 接 下 来 的 十 年 里 ， 尼 基 塔 ． 谢 尔 盖 耶 维 奇 创 作 非 常 丰 收 ， 他 几 乎 每 年 都 睢 出 一 部 电 影 ： 《 爱 情 的 奴 隶 》 （ 1976 年 ） 、 《 机 械 钢 琴 耒 完 成 的 交 响 曲 》 （ 1977 年 ） 、 《 五 个 夜 晚 》 （ 1979 年 ） 、 《 奥 勃 洛 莫 夫 一 生 中 的 几 天 》 （ 1980 年 ） 、 《 亲 戚 》 （ 1982 年 ） 、 《 没 有 目 击 者 》 （ 1983 年 ） 。 他 的 电 影 在 国 际 和 全 苏 电 影 节 上 获 得 了 众 多 奖 项 。 与 此 同 时 ， 他 也 作 为 演 员 参 与 拍 摄 。 他 的 明 星 角 色 出 现 在 埃 利 达 尔 ． 梁 赞 诺 夫 的 电 影 《 两 个 人 的 车 站 》 （ 1983 年 ） 和 《 残 酷 的 氵 良 氵 曼 史 》 （ 1984 年 ） 中 。 1984 年 ， 尼 基 塔 ， 米 哈 尔 科 夫 获 得 了 俄 罗 斯 苏 维 埃 联 邦 社 会 主 义 共 和 国 人 民 艺 术 家 的 称 号 。 关 于 米 哈 尔 科 夫 是 电 影 拍 摄 方 面 的 天 才 纟 且 织 者 这 一 点 ， 早 已 有 大 量 文 字 记 述 。 对 他 来 说 ， 不 存 在 什 么 技 术 难 题 。 当 亻 也 在 深 秋 拍 摄 夏 天 的 场 景 时 ， 臼 桦 林 会 被 \" 贴 上 \" 绿 叶 。 当 米 哈 尔 科 夫 在 四 月 拍 摄 冬 天 的 场 景 时 ， 几 家 莫 斯 科 的 冰 淇 淋 工 厂 会 把 成 吨 的 人 造 冰 运 到 他 的 拍 摄 现 从 80 年 代 中 期 开 始 ， 尼 基 塔 · 米 哈 尔 科 夫 成 为 了 苏 联 文 化 界 的 一 位 传 奇 人 物 。 他 成 为 了 数 白 万 俄 罗 斯 女 性 的 偶 像 。 1987 年 ， 尼 基 塔 ， 米 哈 尔 科 夫 向 公 众 展 示 了 他 的 新 片 《 黑 眼 腊 》 ， 这 部 电 影 是 在 意 大 利 拍 摄 的 。 该 作 品 在 各 大 国 际 电 影 节 上 获 得 了 许 多 奖 项 。 1991 年 ， 他 拍 摄 了 电 影 《 蒙 古 精 神 》 (Urga) ， 讲 述 了 一 对 生 活 在 草 原 上 的 蒙 古 夫 妇 的 故 事 。 该 片 获 得 了 巨 大 的 成 功 ， 被 评 为 年 度 最 佳 欧 洲 电 影 一 荣 获 威 尼 斯 电 影 节 奖 项 ， 并 获 得 了 提 名 “ “ （ 注 ： 文 本 在 此 处 截 断 ） 。 ` 壬 圭 阝 才 缶 卡 亡 言 田 白 0 ． 士 ； 彐 ． 冫 ． ± 旦 ． * 闩 兰 亡 0 又 ； 五 ； 五 ： 土 · r-511i17",
+    "normalized_ocr_output": "尼 基 塔 14 岁 便 开 始 涉 足 电 影 表 演 。 18 岁 时 ， 他 在 格 奥 尔 基 ， 达 涅 利 亚 的 电 影 《 我 氵 曼 步 在 莫 斯 科 》 中 担 任 了 主 角 之 一 ， 并 在 片 中 演 唱 了 同 名 流 行 歌 曲 。 此 后 ， 年 轻 的 米 哈 尔 科 夫 立 刻 成 为 了 一 亻 立 深 受 全 国 人 民 喜 爱 且 非 常 著 名 的 演 员 。 然 而 ， 在 21 岁 时 ， 他 被 他 所 就 读 的 休 金 戏 剧 学 院 开 除 。 原 因 是 当 时 学 生 不 被 允 许 去 拍 电 影 ， 而 米 哈 尔 科 夫 却 多 次 违 反 了 这 一 禁 专 。 于 是 他 转 入 了 全 俄 国 立 电 影 学 院 (VGIK) 导 演 系 二 年 级 。 1974 年 ， 米 哈 尔 科 夫 执 导 的 首 部 电 影 《 敌 营 战 友 》 （ 或 译 《 在 陌 生 人 中 是 自 己 人 ， 在 自 己 人 中 是 陌 生 人 》 ） 在 全 国 上 映 。 接 下 来 的 十 年 里 ， 尼 基 塔 ． 谢 尔 盖 耶 维 奇 创 作 非 常 丰 收 ， 他 几 乎 每 年 都 睢 出 一 部 电 影 ： 《 爱 情 的 奴 隶 》 （ 1976 年 ） 、 《 机 械 钢 琴 耒 完 成 的 交 响 曲 》 （ 1977 年 ） 、 《 五 个 夜 晚 》 （ 1979 年 ） 、 《 奥 勃 洛 莫 夫 一 生 中 的 几 天 》 （ 1980 年 ） 、 《 亲 戚 》 （ 1982 年 ） 、 《 没 有 目 击 者 》 （ 1983 年 ） 。 他 的 电 影 在 国 际 和 全 苏 电 影 节 上 获 得 了 众 多 奖 项 。 与 此 同 时 ， 他 也 作 为 演 员 参 与 拍 摄 。 他 的 明 星 角 色 出 现 在 埃 利 达 尔 ． 梁 赞 诺 夫 的 电 影 《 两 个 人 的 车 站 》 （ 1983 年 ） 和 《 残 酷 的 氵 良 氵 曼 史 》 （ 1984 年 ） 中 。 1984 年 ， 尼 基 塔 ， 米 哈 尔 科 夫 获 得 了 俄 罗 斯 苏 维 埃 联 邦 社 会 主 义 共 和 国 人 民 艺 术 家 的 称 号 。 关 于 米 哈 尔 科 夫 是 电 影 拍 摄 方 面 的 天 才 纟 且 织 者 这 一 点 ， 早 已 有 大 量 文 字 记 述 。 对 他 来 说 ， 不 存 在 什 么 技 术 难 题 。 当 亻 也 在 深 秋 拍 摄 夏 天 的 场 景 时 ， 臼 桦 林 会 被 \" 贴 上 \" 绿 叶 。 当 米 哈 尔 科 夫 在 四 月 拍 摄 冬 天 的 场 景 时 ， 几 家 莫 斯 科 的 冰 淇 淋 工 厂 会 把 成 吨 的 人 造 冰 运 到 他 的 拍 摄 现 从 80 年 代 中 期 开 始 ， 尼 基 塔 · 米 哈 尔 科 夫 成 为 了 苏 联 文 化 界 的 一 位 传 奇 人 物 。 他 成 为 了 数 白 万 俄 罗 斯 女 性 的 偶 像 。 1987 年 ， 尼 基 塔 ， 米 哈 尔 科 夫 向 公 众 展 示 了 他 的 新 片 《 黑 眼 腊 》 ， 这 部 电 影 是 在 意 大 利 拍 摄 的 。 该 作 品 在 各 大 国 际 电 影 节 上 获 得 了 许 多 奖 项 。 1991 年 ， 他 拍 摄 了 电 影 《 蒙 古 精 神 》 (Urga) ， 讲 述 了 一 对 生 活 在 草 原 上 的 蒙 古 夫 妇 的 故 事 。 该 片 获 得 了 巨 大 的 成 功 ， 被 评 为 年 度 最 佳 欧 洲 电 影 一 荣 获 威 尼 斯 电 影 节 奖 项 ， 并 获 得 了 提 名 \" \" （ 注 ： 文 本 在 此 处 截 断 ） 。 ` 壬 圭 阝 才 缶 卡 亡 言 田 白 0 ． 士 ； 彐 ． 冫 ． ± 旦 ． * 闩 兰 亡 0 又 ； 五 ； 五 ： 土 · r-511i17",
+    "normalized_lines": [
+      {
+        "text": "尼 基 塔 14 岁 便 开 始 涉 足 电 影 表 演 。 18 岁 时 ， 他 在 格 奥 尔 基 ， 达 涅 利 亚",
+        "raw_text": "尼 基 塔 14 岁 便 开 始 涉 足 电 影 表 演 。 18 岁 时 ， 他 在 格 奥 尔 基 ， 达 涅 利 亚",
+        "bounding_rect": {
+          "X": 285,
+          "Y": 558,
+          "Width": 1492,
+          "Height": 52
+        },
+        "words": [
+          {
+            "Text": "尼",
+            "BoundingRect": {
+              "X": 285,
+              "Y": 563,
+              "Width": 51,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "基",
+            "BoundingRect": {
+              "X": 336,
+              "Y": 561,
+              "Width": 50,
+              "Height": 44
+            }
+          },
+          {
+            "Text": "塔",
+            "BoundingRect": {
+              "X": 387,
+              "Y": 561,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "14",
+            "BoundingRect": {
+              "X": 441,
+              "Y": 563,
+              "Width": 55,
+              "Height": 40
+            }
+          },
+          {
+            "Text": "岁",
+            "BoundingRect": {
+              "X": 497,
+              "Y": 561,
+              "Width": 45,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "便",
+            "BoundingRect": {
+              "X": 547,
+              "Y": 561,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "开",
+            "BoundingRect": {
+              "X": 597,
+              "Y": 563,
+              "Width": 50,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "始",
+            "BoundingRect": {
+              "X": 647,
+              "Y": 561,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "涉",
+            "BoundingRect": {
+              "X": 698,
+              "Y": 561,
+              "Width": 49,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "足",
+            "BoundingRect": {
+              "X": 748,
+              "Y": 563,
+              "Width": 50,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "电",
+            "BoundingRect": {
+              "X": 801,
+              "Y": 559,
+              "Width": 47,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "影",
+            "BoundingRect": {
+              "X": 850,
+              "Y": 561,
+              "Width": 49,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "表",
+            "BoundingRect": {
+              "X": 900,
+              "Y": 561,
+              "Width": 50,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "演",
+            "BoundingRect": {
+              "X": 950,
+              "Y": 561,
+              "Width": 49,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "。",
+            "BoundingRect": {
+              "X": 1003,
+              "Y": 594,
+              "Width": 14,
+              "Height": 14
+            }
+          },
+          {
+            "Text": "18",
+            "BoundingRect": {
+              "X": 1055,
+              "Y": 563,
+              "Width": 53,
+              "Height": 40
+            }
+          },
+          {
+            "Text": "岁",
+            "BoundingRect": {
+              "X": 1110,
+              "Y": 561,
+              "Width": 45,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "时",
+            "BoundingRect": {
+              "X": 1162,
+              "Y": 561,
+              "Width": 48,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "，",
+            "BoundingRect": {
+              "X": 1217,
+              "Y": 597,
+              "Width": 10,
+              "Height": 13
+            }
+          },
+          {
+            "Text": "他",
+            "BoundingRect": {
+              "X": 1260,
+              "Y": 561,
+              "Width": 51,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "在",
+            "BoundingRect": {
+              "X": 1312,
+              "Y": 558,
+              "Width": 49,
+              "Height": 50
+            }
+          },
+          {
+            "Text": "格",
+            "BoundingRect": {
+              "X": 1362,
+              "Y": 561,
+              "Width": 49,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "奥",
+            "BoundingRect": {
+              "X": 1412,
+              "Y": 561,
+              "Width": 50,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "尔",
+            "BoundingRect": {
+              "X": 1463,
+              "Y": 561,
+              "Width": 49,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "基",
+            "BoundingRect": {
+              "X": 1513,
+              "Y": 561,
+              "Width": 50,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "，",
+            "BoundingRect": {
+              "X": 1566,
+              "Y": 583,
+              "Width": 7,
+              "Height": 8
+            }
+          },
+          {
+            "Text": "达",
+            "BoundingRect": {
+              "X": 1576,
+              "Y": 561,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "涅",
+            "BoundingRect": {
+              "X": 1627,
+              "Y": 561,
+              "Width": 49,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "利",
+            "BoundingRect": {
+              "X": 1677,
+              "Y": 561,
+              "Width": 47,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "亚",
+            "BoundingRect": {
+              "X": 1727,
+              "Y": 563,
+              "Width": 50,
+              "Height": 43
+            }
+          }
+        ]
+      },
+      {
+        "text": "的 电 影 《 我 氵 曼 步 在 莫 斯 科 》 中 担 任 了 主 角 之 一 ， 并 在 片 中 演 唱 了 同 名",
+        "raw_text": "的 电 影 《 我 氵 曼 步 在 莫 斯 科 》 中 担 任 了 主 角 之 一 ， 并 在 片 中 演 唱 了 同 名",
+        "bounding_rect": {
+          "X": 287,
+          "Y": 628,
+          "Width": 1506,
+          "Height": 52
+        },
+        "words": [
+          {
+            "Text": "的",
+            "BoundingRect": {
+              "X": 287,
+              "Y": 630,
+              "Width": 47,
+              "Height": 48
+            }
+          },
+          {
+            "Text": "电",
+            "BoundingRect": {
+              "X": 338,
+              "Y": 628,
+              "Width": 48,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "影",
+            "BoundingRect": {
+              "X": 387,
+              "Y": 631,
+              "Width": 50,
+              "Height": 44
+            }
+          },
+          {
+            "Text": "《",
+            "BoundingRect": {
+              "X": 460,
+              "Y": 630,
+              "Width": 25,
+              "Height": 50
+            }
+          },
+          {
+            "Text": "我",
+            "BoundingRect": {
+              "X": 487,
+              "Y": 631,
+              "Width": 51,
+              "Height": 44
+            }
+          },
+          {
+            "Text": "氵",
+            "BoundingRect": {
+              "X": 539,
+              "Y": 631,
+              "Width": 12,
+              "Height": 46
+            }
+          },
+          {
+            "Text": "曼",
+            "BoundingRect": {
+              "X": 548,
+              "Y": 633,
+              "Width": 40,
+              "Height": 44
+            }
+          },
+          {
+            "Text": "步",
+            "BoundingRect": {
+              "X": 589,
+              "Y": 631,
+              "Width": 49,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "在",
+            "BoundingRect": {
+              "X": 639,
+              "Y": 628,
+              "Width": 50,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "莫",
+            "BoundingRect": {
+              "X": 689,
+              "Y": 628,
+              "Width": 50,
+              "Height": 50
+            }
+          },
+          {
+            "Text": "斯",
+            "BoundingRect": {
+              "X": 740,
+              "Y": 630,
+              "Width": 49,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "科",
+            "BoundingRect": {
+              "X": 790,
+              "Y": 628,
+              "Width": 50,
+              "Height": 52
+            }
+          },
+          {
+            "Text": "》",
+            "BoundingRect": {
+              "X": 842,
+              "Y": 630,
+              "Width": 25,
+              "Height": 50
+            }
+          },
+          {
+            "Text": "中",
+            "BoundingRect": {
+              "X": 894,
+              "Y": 631,
+              "Width": 44,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "担",
+            "BoundingRect": {
+              "X": 942,
+              "Y": 631,
+              "Width": 49,
+              "Height": 44
+            }
+          },
+          {
+            "Text": "任",
+            "BoundingRect": {
+              "X": 992,
+              "Y": 631,
+              "Width": 50,
+              "Height": 46
+            }
+          },
+          {
+            "Text": "了",
+            "BoundingRect": {
+              "X": 1044,
+              "Y": 633,
+              "Width": 45,
+              "Height": 42
+            }
+          },
+          {
+            "Text": "主",
+            "BoundingRect": {
+              "X": 1092,
+              "Y": 629,
+              "Width": 50,
+              "Height": 46
+            }
+          },
+          {
+            "Text": "角",
+            "BoundingRect": {
+              "X": 1143,
+              "Y": 628,
+              "Width": 46,
+              "Height": 52
+            }
+          },
+          {
+            "Text": "之",
+            "BoundingRect": {
+              "X": 1193,
+              "Y": 631,
+              "Width": 50,
+              "Height": 44
+            }
+          },
+          {
+            "Text": "一",
+            "BoundingRect": {
+              "X": 1243,
+              "Y": 652,
+              "Width": 51,
+              "Height": 4
+            }
+          },
+          {
+            "Text": "，",
+            "BoundingRect": {
+              "X": 1300,
+              "Y": 666,
+              "Width": 10,
+              "Height": 14
+            }
+          },
+          {
+            "Text": "并",
+            "BoundingRect": {
+              "X": 1344,
+              "Y": 630,
+              "Width": 50,
+              "Height": 48
+            }
+          },
+          {
+            "Text": "在",
+            "BoundingRect": {
+              "X": 1395,
+              "Y": 628,
+              "Width": 50,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "片",
+            "BoundingRect": {
+              "X": 1447,
+              "Y": 630,
+              "Width": 48,
+              "Height": 48
+            }
+          },
+          {
+            "Text": "中",
+            "BoundingRect": {
+              "X": 1499,
+              "Y": 630,
+              "Width": 44,
+              "Height": 48
+            }
+          },
+          {
+            "Text": "演",
+            "BoundingRect": {
+              "X": 1547,
+              "Y": 631,
+              "Width": 47,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "唱",
+            "BoundingRect": {
+              "X": 1599,
+              "Y": 633,
+              "Width": 45,
+              "Height": 44
+            }
+          },
+          {
+            "Text": "了",
+            "BoundingRect": {
+              "X": 1649,
+              "Y": 633,
+              "Width": 45,
+              "Height": 42
+            }
+          },
+          {
+            "Text": "同",
+            "BoundingRect": {
+              "X": 1700,
+              "Y": 633,
+              "Width": 44,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "名",
+            "BoundingRect": {
+              "X": 1748,
+              "Y": 630,
+              "Width": 45,
+              "Height": 47
+            }
+          }
+        ]
+      },
+      {
+        "text": "流 行 歌 曲 。 此 后 ， 年 轻 的 米 哈 尔 科 夫 立 刻 成 为 了 一 亻 立 深 受 全 国 人 民 喜",
+        "raw_text": "流 行 歌 曲 。 此 后 ， 年 轻 的 米 哈 尔 科 夫 立 刻 成 为 了 一 亻 立 深 受 全 国 人 民 喜",
+        "bounding_rect": {
+          "X": 286,
+          "Y": 695,
+          "Width": 1512,
+          "Height": 52
+        },
+        "words": [
+          {
+            "Text": "流",
+            "BoundingRect": {
+              "X": 286,
+              "Y": 696,
+              "Width": 50,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "行",
+            "BoundingRect": {
+              "X": 337,
+              "Y": 696,
+              "Width": 49,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "歌",
+            "BoundingRect": {
+              "X": 387,
+              "Y": 695,
+              "Width": 50,
+              "Height": 52
+            }
+          },
+          {
+            "Text": "曲",
+            "BoundingRect": {
+              "X": 440,
+              "Y": 698,
+              "Width": 44,
+              "Height": 46
+            }
+          },
+          {
+            "Text": "。",
+            "BoundingRect": {
+              "X": 490,
+              "Y": 731,
+              "Width": 14,
+              "Height": 14
+            }
+          },
+          {
+            "Text": "此",
+            "BoundingRect": {
+              "X": 537,
+              "Y": 695,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "后",
+            "BoundingRect": {
+              "X": 588,
+              "Y": 697,
+              "Width": 50,
+              "Height": 48
+            }
+          },
+          {
+            "Text": "，",
+            "BoundingRect": {
+              "X": 645,
+              "Y": 734,
+              "Width": 9,
+              "Height": 13
+            }
+          },
+          {
+            "Text": "年",
+            "BoundingRect": {
+              "X": 689,
+              "Y": 698,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "轻",
+            "BoundingRect": {
+              "X": 740,
+              "Y": 695,
+              "Width": 49,
+              "Height": 52
+            }
+          },
+          {
+            "Text": "的",
+            "BoundingRect": {
+              "X": 792,
+              "Y": 698,
+              "Width": 46,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "米",
+            "BoundingRect": {
+              "X": 840,
+              "Y": 698,
+              "Width": 50,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "哈",
+            "BoundingRect": {
+              "X": 893,
+              "Y": 698,
+              "Width": 48,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "尔",
+            "BoundingRect": {
+              "X": 942,
+              "Y": 698,
+              "Width": 48,
+              "Height": 44
+            }
+          },
+          {
+            "Text": "科",
+            "BoundingRect": {
+              "X": 991,
+              "Y": 695,
+              "Width": 50,
+              "Height": 52
+            }
+          },
+          {
+            "Text": "夫",
+            "BoundingRect": {
+              "X": 1042,
+              "Y": 698,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "立",
+            "BoundingRect": {
+              "X": 1093,
+              "Y": 695,
+              "Width": 49,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "刻",
+            "BoundingRect": {
+              "X": 1142,
+              "Y": 695,
+              "Width": 48,
+              "Height": 50
+            }
+          },
+          {
+            "Text": "成",
+            "BoundingRect": {
+              "X": 1193,
+              "Y": 698,
+              "Width": 50,
+              "Height": 44
+            }
+          },
+          {
+            "Text": "为",
+            "BoundingRect": {
+              "X": 1245,
+              "Y": 698,
+              "Width": 46,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "了",
+            "BoundingRect": {
+              "X": 1296,
+              "Y": 700,
+              "Width": 45,
+              "Height": 42
+            }
+          },
+          {
+            "Text": "一",
+            "BoundingRect": {
+              "X": 1344,
+              "Y": 719,
+              "Width": 51,
+              "Height": 4
+            }
+          },
+          {
+            "Text": "亻",
+            "BoundingRect": {
+              "X": 1395,
+              "Y": 698,
+              "Width": 15,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "立",
+            "BoundingRect": {
+              "X": 1408,
+              "Y": 698,
+              "Width": 37,
+              "Height": 44
+            }
+          },
+          {
+            "Text": "深",
+            "BoundingRect": {
+              "X": 1445,
+              "Y": 698,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "受",
+            "BoundingRect": {
+              "X": 1496,
+              "Y": 697,
+              "Width": 50,
+              "Height": 48
+            }
+          },
+          {
+            "Text": "全",
+            "BoundingRect": {
+              "X": 1546,
+              "Y": 698,
+              "Width": 50,
+              "Height": 44
+            }
+          },
+          {
+            "Text": "国",
+            "BoundingRect": {
+              "X": 1599,
+              "Y": 698,
+              "Width": 45,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "人",
+            "BoundingRect": {
+              "X": 1647,
+              "Y": 698,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "民",
+            "BoundingRect": {
+              "X": 1701,
+              "Y": 700,
+              "Width": 45,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "喜",
+            "BoundingRect": {
+              "X": 1748,
+              "Y": 698,
+              "Width": 50,
+              "Height": 47
+            }
+          }
+        ]
+      },
+      {
+        "text": "爱 且 非 常 著 名 的 演 员 。",
+        "raw_text": "爱 且 非 常 著 名 的 演 员 。",
+        "bounding_rect": {
+          "X": 285,
+          "Y": 767,
+          "Width": 471,
+          "Height": 50
+        },
+        "words": [
+          {
+            "Text": "爱",
+            "BoundingRect": {
+              "X": 285,
+              "Y": 767,
+              "Width": 51,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "且",
+            "BoundingRect": {
+              "X": 336,
+              "Y": 770,
+              "Width": 50,
+              "Height": 42
+            }
+          },
+          {
+            "Text": "非",
+            "BoundingRect": {
+              "X": 387,
+              "Y": 767,
+              "Width": 50,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "常",
+            "BoundingRect": {
+              "X": 439,
+              "Y": 767,
+              "Width": 46,
+              "Height": 50
+            }
+          },
+          {
+            "Text": "著",
+            "BoundingRect": {
+              "X": 488,
+              "Y": 768,
+              "Width": 49,
+              "Height": 46
+            }
+          },
+          {
+            "Text": "名",
+            "BoundingRect": {
+              "X": 538,
+              "Y": 767,
+              "Width": 45,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "的",
+            "BoundingRect": {
+              "X": 590,
+              "Y": 767,
+              "Width": 46,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "演",
+            "BoundingRect": {
+              "X": 639,
+              "Y": 767,
+              "Width": 48,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "员",
+            "BoundingRect": {
+              "X": 690,
+              "Y": 770,
+              "Width": 49,
+              "Height": 44
+            }
+          },
+          {
+            "Text": "。",
+            "BoundingRect": {
+              "X": 742,
+              "Y": 801,
+              "Width": 14,
+              "Height": 13
+            }
+          }
+        ]
+      },
+      {
+        "text": "然 而 ， 在 21 岁 时 ， 他 被 他 所 就 读 的 休 金 戏 剧 学 院 开 除 。 原 因 是 当 时 学",
+        "raw_text": "然 而 ， 在 21 岁 时 ， 他 被 他 所 就 读 的 休 金 戏 剧 学 院 开 除 。 原 因 是 当 时 学",
+        "bounding_rect": {
+          "X": 286,
+          "Y": 832,
+          "Width": 1520,
+          "Height": 52
+        },
+        "words": [
+          {
+            "Text": "然",
+            "BoundingRect": {
+              "X": 286,
+              "Y": 834,
+              "Width": 50,
+              "Height": 50
+            }
+          },
+          {
+            "Text": "而",
+            "BoundingRect": {
+              "X": 337,
+              "Y": 837,
+              "Width": 49,
+              "Height": 44
+            }
+          },
+          {
+            "Text": "，",
+            "BoundingRect": {
+              "X": 393,
+              "Y": 870,
+              "Width": 9,
+              "Height": 14
+            }
+          },
+          {
+            "Text": "在",
+            "BoundingRect": {
+              "X": 437,
+              "Y": 832,
+              "Width": 51,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "21",
+            "BoundingRect": {
+              "X": 489,
+              "Y": 837,
+              "Width": 48,
+              "Height": 40
+            }
+          },
+          {
+            "Text": "岁",
+            "BoundingRect": {
+              "X": 547,
+              "Y": 834,
+              "Width": 45,
+              "Height": 48
+            }
+          },
+          {
+            "Text": "时",
+            "BoundingRect": {
+              "X": 599,
+              "Y": 834,
+              "Width": 49,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "，",
+            "BoundingRect": {
+              "X": 654,
+              "Y": 870,
+              "Width": 9,
+              "Height": 14
+            }
+          },
+          {
+            "Text": "他",
+            "BoundingRect": {
+              "X": 698,
+              "Y": 834,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "被",
+            "BoundingRect": {
+              "X": 749,
+              "Y": 834,
+              "Width": 49,
+              "Height": 50
+            }
+          },
+          {
+            "Text": "他",
+            "BoundingRect": {
+              "X": 799,
+              "Y": 834,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "所",
+            "BoundingRect": {
+              "X": 849,
+              "Y": 834,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "就",
+            "BoundingRect": {
+              "X": 900,
+              "Y": 834,
+              "Width": 49,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "读",
+            "BoundingRect": {
+              "X": 950,
+              "Y": 834,
+              "Width": 49,
+              "Height": 50
+            }
+          },
+          {
+            "Text": "的",
+            "BoundingRect": {
+              "X": 1002,
+              "Y": 834,
+              "Width": 47,
+              "Height": 48
+            }
+          },
+          {
+            "Text": "休",
+            "BoundingRect": {
+              "X": 1051,
+              "Y": 834,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "金",
+            "BoundingRect": {
+              "X": 1101,
+              "Y": 834,
+              "Width": 50,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "戏",
+            "BoundingRect": {
+              "X": 1152,
+              "Y": 834,
+              "Width": 49,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "剧",
+            "BoundingRect": {
+              "X": 1202,
+              "Y": 834,
+              "Width": 48,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "学",
+            "BoundingRect": {
+              "X": 1253,
+              "Y": 835,
+              "Width": 49,
+              "Height": 44
+            }
+          },
+          {
+            "Text": "院",
+            "BoundingRect": {
+              "X": 1305,
+              "Y": 835,
+              "Width": 48,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "开",
+            "BoundingRect": {
+              "X": 1353,
+              "Y": 837,
+              "Width": 50,
+              "Height": 44
+            }
+          },
+          {
+            "Text": "除",
+            "BoundingRect": {
+              "X": 1406,
+              "Y": 834,
+              "Width": 49,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "。",
+            "BoundingRect": {
+              "X": 1456,
+              "Y": 868,
+              "Width": 15,
+              "Height": 14
+            }
+          },
+          {
+            "Text": "原",
+            "BoundingRect": {
+              "X": 1504,
+              "Y": 837,
+              "Width": 50,
+              "Height": 42
+            }
+          },
+          {
+            "Text": "因",
+            "BoundingRect": {
+              "X": 1558,
+              "Y": 834,
+              "Width": 44,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "是",
+            "BoundingRect": {
+              "X": 1605,
+              "Y": 837,
+              "Width": 51,
+              "Height": 44
+            }
+          },
+          {
+            "Text": "当",
+            "BoundingRect": {
+              "X": 1658,
+              "Y": 834,
+              "Width": 44,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "时",
+            "BoundingRect": {
+              "X": 1708,
+              "Y": 834,
+              "Width": 48,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "学",
+            "BoundingRect": {
+              "X": 1757,
+              "Y": 835,
+              "Width": 49,
+              "Height": 44
+            }
+          }
+        ]
+      },
+      {
+        "text": "生 不 被 允 许 去 拍 电 影 ， 而 米 哈 尔 科 夫 却 多 次 违 反 了 这 一 禁 专 。 于 是 他",
+        "raw_text": "生 不 被 允 许 去 拍 电 影 ， 而 米 哈 尔 科 夫 却 多 次 违 反 了 这 一 禁 专 。 于 是 他",
+        "bounding_rect": {
+          "X": 286,
+          "Y": 902,
+          "Width": 1512,
+          "Height": 51
+        },
+        "words": [
+          {
+            "Text": "生",
+            "BoundingRect": {
+              "X": 286,
+              "Y": 904,
+              "Width": 50,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "不",
+            "BoundingRect": {
+              "X": 336,
+              "Y": 906,
+              "Width": 51,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "被",
+            "BoundingRect": {
+              "X": 387,
+              "Y": 904,
+              "Width": 50,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "允",
+            "BoundingRect": {
+              "X": 437,
+              "Y": 904,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "许",
+            "BoundingRect": {
+              "X": 487,
+              "Y": 904,
+              "Width": 50,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "去",
+            "BoundingRect": {
+              "X": 538,
+              "Y": 904,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "拍",
+            "BoundingRect": {
+              "X": 589,
+              "Y": 904,
+              "Width": 47,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "电",
+            "BoundingRect": {
+              "X": 641,
+              "Y": 902,
+              "Width": 47,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "影",
+            "BoundingRect": {
+              "X": 689,
+              "Y": 904,
+              "Width": 50,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "，",
+            "BoundingRect": {
+              "X": 746,
+              "Y": 940,
+              "Width": 9,
+              "Height": 13
+            }
+          },
+          {
+            "Text": "而",
+            "BoundingRect": {
+              "X": 790,
+              "Y": 906,
+              "Width": 49,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "米",
+            "BoundingRect": {
+              "X": 840,
+              "Y": 904,
+              "Width": 50,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "哈",
+            "BoundingRect": {
+              "X": 893,
+              "Y": 904,
+              "Width": 48,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "尔",
+            "BoundingRect": {
+              "X": 942,
+              "Y": 904,
+              "Width": 48,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "科",
+            "BoundingRect": {
+              "X": 991,
+              "Y": 902,
+              "Width": 50,
+              "Height": 51
+            }
+          },
+          {
+            "Text": "夫",
+            "BoundingRect": {
+              "X": 1042,
+              "Y": 904,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "却",
+            "BoundingRect": {
+              "X": 1093,
+              "Y": 904,
+              "Width": 47,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "多",
+            "BoundingRect": {
+              "X": 1144,
+              "Y": 904,
+              "Width": 47,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "次",
+            "BoundingRect": {
+              "X": 1193,
+              "Y": 902,
+              "Width": 50,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "违",
+            "BoundingRect": {
+              "X": 1244,
+              "Y": 904,
+              "Width": 49,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "反",
+            "BoundingRect": {
+              "X": 1294,
+              "Y": 904,
+              "Width": 51,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "了",
+            "BoundingRect": {
+              "X": 1346,
+              "Y": 906,
+              "Width": 45,
+              "Height": 43
+            }
+          },
+          {
+            "Text": "这",
+            "BoundingRect": {
+              "X": 1394,
+              "Y": 904,
+              "Width": 51,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "一",
+            "BoundingRect": {
+              "X": 1445,
+              "Y": 925,
+              "Width": 50,
+              "Height": 5
+            }
+          },
+          {
+            "Text": "禁",
+            "BoundingRect": {
+              "X": 1495,
+              "Y": 904,
+              "Width": 51,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "专",
+            "BoundingRect": {
+              "X": 1551,
+              "Y": 919,
+              "Width": 38,
+              "Height": 32
+            }
+          },
+          {
+            "Text": "。",
+            "BoundingRect": {
+              "X": 1599,
+              "Y": 937,
+              "Width": 14,
+              "Height": 14
+            }
+          },
+          {
+            "Text": "于",
+            "BoundingRect": {
+              "X": 1646,
+              "Y": 906,
+              "Width": 51,
+              "Height": 43
+            }
+          },
+          {
+            "Text": "是",
+            "BoundingRect": {
+              "X": 1697,
+              "Y": 906,
+              "Width": 50,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "他",
+            "BoundingRect": {
+              "X": 1747,
+              "Y": 904,
+              "Width": 51,
+              "Height": 47
+            }
+          }
+        ]
+      },
+      {
+        "text": "转 入 了 全 俄 国 立 电 影 学 院 (VGIK) 导 演 系 二 年 级 。",
+        "raw_text": "转 入 了 全 俄 国 立 电 影 学 院 (VGIK) 导 演 系 二 年 级 。",
+        "bounding_rect": {
+          "X": 286,
+          "Y": 969,
+          "Width": 1092,
+          "Height": 52
+        },
+        "words": [
+          {
+            "Text": "转",
+            "BoundingRect": {
+              "X": 286,
+              "Y": 971,
+              "Width": 50,
+              "Height": 50
+            }
+          },
+          {
+            "Text": "入",
+            "BoundingRect": {
+              "X": 336,
+              "Y": 971,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "了",
+            "BoundingRect": {
+              "X": 388,
+              "Y": 973,
+              "Width": 46,
+              "Height": 43
+            }
+          },
+          {
+            "Text": "全",
+            "BoundingRect": {
+              "X": 437,
+              "Y": 971,
+              "Width": 50,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "俄",
+            "BoundingRect": {
+              "X": 487,
+              "Y": 971,
+              "Width": 51,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "国",
+            "BoundingRect": {
+              "X": 540,
+              "Y": 971,
+              "Width": 45,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "立",
+            "BoundingRect": {
+              "X": 589,
+              "Y": 969,
+              "Width": 49,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "电",
+            "BoundingRect": {
+              "X": 641,
+              "Y": 969,
+              "Width": 47,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "影",
+            "BoundingRect": {
+              "X": 689,
+              "Y": 972,
+              "Width": 50,
+              "Height": 44
+            }
+          },
+          {
+            "Text": "学",
+            "BoundingRect": {
+              "X": 740,
+              "Y": 971,
+              "Width": 49,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "院",
+            "BoundingRect": {
+              "X": 792,
+              "Y": 971,
+              "Width": 48,
+              "Height": 50
+            }
+          },
+          {
+            "Text": "(VGIK)",
+            "BoundingRect": {
+              "X": 872,
+              "Y": 973,
+              "Width": 154,
+              "Height": 48
+            }
+          },
+          {
+            "Text": "导",
+            "BoundingRect": {
+              "X": 1058,
+              "Y": 974,
+              "Width": 51,
+              "Height": 42
+            }
+          },
+          {
+            "Text": "演",
+            "BoundingRect": {
+              "X": 1110,
+              "Y": 971,
+              "Width": 48,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "系",
+            "BoundingRect": {
+              "X": 1160,
+              "Y": 971,
+              "Width": 49,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "二",
+            "BoundingRect": {
+              "X": 1211,
+              "Y": 976,
+              "Width": 48,
+              "Height": 38
+            }
+          },
+          {
+            "Text": "年",
+            "BoundingRect": {
+              "X": 1260,
+              "Y": 971,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "级",
+            "BoundingRect": {
+              "X": 1311,
+              "Y": 971,
+              "Width": 50,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "。",
+            "BoundingRect": {
+              "X": 1364,
+              "Y": 1005,
+              "Width": 14,
+              "Height": 13
+            }
+          }
+        ]
+      },
+      {
+        "text": "1974 年 ， 米 哈 尔 科 夫 执 导 的 首 部 电 影 《 敌 营 战 友 》 （ 或 译 《 在 陌 生 人",
+        "raw_text": "1974 年 ， 米 哈 尔 科 夫 执 导 的 首 部 电 影 《 敌 营 战 友 》 （ 或 译 《 在 陌 生 人",
+        "bounding_rect": {
+          "X": 290,
+          "Y": 1038,
+          "Width": 1525,
+          "Height": 52
+        },
+        "words": [
+          {
+            "Text": "1974",
+            "BoundingRect": {
+              "X": 290,
+              "Y": 1043,
+              "Width": 114,
+              "Height": 40
+            }
+          },
+          {
+            "Text": "年",
+            "BoundingRect": {
+              "X": 405,
+              "Y": 1041,
+              "Width": 49,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "，",
+            "BoundingRect": {
+              "X": 461,
+              "Y": 1077,
+              "Width": 9,
+              "Height": 13
+            }
+          },
+          {
+            "Text": "米",
+            "BoundingRect": {
+              "X": 505,
+              "Y": 1041,
+              "Width": 50,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "哈",
+            "BoundingRect": {
+              "X": 558,
+              "Y": 1041,
+              "Width": 48,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "尔",
+            "BoundingRect": {
+              "X": 606,
+              "Y": 1041,
+              "Width": 49,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "科",
+            "BoundingRect": {
+              "X": 656,
+              "Y": 1038,
+              "Width": 50,
+              "Height": 52
+            }
+          },
+          {
+            "Text": "夫",
+            "BoundingRect": {
+              "X": 707,
+              "Y": 1041,
+              "Width": 49,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "执",
+            "BoundingRect": {
+              "X": 757,
+              "Y": 1041,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "导",
+            "BoundingRect": {
+              "X": 807,
+              "Y": 1043,
+              "Width": 50,
+              "Height": 42
+            }
+          },
+          {
+            "Text": "的",
+            "BoundingRect": {
+              "X": 859,
+              "Y": 1041,
+              "Width": 47,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "首",
+            "BoundingRect": {
+              "X": 909,
+              "Y": 1041,
+              "Width": 49,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "部",
+            "BoundingRect": {
+              "X": 959,
+              "Y": 1041,
+              "Width": 49,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "电",
+            "BoundingRect": {
+              "X": 1011,
+              "Y": 1038,
+              "Width": 48,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "影",
+            "BoundingRect": {
+              "X": 1060,
+              "Y": 1041,
+              "Width": 49,
+              "Height": 44
+            }
+          },
+          {
+            "Text": "《",
+            "BoundingRect": {
+              "X": 1133,
+              "Y": 1041,
+              "Width": 25,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "敌",
+            "BoundingRect": {
+              "X": 1161,
+              "Y": 1041,
+              "Width": 49,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "营",
+            "BoundingRect": {
+              "X": 1211,
+              "Y": 1039,
+              "Width": 49,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "战",
+            "BoundingRect": {
+              "X": 1262,
+              "Y": 1041,
+              "Width": 49,
+              "Height": 44
+            }
+          },
+          {
+            "Text": "友",
+            "BoundingRect": {
+              "X": 1311,
+              "Y": 1041,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "》",
+            "BoundingRect": {
+              "X": 1364,
+              "Y": 1041,
+              "Width": 25,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "（",
+            "BoundingRect": {
+              "X": 1444,
+              "Y": 1043,
+              "Width": 16,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "或",
+            "BoundingRect": {
+              "X": 1463,
+              "Y": 1041,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "译",
+            "BoundingRect": {
+              "X": 1513,
+              "Y": 1041,
+              "Width": 50,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "《",
+            "BoundingRect": {
+              "X": 1587,
+              "Y": 1041,
+              "Width": 25,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "在",
+            "BoundingRect": {
+              "X": 1614,
+              "Y": 1038,
+              "Width": 50,
+              "Height": 50
+            }
+          },
+          {
+            "Text": "陌",
+            "BoundingRect": {
+              "X": 1666,
+              "Y": 1043,
+              "Width": 48,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "生",
+            "BoundingRect": {
+              "X": 1715,
+              "Y": 1041,
+              "Width": 50,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "人",
+            "BoundingRect": {
+              "X": 1765,
+              "Y": 1041,
+              "Width": 50,
+              "Height": 47
+            }
+          }
+        ]
+      },
+      {
+        "text": "中 是 自 己 人 ， 在 自 己 人 中 是 陌 生 人 》 ） 在 全 国 上 映 。 接 下 来 的 十 年",
+        "raw_text": "中 是 自 己 人 ， 在 自 己 人 中 是 陌 生 人 》 ） 在 全 国 上 映 。 接 下 来 的 十 年",
+        "bounding_rect": {
+          "X": 289,
+          "Y": 1106,
+          "Width": 1459,
+          "Height": 52
+        },
+        "words": [
+          {
+            "Text": "中",
+            "BoundingRect": {
+              "X": 289,
+              "Y": 1108,
+              "Width": 44,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "是",
+            "BoundingRect": {
+              "X": 336,
+              "Y": 1110,
+              "Width": 51,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "自",
+            "BoundingRect": {
+              "X": 391,
+              "Y": 1106,
+              "Width": 41,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "己",
+            "BoundingRect": {
+              "X": 441,
+              "Y": 1110,
+              "Width": 46,
+              "Height": 43
+            }
+          },
+          {
+            "Text": "人",
+            "BoundingRect": {
+              "X": 488,
+              "Y": 1108,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "，",
+            "BoundingRect": {
+              "X": 544,
+              "Y": 1144,
+              "Width": 10,
+              "Height": 13
+            }
+          },
+          {
+            "Text": "在",
+            "BoundingRect": {
+              "X": 588,
+              "Y": 1106,
+              "Width": 51,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "自",
+            "BoundingRect": {
+              "X": 643,
+              "Y": 1106,
+              "Width": 41,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "己",
+            "BoundingRect": {
+              "X": 693,
+              "Y": 1110,
+              "Width": 46,
+              "Height": 43
+            }
+          },
+          {
+            "Text": "人",
+            "BoundingRect": {
+              "X": 740,
+              "Y": 1108,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "中",
+            "BoundingRect": {
+              "X": 793,
+              "Y": 1108,
+              "Width": 44,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "是",
+            "BoundingRect": {
+              "X": 840,
+              "Y": 1110,
+              "Width": 51,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "陌",
+            "BoundingRect": {
+              "X": 893,
+              "Y": 1110,
+              "Width": 47,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "生",
+            "BoundingRect": {
+              "X": 941,
+              "Y": 1108,
+              "Width": 50,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "人",
+            "BoundingRect": {
+              "X": 992,
+              "Y": 1108,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "》",
+            "BoundingRect": {
+              "X": 1044,
+              "Y": 1108,
+              "Width": 25,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "）",
+            "BoundingRect": {
+              "X": 1096,
+              "Y": 1110,
+              "Width": 14,
+              "Height": 48
+            }
+          },
+          {
+            "Text": "在",
+            "BoundingRect": {
+              "X": 1142,
+              "Y": 1106,
+              "Width": 51,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "全",
+            "BoundingRect": {
+              "X": 1193,
+              "Y": 1108,
+              "Width": 50,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "国",
+            "BoundingRect": {
+              "X": 1246,
+              "Y": 1108,
+              "Width": 45,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "上",
+            "BoundingRect": {
+              "X": 1294,
+              "Y": 1108,
+              "Width": 50,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "映",
+            "BoundingRect": {
+              "X": 1347,
+              "Y": 1106,
+              "Width": 47,
+              "Height": 51
+            }
+          },
+          {
+            "Text": "。",
+            "BoundingRect": {
+              "X": 1397,
+              "Y": 1141,
+              "Width": 15,
+              "Height": 14
+            }
+          },
+          {
+            "Text": "接",
+            "BoundingRect": {
+              "X": 1445,
+              "Y": 1108,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "下",
+            "BoundingRect": {
+              "X": 1496,
+              "Y": 1110,
+              "Width": 49,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "来",
+            "BoundingRect": {
+              "X": 1546,
+              "Y": 1106,
+              "Width": 50,
+              "Height": 51
+            }
+          },
+          {
+            "Text": "的",
+            "BoundingRect": {
+              "X": 1598,
+              "Y": 1108,
+              "Width": 47,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "十",
+            "BoundingRect": {
+              "X": 1647,
+              "Y": 1108,
+              "Width": 49,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "年",
+            "BoundingRect": {
+              "X": 1697,
+              "Y": 1108,
+              "Width": 51,
+              "Height": 47
+            }
+          }
+        ]
+      },
+      {
+        "text": "里 ， 尼 基 塔 ． 谢 尔 盖 耶 维 奇 创 作 非 常 丰 收 ， 他 几 乎 每 年 都 睢 出 一 部 电",
+        "raw_text": "里 ， 尼 基 塔 ． 谢 尔 盖 耶 维 奇 创 作 非 常 丰 收 ， 他 几 乎 每 年 都 睢 出 一 部 电",
+        "bounding_rect": {
+          "X": 285,
+          "Y": 1175,
+          "Width": 1475,
+          "Height": 52
+        },
+        "words": [
+          {
+            "Text": "里",
+            "BoundingRect": {
+              "X": 285,
+              "Y": 1180,
+              "Width": 51,
+              "Height": 42
+            }
+          },
+          {
+            "Text": "，",
+            "BoundingRect": {
+              "X": 343,
+              "Y": 1213,
+              "Width": 9,
+              "Height": 14
+            }
+          },
+          {
+            "Text": "尼",
+            "BoundingRect": {
+              "X": 386,
+              "Y": 1180,
+              "Width": 50,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "基",
+            "BoundingRect": {
+              "X": 437,
+              "Y": 1178,
+              "Width": 50,
+              "Height": 44
+            }
+          },
+          {
+            "Text": "塔",
+            "BoundingRect": {
+              "X": 488,
+              "Y": 1178,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "．",
+            "BoundingRect": {
+              "X": 540,
+              "Y": 1199,
+              "Width": 7,
+              "Height": 8
+            }
+          },
+          {
+            "Text": "谢",
+            "BoundingRect": {
+              "X": 550,
+              "Y": 1178,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "尔",
+            "BoundingRect": {
+              "X": 602,
+              "Y": 1178,
+              "Width": 48,
+              "Height": 44
+            }
+          },
+          {
+            "Text": "盖",
+            "BoundingRect": {
+              "X": 651,
+              "Y": 1175,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "耶",
+            "BoundingRect": {
+              "X": 702,
+              "Y": 1180,
+              "Width": 48,
+              "Height": 44
+            }
+          },
+          {
+            "Text": "维",
+            "BoundingRect": {
+              "X": 753,
+              "Y": 1175,
+              "Width": 49,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "奇",
+            "BoundingRect": {
+              "X": 804,
+              "Y": 1178,
+              "Width": 48,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "创",
+            "BoundingRect": {
+              "X": 853,
+              "Y": 1178,
+              "Width": 47,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "作",
+            "BoundingRect": {
+              "X": 904,
+              "Y": 1178,
+              "Width": 49,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "非",
+            "BoundingRect": {
+              "X": 954,
+              "Y": 1178,
+              "Width": 50,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "常",
+            "BoundingRect": {
+              "X": 1006,
+              "Y": 1178,
+              "Width": 46,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "丰",
+            "BoundingRect": {
+              "X": 1055,
+              "Y": 1178,
+              "Width": 49,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "收",
+            "BoundingRect": {
+              "X": 1107,
+              "Y": 1178,
+              "Width": 48,
+              "Height": 44
+            }
+          },
+          {
+            "Text": "，",
+            "BoundingRect": {
+              "X": 1162,
+              "Y": 1213,
+              "Width": 9,
+              "Height": 14
+            }
+          },
+          {
+            "Text": "他",
+            "BoundingRect": {
+              "X": 1205,
+              "Y": 1178,
+              "Width": 51,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "几",
+            "BoundingRect": {
+              "X": 1256,
+              "Y": 1180,
+              "Width": 50,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "乎",
+            "BoundingRect": {
+              "X": 1306,
+              "Y": 1177,
+              "Width": 51,
+              "Height": 48
+            }
+          },
+          {
+            "Text": "每",
+            "BoundingRect": {
+              "X": 1357,
+              "Y": 1175,
+              "Width": 50,
+              "Height": 50
+            }
+          },
+          {
+            "Text": "年",
+            "BoundingRect": {
+              "X": 1408,
+              "Y": 1178,
+              "Width": 49,
+              "Height": 46
+            }
+          },
+          {
+            "Text": "都",
+            "BoundingRect": {
+              "X": 1458,
+              "Y": 1178,
+              "Width": 49,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "睢",
+            "BoundingRect": {
+              "X": 1509,
+              "Y": 1175,
+              "Width": 49,
+              "Height": 50
+            }
+          },
+          {
+            "Text": "出",
+            "BoundingRect": {
+              "X": 1562,
+              "Y": 1178,
+              "Width": 43,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "一",
+            "BoundingRect": {
+              "X": 1609,
+              "Y": 1199,
+              "Width": 50,
+              "Height": 4
+            }
+          },
+          {
+            "Text": "部",
+            "BoundingRect": {
+              "X": 1660,
+              "Y": 1178,
+              "Width": 49,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "电",
+            "BoundingRect": {
+              "X": 1712,
+              "Y": 1175,
+              "Width": 48,
+              "Height": 47
+            }
+          }
+        ]
+      },
+      {
+        "text": "影 ： 《 爱 情 的 奴 隶 》 （ 1976 年 ） 、 《 机 械 钢 琴 耒 完 成 的 交 响 曲 》",
+        "raw_text": "影 ： 《 爱 情 的 奴 隶 》 （ 1976 年 ） 、 《 机 械 钢 琴 耒 完 成 的 交 响 曲 》",
+        "bounding_rect": {
+          "X": 286,
+          "Y": 1242,
+          "Width": 1405,
+          "Height": 52
+        },
+        "words": [
+          {
+            "Text": "影",
+            "BoundingRect": {
+              "X": 286,
+              "Y": 1245,
+              "Width": 50,
+              "Height": 44
+            }
+          },
+          {
+            "Text": "：",
+            "BoundingRect": {
+              "X": 345,
+              "Y": 1259,
+              "Width": 8,
+              "Height": 28
+            }
+          },
+          {
+            "Text": "《",
+            "BoundingRect": {
+              "X": 410,
+              "Y": 1245,
+              "Width": 25,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "爱",
+            "BoundingRect": {
+              "X": 437,
+              "Y": 1245,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "情",
+            "BoundingRect": {
+              "X": 488,
+              "Y": 1242,
+              "Width": 49,
+              "Height": 50
+            }
+          },
+          {
+            "Text": "的",
+            "BoundingRect": {
+              "X": 540,
+              "Y": 1245,
+              "Width": 46,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "奴",
+            "BoundingRect": {
+              "X": 588,
+              "Y": 1245,
+              "Width": 51,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "隶",
+            "BoundingRect": {
+              "X": 639,
+              "Y": 1245,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "》",
+            "BoundingRect": {
+              "X": 691,
+              "Y": 1245,
+              "Width": 25,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "（",
+            "BoundingRect": {
+              "X": 772,
+              "Y": 1247,
+              "Width": 15,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "1976",
+            "BoundingRect": {
+              "X": 794,
+              "Y": 1247,
+              "Width": 112,
+              "Height": 40
+            }
+          },
+          {
+            "Text": "年",
+            "BoundingRect": {
+              "X": 908,
+              "Y": 1245,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "）",
+            "BoundingRect": {
+              "X": 962,
+              "Y": 1247,
+              "Width": 15,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "、",
+            "BoundingRect": {
+              "X": 1011,
+              "Y": 1281,
+              "Width": 14,
+              "Height": 13
+            }
+          },
+          {
+            "Text": "《",
+            "BoundingRect": {
+              "X": 1083,
+              "Y": 1245,
+              "Width": 25,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "机",
+            "BoundingRect": {
+              "X": 1110,
+              "Y": 1245,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "械",
+            "BoundingRect": {
+              "X": 1161,
+              "Y": 1245,
+              "Width": 49,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "钢",
+            "BoundingRect": {
+              "X": 1211,
+              "Y": 1245,
+              "Width": 48,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "琴",
+            "BoundingRect": {
+              "X": 1261,
+              "Y": 1247,
+              "Width": 50,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "耒",
+            "BoundingRect": {
+              "X": 1311,
+              "Y": 1242,
+              "Width": 50,
+              "Height": 52
+            }
+          },
+          {
+            "Text": "完",
+            "BoundingRect": {
+              "X": 1362,
+              "Y": 1243,
+              "Width": 50,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "成",
+            "BoundingRect": {
+              "X": 1412,
+              "Y": 1245,
+              "Width": 50,
+              "Height": 44
+            }
+          },
+          {
+            "Text": "的",
+            "BoundingRect": {
+              "X": 1464,
+              "Y": 1245,
+              "Width": 47,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "交",
+            "BoundingRect": {
+              "X": 1514,
+              "Y": 1245,
+              "Width": 49,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "响",
+            "BoundingRect": {
+              "X": 1566,
+              "Y": 1245,
+              "Width": 45,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "曲",
+            "BoundingRect": {
+              "X": 1617,
+              "Y": 1245,
+              "Width": 44,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "》",
+            "BoundingRect": {
+              "X": 1666,
+              "Y": 1245,
+              "Width": 25,
+              "Height": 49
+            }
+          }
+        ]
+      },
+      {
+        "text": "（ 1977 年 ） 、 《 五 个 夜 晚 》 （ 1979 年 ） 、 《 奥 勃 洛 莫 夫 一 生 中 的 几",
+        "raw_text": "（ 1977 年 ） 、 《 五 个 夜 晚 》 （ 1979 年 ） 、 《 奥 勃 洛 莫 夫 一 生 中 的 几",
+        "bounding_rect": {
+          "X": 318,
+          "Y": 1312,
+          "Width": 1464,
+          "Height": 52
+        },
+        "words": [
+          {
+            "Text": "（",
+            "BoundingRect": {
+              "X": 318,
+              "Y": 1317,
+              "Width": 15,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "1977",
+            "BoundingRect": {
+              "X": 340,
+              "Y": 1317,
+              "Width": 112,
+              "Height": 40
+            }
+          },
+          {
+            "Text": "年",
+            "BoundingRect": {
+              "X": 454,
+              "Y": 1314,
+              "Width": 51,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "）",
+            "BoundingRect": {
+              "X": 509,
+              "Y": 1317,
+              "Width": 14,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "、",
+            "BoundingRect": {
+              "X": 557,
+              "Y": 1350,
+              "Width": 14,
+              "Height": 14
+            }
+          },
+          {
+            "Text": "《",
+            "BoundingRect": {
+              "X": 629,
+              "Y": 1314,
+              "Width": 25,
+              "Height": 50
+            }
+          },
+          {
+            "Text": "五",
+            "BoundingRect": {
+              "X": 655,
+              "Y": 1317,
+              "Width": 51,
+              "Height": 42
+            }
+          },
+          {
+            "Text": "个",
+            "BoundingRect": {
+              "X": 707,
+              "Y": 1314,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "夜",
+            "BoundingRect": {
+              "X": 758,
+              "Y": 1312,
+              "Width": 49,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "晚",
+            "BoundingRect": {
+              "X": 810,
+              "Y": 1314,
+              "Width": 48,
+              "Height": 50
+            }
+          },
+          {
+            "Text": "》",
+            "BoundingRect": {
+              "X": 860,
+              "Y": 1314,
+              "Width": 25,
+              "Height": 50
+            }
+          },
+          {
+            "Text": "（",
+            "BoundingRect": {
+              "X": 940,
+              "Y": 1317,
+              "Width": 16,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "1979",
+            "BoundingRect": {
+              "X": 962,
+              "Y": 1317,
+              "Width": 112,
+              "Height": 40
+            }
+          },
+          {
+            "Text": "年",
+            "BoundingRect": {
+              "X": 1077,
+              "Y": 1314,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "）",
+            "BoundingRect": {
+              "X": 1131,
+              "Y": 1317,
+              "Width": 14,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "、",
+            "BoundingRect": {
+              "X": 1180,
+              "Y": 1350,
+              "Width": 14,
+              "Height": 14
+            }
+          },
+          {
+            "Text": "《",
+            "BoundingRect": {
+              "X": 1251,
+              "Y": 1314,
+              "Width": 25,
+              "Height": 50
+            }
+          },
+          {
+            "Text": "奥",
+            "BoundingRect": {
+              "X": 1279,
+              "Y": 1314,
+              "Width": 49,
+              "Height": 50
+            }
+          },
+          {
+            "Text": "勃",
+            "BoundingRect": {
+              "X": 1330,
+              "Y": 1314,
+              "Width": 48,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "洛",
+            "BoundingRect": {
+              "X": 1380,
+              "Y": 1312,
+              "Width": 48,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "莫",
+            "BoundingRect": {
+              "X": 1430,
+              "Y": 1312,
+              "Width": 49,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "夫",
+            "BoundingRect": {
+              "X": 1480,
+              "Y": 1314,
+              "Width": 50,
+              "Height": 48
+            }
+          },
+          {
+            "Text": "一",
+            "BoundingRect": {
+              "X": 1531,
+              "Y": 1336,
+              "Width": 49,
+              "Height": 4
+            }
+          },
+          {
+            "Text": "生",
+            "BoundingRect": {
+              "X": 1581,
+              "Y": 1314,
+              "Width": 50,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "中",
+            "BoundingRect": {
+              "X": 1634,
+              "Y": 1314,
+              "Width": 44,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "的",
+            "BoundingRect": {
+              "X": 1683,
+              "Y": 1314,
+              "Width": 47,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "几",
+            "BoundingRect": {
+              "X": 1732,
+              "Y": 1317,
+              "Width": 50,
+              "Height": 44
+            }
+          }
+        ]
+      },
+      {
+        "text": "天 》 （ 1980 年 ） 、 《 亲 戚 》 （ 1982 年 ） 、 《 没 有 目 击 者 》 （ 1983",
+        "raw_text": "天 》 （ 1980 年 ） 、 《 亲 戚 》 （ 1982 年 ） 、 《 没 有 目 击 者 》 （ 1983",
+        "bounding_rect": {
+          "X": 285,
+          "Y": 1379,
+          "Width": 1461,
+          "Height": 52
+        },
+        "words": [
+          {
+            "Text": "天",
+            "BoundingRect": {
+              "X": 285,
+              "Y": 1384,
+              "Width": 51,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "》",
+            "BoundingRect": {
+              "X": 338,
+              "Y": 1382,
+              "Width": 25,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "（",
+            "BoundingRect": {
+              "X": 419,
+              "Y": 1384,
+              "Width": 15,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "1980",
+            "BoundingRect": {
+              "X": 441,
+              "Y": 1384,
+              "Width": 112,
+              "Height": 40
+            }
+          },
+          {
+            "Text": "年",
+            "BoundingRect": {
+              "X": 555,
+              "Y": 1382,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "）",
+            "BoundingRect": {
+              "X": 609,
+              "Y": 1384,
+              "Width": 15,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "、",
+            "BoundingRect": {
+              "X": 658,
+              "Y": 1417,
+              "Width": 14,
+              "Height": 14
+            }
+          },
+          {
+            "Text": "《",
+            "BoundingRect": {
+              "X": 730,
+              "Y": 1382,
+              "Width": 25,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "亲",
+            "BoundingRect": {
+              "X": 757,
+              "Y": 1382,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "戚",
+            "BoundingRect": {
+              "X": 808,
+              "Y": 1382,
+              "Width": 49,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "》",
+            "BoundingRect": {
+              "X": 860,
+              "Y": 1382,
+              "Width": 25,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "（",
+            "BoundingRect": {
+              "X": 940,
+              "Y": 1384,
+              "Width": 16,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "1982",
+            "BoundingRect": {
+              "X": 962,
+              "Y": 1384,
+              "Width": 113,
+              "Height": 40
+            }
+          },
+          {
+            "Text": "年",
+            "BoundingRect": {
+              "X": 1077,
+              "Y": 1382,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "）",
+            "BoundingRect": {
+              "X": 1131,
+              "Y": 1384,
+              "Width": 14,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "、",
+            "BoundingRect": {
+              "X": 1180,
+              "Y": 1417,
+              "Width": 14,
+              "Height": 14
+            }
+          },
+          {
+            "Text": "《",
+            "BoundingRect": {
+              "X": 1251,
+              "Y": 1382,
+              "Width": 25,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "没",
+            "BoundingRect": {
+              "X": 1279,
+              "Y": 1382,
+              "Width": 49,
+              "Height": 44
+            }
+          },
+          {
+            "Text": "有",
+            "BoundingRect": {
+              "X": 1329,
+              "Y": 1379,
+              "Width": 49,
+              "Height": 50
+            }
+          },
+          {
+            "Text": "目",
+            "BoundingRect": {
+              "X": 1386,
+              "Y": 1384,
+              "Width": 37,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "击",
+            "BoundingRect": {
+              "X": 1430,
+              "Y": 1382,
+              "Width": 49,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "者",
+            "BoundingRect": {
+              "X": 1480,
+              "Y": 1379,
+              "Width": 50,
+              "Height": 50
+            }
+          },
+          {
+            "Text": "》",
+            "BoundingRect": {
+              "X": 1533,
+              "Y": 1381,
+              "Width": 24,
+              "Height": 50
+            }
+          },
+          {
+            "Text": "（",
+            "BoundingRect": {
+              "X": 1613,
+              "Y": 1384,
+              "Width": 15,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "1983",
+            "BoundingRect": {
+              "X": 1635,
+              "Y": 1384,
+              "Width": 111,
+              "Height": 40
+            }
+          }
+        ]
+      },
+      {
+        "text": "年 ） 。 他 的 电 影 在 国 际 和 全 苏 电 影 节 上 获 得 了 众 多 奖 项 。",
+        "raw_text": "年 ） 。 他 的 电 影 在 国 际 和 全 苏 电 影 节 上 获 得 了 众 多 奖 项 。",
+        "bounding_rect": {
+          "X": 285,
+          "Y": 1449,
+          "Width": 1227,
+          "Height": 52
+        },
+        "words": [
+          {
+            "Text": "年",
+            "BoundingRect": {
+              "X": 285,
+              "Y": 1451,
+              "Width": 51,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "）",
+            "BoundingRect": {
+              "X": 340,
+              "Y": 1453,
+              "Width": 14,
+              "Height": 48
+            }
+          },
+          {
+            "Text": "。",
+            "BoundingRect": {
+              "X": 389,
+              "Y": 1485,
+              "Width": 14,
+              "Height": 13
+            }
+          },
+          {
+            "Text": "他",
+            "BoundingRect": {
+              "X": 436,
+              "Y": 1451,
+              "Width": 51,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "的",
+            "BoundingRect": {
+              "X": 489,
+              "Y": 1451,
+              "Width": 47,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "电",
+            "BoundingRect": {
+              "X": 540,
+              "Y": 1449,
+              "Width": 47,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "影",
+            "BoundingRect": {
+              "X": 589,
+              "Y": 1451,
+              "Width": 49,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "在",
+            "BoundingRect": {
+              "X": 639,
+              "Y": 1449,
+              "Width": 50,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "国",
+            "BoundingRect": {
+              "X": 692,
+              "Y": 1451,
+              "Width": 44,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "际",
+            "BoundingRect": {
+              "X": 741,
+              "Y": 1454,
+              "Width": 48,
+              "Height": 44
+            }
+          },
+          {
+            "Text": "和",
+            "BoundingRect": {
+              "X": 790,
+              "Y": 1451,
+              "Width": 48,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "全",
+            "BoundingRect": {
+              "X": 841,
+              "Y": 1451,
+              "Width": 50,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "苏",
+            "BoundingRect": {
+              "X": 891,
+              "Y": 1451,
+              "Width": 50,
+              "Height": 50
+            }
+          },
+          {
+            "Text": "电",
+            "BoundingRect": {
+              "X": 943,
+              "Y": 1449,
+              "Width": 48,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "影",
+            "BoundingRect": {
+              "X": 992,
+              "Y": 1452,
+              "Width": 50,
+              "Height": 44
+            }
+          },
+          {
+            "Text": "节",
+            "BoundingRect": {
+              "X": 1042,
+              "Y": 1449,
+              "Width": 50,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "上",
+            "BoundingRect": {
+              "X": 1093,
+              "Y": 1451,
+              "Width": 49,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "获",
+            "BoundingRect": {
+              "X": 1143,
+              "Y": 1451,
+              "Width": 50,
+              "Height": 50
+            }
+          },
+          {
+            "Text": "得",
+            "BoundingRect": {
+              "X": 1193,
+              "Y": 1451,
+              "Width": 51,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "了",
+            "BoundingRect": {
+              "X": 1245,
+              "Y": 1453,
+              "Width": 46,
+              "Height": 43
+            }
+          },
+          {
+            "Text": "众",
+            "BoundingRect": {
+              "X": 1293,
+              "Y": 1451,
+              "Width": 51,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "多",
+            "BoundingRect": {
+              "X": 1346,
+              "Y": 1451,
+              "Width": 46,
+              "Height": 50
+            }
+          },
+          {
+            "Text": "奖",
+            "BoundingRect": {
+              "X": 1396,
+              "Y": 1451,
+              "Width": 49,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "项",
+            "BoundingRect": {
+              "X": 1445,
+              "Y": 1453,
+              "Width": 50,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "。",
+            "BoundingRect": {
+              "X": 1498,
+              "Y": 1485,
+              "Width": 14,
+              "Height": 13
+            }
+          }
+        ]
+      },
+      {
+        "text": "与 此 同 时 ， 他 也 作 为 演 员 参 与 拍 摄 。 他 的 明 星 角 色 出 现 在 埃 利 达 尔 ． 梁",
+        "raw_text": "与 此 同 时 ， 他 也 作 为 演 员 参 与 拍 摄 。 他 的 明 星 角 色 出 现 在 埃 利 达 尔 ． 梁",
+        "bounding_rect": {
+          "X": 285,
+          "Y": 1516,
+          "Width": 1525,
+          "Height": 52
+        },
+        "words": [
+          {
+            "Text": "与",
+            "BoundingRect": {
+              "X": 285,
+              "Y": 1518,
+              "Width": 51,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "此",
+            "BoundingRect": {
+              "X": 336,
+              "Y": 1516,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "同",
+            "BoundingRect": {
+              "X": 390,
+              "Y": 1521,
+              "Width": 43,
+              "Height": 44
+            }
+          },
+          {
+            "Text": "时",
+            "BoundingRect": {
+              "X": 439,
+              "Y": 1518,
+              "Width": 49,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "，",
+            "BoundingRect": {
+              "X": 494,
+              "Y": 1554,
+              "Width": 9,
+              "Height": 14
+            }
+          },
+          {
+            "Text": "他",
+            "BoundingRect": {
+              "X": 537,
+              "Y": 1518,
+              "Width": 51,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "也",
+            "BoundingRect": {
+              "X": 588,
+              "Y": 1518,
+              "Width": 50,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "作",
+            "BoundingRect": {
+              "X": 639,
+              "Y": 1518,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "为",
+            "BoundingRect": {
+              "X": 690,
+              "Y": 1519,
+              "Width": 46,
+              "Height": 46
+            }
+          },
+          {
+            "Text": "演",
+            "BoundingRect": {
+              "X": 740,
+              "Y": 1518,
+              "Width": 48,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "员",
+            "BoundingRect": {
+              "X": 791,
+              "Y": 1521,
+              "Width": 49,
+              "Height": 44
+            }
+          },
+          {
+            "Text": "参",
+            "BoundingRect": {
+              "X": 841,
+              "Y": 1519,
+              "Width": 49,
+              "Height": 46
+            }
+          },
+          {
+            "Text": "与",
+            "BoundingRect": {
+              "X": 891,
+              "Y": 1518,
+              "Width": 50,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "拍",
+            "BoundingRect": {
+              "X": 941,
+              "Y": 1518,
+              "Width": 47,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "摄",
+            "BoundingRect": {
+              "X": 992,
+              "Y": 1519,
+              "Width": 50,
+              "Height": 46
+            }
+          },
+          {
+            "Text": "。",
+            "BoundingRect": {
+              "X": 1044,
+              "Y": 1552,
+              "Width": 15,
+              "Height": 13
+            }
+          },
+          {
+            "Text": "他",
+            "BoundingRect": {
+              "X": 1092,
+              "Y": 1518,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "的",
+            "BoundingRect": {
+              "X": 1144,
+              "Y": 1518,
+              "Width": 47,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "明",
+            "BoundingRect": {
+              "X": 1196,
+              "Y": 1521,
+              "Width": 45,
+              "Height": 44
+            }
+          },
+          {
+            "Text": "星",
+            "BoundingRect": {
+              "X": 1244,
+              "Y": 1521,
+              "Width": 49,
+              "Height": 42
+            }
+          },
+          {
+            "Text": "角",
+            "BoundingRect": {
+              "X": 1294,
+              "Y": 1516,
+              "Width": 46,
+              "Height": 52
+            }
+          },
+          {
+            "Text": "色",
+            "BoundingRect": {
+              "X": 1344,
+              "Y": 1518,
+              "Width": 50,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "出",
+            "BoundingRect": {
+              "X": 1398,
+              "Y": 1518,
+              "Width": 43,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "现",
+            "BoundingRect": {
+              "X": 1445,
+              "Y": 1521,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "在",
+            "BoundingRect": {
+              "X": 1496,
+              "Y": 1516,
+              "Width": 50,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "埃",
+            "BoundingRect": {
+              "X": 1546,
+              "Y": 1518,
+              "Width": 51,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "利",
+            "BoundingRect": {
+              "X": 1596,
+              "Y": 1518,
+              "Width": 48,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "达",
+            "BoundingRect": {
+              "X": 1647,
+              "Y": 1518,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "尔",
+            "BoundingRect": {
+              "X": 1698,
+              "Y": 1518,
+              "Width": 49,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "．",
+            "BoundingRect": {
+              "X": 1750,
+              "Y": 1540,
+              "Width": 7,
+              "Height": 8
+            }
+          },
+          {
+            "Text": "梁",
+            "BoundingRect": {
+              "X": 1760,
+              "Y": 1518,
+              "Width": 50,
+              "Height": 50
+            }
+          }
+        ]
+      },
+      {
+        "text": "赞 诺 夫 的 电 影 《 两 个 人 的 车 站 》 （ 1983 年 ） 和 《 残 酷 的 氵 良 氵 曼 史 》",
+        "raw_text": "赞 诺 夫 的 电 影 《 两 个 人 的 车 站 》 （ 1983 年 ） 和 《 残 酷 的 氵 良 氵 曼 史 》",
+        "bounding_rect": {
+          "X": 286,
+          "Y": 1586,
+          "Width": 1405,
+          "Height": 51
+        },
+        "words": [
+          {
+            "Text": "赞",
+            "BoundingRect": {
+              "X": 286,
+              "Y": 1588,
+              "Width": 50,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "诺",
+            "BoundingRect": {
+              "X": 336,
+              "Y": 1586,
+              "Width": 50,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "夫",
+            "BoundingRect": {
+              "X": 387,
+              "Y": 1588,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "的",
+            "BoundingRect": {
+              "X": 439,
+              "Y": 1588,
+              "Width": 46,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "电",
+            "BoundingRect": {
+              "X": 489,
+              "Y": 1586,
+              "Width": 48,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "影",
+            "BoundingRect": {
+              "X": 538,
+              "Y": 1588,
+              "Width": 50,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "《",
+            "BoundingRect": {
+              "X": 612,
+              "Y": 1588,
+              "Width": 24,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "两",
+            "BoundingRect": {
+              "X": 639,
+              "Y": 1590,
+              "Width": 49,
+              "Height": 43
+            }
+          },
+          {
+            "Text": "个",
+            "BoundingRect": {
+              "X": 689,
+              "Y": 1588,
+              "Width": 51,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "人",
+            "BoundingRect": {
+              "X": 740,
+              "Y": 1588,
+              "Width": 49,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "的",
+            "BoundingRect": {
+              "X": 792,
+              "Y": 1588,
+              "Width": 46,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "车",
+            "BoundingRect": {
+              "X": 841,
+              "Y": 1588,
+              "Width": 49,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "站",
+            "BoundingRect": {
+              "X": 891,
+              "Y": 1588,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "》",
+            "BoundingRect": {
+              "X": 943,
+              "Y": 1588,
+              "Width": 25,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "（",
+            "BoundingRect": {
+              "X": 1024,
+              "Y": 1590,
+              "Width": 15,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "1983",
+            "BoundingRect": {
+              "X": 1046,
+              "Y": 1590,
+              "Width": 111,
+              "Height": 40
+            }
+          },
+          {
+            "Text": "年",
+            "BoundingRect": {
+              "X": 1160,
+              "Y": 1588,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "）",
+            "BoundingRect": {
+              "X": 1214,
+              "Y": 1590,
+              "Width": 15,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "和",
+            "BoundingRect": {
+              "X": 1261,
+              "Y": 1588,
+              "Width": 48,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "《",
+            "BoundingRect": {
+              "X": 1335,
+              "Y": 1588,
+              "Width": 24,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "残",
+            "BoundingRect": {
+              "X": 1362,
+              "Y": 1588,
+              "Width": 49,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "酷",
+            "BoundingRect": {
+              "X": 1413,
+              "Y": 1588,
+              "Width": 49,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "的",
+            "BoundingRect": {
+              "X": 1464,
+              "Y": 1588,
+              "Width": 47,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "氵",
+            "BoundingRect": {
+              "X": 1514,
+              "Y": 1588,
+              "Width": 12,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "良",
+            "BoundingRect": {
+              "X": 1528,
+              "Y": 1586,
+              "Width": 35,
+              "Height": 51
+            }
+          },
+          {
+            "Text": "氵",
+            "BoundingRect": {
+              "X": 1564,
+              "Y": 1588,
+              "Width": 13,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "曼",
+            "BoundingRect": {
+              "X": 1574,
+              "Y": 1590,
+              "Width": 40,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "史",
+            "BoundingRect": {
+              "X": 1615,
+              "Y": 1588,
+              "Width": 49,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "》",
+            "BoundingRect": {
+              "X": 1666,
+              "Y": 1588,
+              "Width": 25,
+              "Height": 49
+            }
+          }
+        ]
+      },
+      {
+        "text": "（ 1984 年 ） 中 。 1984 年 ， 尼 基 塔 ， 米 哈 尔 科 夫 获 得 了 俄 罗 斯 苏 维 埃 联",
+        "raw_text": "（ 1984 年 ） 中 。 1984 年 ， 尼 基 塔 ， 米 哈 尔 科 夫 获 得 了 俄 罗 斯 苏 维 埃 联",
+        "bounding_rect": {
+          "X": 318,
+          "Y": 1653,
+          "Width": 1477,
+          "Height": 52
+        },
+        "words": [
+          {
+            "Text": "（",
+            "BoundingRect": {
+              "X": 318,
+              "Y": 1657,
+              "Width": 15,
+              "Height": 48
+            }
+          },
+          {
+            "Text": "1984",
+            "BoundingRect": {
+              "X": 340,
+              "Y": 1658,
+              "Width": 114,
+              "Height": 39
+            }
+          },
+          {
+            "Text": "年",
+            "BoundingRect": {
+              "X": 455,
+              "Y": 1655,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "）",
+            "BoundingRect": {
+              "X": 508,
+              "Y": 1657,
+              "Width": 15,
+              "Height": 48
+            }
+          },
+          {
+            "Text": "中",
+            "BoundingRect": {
+              "X": 558,
+              "Y": 1655,
+              "Width": 45,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "。",
+            "BoundingRect": {
+              "X": 608,
+              "Y": 1689,
+              "Width": 14,
+              "Height": 13
+            }
+          },
+          {
+            "Text": "1984",
+            "BoundingRect": {
+              "X": 660,
+              "Y": 1657,
+              "Width": 114,
+              "Height": 40
+            }
+          },
+          {
+            "Text": "年",
+            "BoundingRect": {
+              "X": 775,
+              "Y": 1655,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "，",
+            "BoundingRect": {
+              "X": 831,
+              "Y": 1691,
+              "Width": 10,
+              "Height": 14
+            }
+          },
+          {
+            "Text": "尼",
+            "BoundingRect": {
+              "X": 875,
+              "Y": 1657,
+              "Width": 50,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "基",
+            "BoundingRect": {
+              "X": 926,
+              "Y": 1655,
+              "Width": 49,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "塔",
+            "BoundingRect": {
+              "X": 976,
+              "Y": 1655,
+              "Width": 51,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "，",
+            "BoundingRect": {
+              "X": 1029,
+              "Y": 1677,
+              "Width": 7,
+              "Height": 8
+            }
+          },
+          {
+            "Text": "米",
+            "BoundingRect": {
+              "X": 1039,
+              "Y": 1655,
+              "Width": 50,
+              "Height": 50
+            }
+          },
+          {
+            "Text": "哈",
+            "BoundingRect": {
+              "X": 1092,
+              "Y": 1655,
+              "Width": 47,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "尔",
+            "BoundingRect": {
+              "X": 1140,
+              "Y": 1655,
+              "Width": 49,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "科",
+            "BoundingRect": {
+              "X": 1190,
+              "Y": 1653,
+              "Width": 50,
+              "Height": 52
+            }
+          },
+          {
+            "Text": "夫",
+            "BoundingRect": {
+              "X": 1241,
+              "Y": 1655,
+              "Width": 49,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "获",
+            "BoundingRect": {
+              "X": 1291,
+              "Y": 1655,
+              "Width": 50,
+              "Height": 50
+            }
+          },
+          {
+            "Text": "得",
+            "BoundingRect": {
+              "X": 1342,
+              "Y": 1655,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "了",
+            "BoundingRect": {
+              "X": 1394,
+              "Y": 1657,
+              "Width": 45,
+              "Height": 43
+            }
+          },
+          {
+            "Text": "俄",
+            "BoundingRect": {
+              "X": 1442,
+              "Y": 1655,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "罗",
+            "BoundingRect": {
+              "X": 1493,
+              "Y": 1657,
+              "Width": 47,
+              "Height": 48
+            }
+          },
+          {
+            "Text": "斯",
+            "BoundingRect": {
+              "X": 1543,
+              "Y": 1655,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "苏",
+            "BoundingRect": {
+              "X": 1594,
+              "Y": 1655,
+              "Width": 49,
+              "Height": 50
+            }
+          },
+          {
+            "Text": "维",
+            "BoundingRect": {
+              "X": 1644,
+              "Y": 1653,
+              "Width": 50,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "埃",
+            "BoundingRect": {
+              "X": 1694,
+              "Y": 1655,
+              "Width": 51,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "联",
+            "BoundingRect": {
+              "X": 1745,
+              "Y": 1655,
+              "Width": 50,
+              "Height": 47
+            }
+          }
+        ]
+      },
+      {
+        "text": "邦 社 会 主 义 共 和 国 人 民 艺 术 家 的 称 号 。",
+        "raw_text": "邦 社 会 主 义 共 和 国 人 民 艺 术 家 的 称 号 。",
+        "bounding_rect": {
+          "X": 286,
+          "Y": 1722,
+          "Width": 823,
+          "Height": 52
+        },
+        "words": [
+          {
+            "Text": "邦",
+            "BoundingRect": {
+              "X": 286,
+              "Y": 1727,
+              "Width": 49,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "社",
+            "BoundingRect": {
+              "X": 336,
+              "Y": 1725,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "会",
+            "BoundingRect": {
+              "X": 387,
+              "Y": 1725,
+              "Width": 51,
+              "Height": 46
+            }
+          },
+          {
+            "Text": "主",
+            "BoundingRect": {
+              "X": 437,
+              "Y": 1723,
+              "Width": 50,
+              "Height": 46
+            }
+          },
+          {
+            "Text": "义",
+            "BoundingRect": {
+              "X": 487,
+              "Y": 1725,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "共",
+            "BoundingRect": {
+              "X": 538,
+              "Y": 1725,
+              "Width": 49,
+              "Height": 46
+            }
+          },
+          {
+            "Text": "和",
+            "BoundingRect": {
+              "X": 588,
+              "Y": 1725,
+              "Width": 48,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "国",
+            "BoundingRect": {
+              "X": 641,
+              "Y": 1725,
+              "Width": 45,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "人",
+            "BoundingRect": {
+              "X": 689,
+              "Y": 1725,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "民",
+            "BoundingRect": {
+              "X": 743,
+              "Y": 1727,
+              "Width": 46,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "艺",
+            "BoundingRect": {
+              "X": 790,
+              "Y": 1722,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "术",
+            "BoundingRect": {
+              "X": 840,
+              "Y": 1725,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "家",
+            "BoundingRect": {
+              "X": 891,
+              "Y": 1723,
+              "Width": 50,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "的",
+            "BoundingRect": {
+              "X": 943,
+              "Y": 1725,
+              "Width": 46,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "称",
+            "BoundingRect": {
+              "X": 992,
+              "Y": 1722,
+              "Width": 49,
+              "Height": 50
+            }
+          },
+          {
+            "Text": "号",
+            "BoundingRect": {
+              "X": 1042,
+              "Y": 1727,
+              "Width": 51,
+              "Height": 42
+            }
+          },
+          {
+            "Text": "。",
+            "BoundingRect": {
+              "X": 1095,
+              "Y": 1758,
+              "Width": 14,
+              "Height": 14
+            }
+          }
+        ]
+      },
+      {
+        "text": "关 于 米 哈 尔 科 夫 是 电 影 拍 摄 方 面 的 天 才 纟 且 织 者 这 一 点 ， 早 已 有 大 量 文",
+        "raw_text": "关 于 米 哈 尔 科 夫 是 电 影 拍 摄 方 面 的 天 才 纟 且 织 者 这 一 点 ， 早 已 有 大 量 文",
+        "bounding_rect": {
+          "X": 286,
+          "Y": 1787,
+          "Width": 1512,
+          "Height": 54
+        },
+        "words": [
+          {
+            "Text": "关",
+            "BoundingRect": {
+              "X": 286,
+              "Y": 1792,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "于",
+            "BoundingRect": {
+              "X": 336,
+              "Y": 1794,
+              "Width": 50,
+              "Height": 43
+            }
+          },
+          {
+            "Text": "米",
+            "BoundingRect": {
+              "X": 387,
+              "Y": 1792,
+              "Width": 50,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "哈",
+            "BoundingRect": {
+              "X": 439,
+              "Y": 1792,
+              "Width": 48,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "尔",
+            "BoundingRect": {
+              "X": 488,
+              "Y": 1792,
+              "Width": 48,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "科",
+            "BoundingRect": {
+              "X": 537,
+              "Y": 1789,
+              "Width": 51,
+              "Height": 52
+            }
+          },
+          {
+            "Text": "夫",
+            "BoundingRect": {
+              "X": 588,
+              "Y": 1792,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "是",
+            "BoundingRect": {
+              "X": 639,
+              "Y": 1794,
+              "Width": 50,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "电",
+            "BoundingRect": {
+              "X": 691,
+              "Y": 1790,
+              "Width": 47,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "影",
+            "BoundingRect": {
+              "X": 740,
+              "Y": 1792,
+              "Width": 49,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "拍",
+            "BoundingRect": {
+              "X": 790,
+              "Y": 1792,
+              "Width": 47,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "摄",
+            "BoundingRect": {
+              "X": 840,
+              "Y": 1792,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "方",
+            "BoundingRect": {
+              "X": 891,
+              "Y": 1787,
+              "Width": 49,
+              "Height": 54
+            }
+          },
+          {
+            "Text": "面",
+            "BoundingRect": {
+              "X": 942,
+              "Y": 1794,
+              "Width": 48,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "的",
+            "BoundingRect": {
+              "X": 993,
+              "Y": 1792,
+              "Width": 47,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "天",
+            "BoundingRect": {
+              "X": 1042,
+              "Y": 1794,
+              "Width": 50,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "才",
+            "BoundingRect": {
+              "X": 1093,
+              "Y": 1792,
+              "Width": 49,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "纟",
+            "BoundingRect": {
+              "X": 1144,
+              "Y": 1792,
+              "Width": 18,
+              "Height": 40
+            }
+          },
+          {
+            "Text": "且",
+            "BoundingRect": {
+              "X": 1158,
+              "Y": 1794,
+              "Width": 35,
+              "Height": 43
+            }
+          },
+          {
+            "Text": "织",
+            "BoundingRect": {
+              "X": 1194,
+              "Y": 1792,
+              "Width": 49,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "者",
+            "BoundingRect": {
+              "X": 1243,
+              "Y": 1790,
+              "Width": 51,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "这",
+            "BoundingRect": {
+              "X": 1294,
+              "Y": 1792,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "一",
+            "BoundingRect": {
+              "X": 1344,
+              "Y": 1813,
+              "Width": 51,
+              "Height": 4
+            }
+          },
+          {
+            "Text": "点",
+            "BoundingRect": {
+              "X": 1395,
+              "Y": 1792,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "，",
+            "BoundingRect": {
+              "X": 1452,
+              "Y": 1828,
+              "Width": 9,
+              "Height": 13
+            }
+          },
+          {
+            "Text": "早",
+            "BoundingRect": {
+              "X": 1495,
+              "Y": 1794,
+              "Width": 50,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "已",
+            "BoundingRect": {
+              "X": 1549,
+              "Y": 1794,
+              "Width": 47,
+              "Height": 43
+            }
+          },
+          {
+            "Text": "有",
+            "BoundingRect": {
+              "X": 1597,
+              "Y": 1790,
+              "Width": 49,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "大",
+            "BoundingRect": {
+              "X": 1647,
+              "Y": 1792,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "量",
+            "BoundingRect": {
+              "X": 1697,
+              "Y": 1794,
+              "Width": 50,
+              "Height": 43
+            }
+          },
+          {
+            "Text": "文",
+            "BoundingRect": {
+              "X": 1748,
+              "Y": 1787,
+              "Width": 50,
+              "Height": 50
+            }
+          }
+        ]
+      },
+      {
+        "text": "字 记 述 。 对 他 来 说 ， 不 存 在 什 么 技 术 难 题 。 当 亻 也 在 深 秋 拍 摄 夏 天 的 场",
+        "raw_text": "字 记 述 。 对 他 来 说 ， 不 存 在 什 么 技 术 难 题 。 当 亻 也 在 深 秋 拍 摄 夏 天 的 场",
+        "bounding_rect": {
+          "X": 285,
+          "Y": 1859,
+          "Width": 1511,
+          "Height": 52
+        },
+        "words": [
+          {
+            "Text": "字",
+            "BoundingRect": {
+              "X": 285,
+              "Y": 1860,
+              "Width": 51,
+              "Height": 46
+            }
+          },
+          {
+            "Text": "记",
+            "BoundingRect": {
+              "X": 336,
+              "Y": 1862,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "述",
+            "BoundingRect": {
+              "X": 386,
+              "Y": 1862,
+              "Width": 51,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "。",
+            "BoundingRect": {
+              "X": 439,
+              "Y": 1895,
+              "Width": 15,
+              "Height": 14
+            }
+          },
+          {
+            "Text": "对",
+            "BoundingRect": {
+              "X": 487,
+              "Y": 1862,
+              "Width": 51,
+              "Height": 44
+            }
+          },
+          {
+            "Text": "他",
+            "BoundingRect": {
+              "X": 538,
+              "Y": 1862,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "来",
+            "BoundingRect": {
+              "X": 588,
+              "Y": 1859,
+              "Width": 50,
+              "Height": 52
+            }
+          },
+          {
+            "Text": "说",
+            "BoundingRect": {
+              "X": 638,
+              "Y": 1862,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "，",
+            "BoundingRect": {
+              "X": 696,
+              "Y": 1897,
+              "Width": 9,
+              "Height": 14
+            }
+          },
+          {
+            "Text": "不",
+            "BoundingRect": {
+              "X": 739,
+              "Y": 1864,
+              "Width": 51,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "存",
+            "BoundingRect": {
+              "X": 790,
+              "Y": 1862,
+              "Width": 50,
+              "Height": 44
+            }
+          },
+          {
+            "Text": "在",
+            "BoundingRect": {
+              "X": 840,
+              "Y": 1859,
+              "Width": 50,
+              "Height": 50
+            }
+          },
+          {
+            "Text": "什",
+            "BoundingRect": {
+              "X": 891,
+              "Y": 1861,
+              "Width": 50,
+              "Height": 50
+            }
+          },
+          {
+            "Text": "么",
+            "BoundingRect": {
+              "X": 942,
+              "Y": 1862,
+              "Width": 48,
+              "Height": 46
+            }
+          },
+          {
+            "Text": "技",
+            "BoundingRect": {
+              "X": 991,
+              "Y": 1862,
+              "Width": 51,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "术",
+            "BoundingRect": {
+              "X": 1042,
+              "Y": 1862,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "难",
+            "BoundingRect": {
+              "X": 1092,
+              "Y": 1862,
+              "Width": 50,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "题",
+            "BoundingRect": {
+              "X": 1143,
+              "Y": 1861,
+              "Width": 50,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "。",
+            "BoundingRect": {
+              "X": 1196,
+              "Y": 1895,
+              "Width": 14,
+              "Height": 14
+            }
+          },
+          {
+            "Text": "当",
+            "BoundingRect": {
+              "X": 1245,
+              "Y": 1862,
+              "Width": 45,
+              "Height": 46
+            }
+          },
+          {
+            "Text": "亻",
+            "BoundingRect": {
+              "X": 1294,
+              "Y": 1862,
+              "Width": 16,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "也",
+            "BoundingRect": {
+              "X": 1307,
+              "Y": 1862,
+              "Width": 38,
+              "Height": 44
+            }
+          },
+          {
+            "Text": "在",
+            "BoundingRect": {
+              "X": 1344,
+              "Y": 1859,
+              "Width": 50,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "深",
+            "BoundingRect": {
+              "X": 1395,
+              "Y": 1862,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "秋",
+            "BoundingRect": {
+              "X": 1445,
+              "Y": 1862,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "拍",
+            "BoundingRect": {
+              "X": 1496,
+              "Y": 1862,
+              "Width": 47,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "摄",
+            "BoundingRect": {
+              "X": 1546,
+              "Y": 1862,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "夏",
+            "BoundingRect": {
+              "X": 1597,
+              "Y": 1864,
+              "Width": 49,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "天",
+            "BoundingRect": {
+              "X": 1647,
+              "Y": 1864,
+              "Width": 50,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "的",
+            "BoundingRect": {
+              "X": 1699,
+              "Y": 1862,
+              "Width": 46,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "场",
+            "BoundingRect": {
+              "X": 1748,
+              "Y": 1862,
+              "Width": 48,
+              "Height": 47
+            }
+          }
+        ]
+      },
+      {
+        "text": "景 时 ， 臼 桦 林 会 被 \" 贴 上 \" 绿 叶 。 当 米 哈 尔 科 夫 在 四 月 拍 摄 冬 天 的 场",
+        "raw_text": "景 时 ， 臼 桦 林 会 被 \" 贴 上 \" 绿 叶 。 当 米 哈 尔 科 夫 在 四 月 拍 摄 冬 天 的 场",
+        "bounding_rect": {
+          "X": 288,
+          "Y": 1926,
+          "Width": 1508,
+          "Height": 52
+        },
+        "words": [
+          {
+            "Text": "景",
+            "BoundingRect": {
+              "X": 288,
+              "Y": 1931,
+              "Width": 46,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "时",
+            "BoundingRect": {
+              "X": 338,
+              "Y": 1929,
+              "Width": 49,
+              "Height": 44
+            }
+          },
+          {
+            "Text": "，",
+            "BoundingRect": {
+              "X": 393,
+              "Y": 1965,
+              "Width": 9,
+              "Height": 13
+            }
+          },
+          {
+            "Text": "臼",
+            "BoundingRect": {
+              "X": 441,
+              "Y": 1929,
+              "Width": 42,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "桦",
+            "BoundingRect": {
+              "X": 487,
+              "Y": 1929,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "林",
+            "BoundingRect": {
+              "X": 538,
+              "Y": 1929,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "会",
+            "BoundingRect": {
+              "X": 589,
+              "Y": 1929,
+              "Width": 50,
+              "Height": 46
+            }
+          },
+          {
+            "Text": "被",
+            "BoundingRect": {
+              "X": 639,
+              "Y": 1929,
+              "Width": 50,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "\"",
+            "BoundingRect": {
+              "X": 720,
+              "Y": 1931,
+              "Width": 17,
+              "Height": 14
+            }
+          },
+          {
+            "Text": "贴",
+            "BoundingRect": {
+              "X": 739,
+              "Y": 1929,
+              "Width": 51,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "上",
+            "BoundingRect": {
+              "X": 790,
+              "Y": 1929,
+              "Width": 50,
+              "Height": 44
+            }
+          },
+          {
+            "Text": "\"",
+            "BoundingRect": {
+              "X": 842,
+              "Y": 1931,
+              "Width": 17,
+              "Height": 14
+            }
+          },
+          {
+            "Text": "绿",
+            "BoundingRect": {
+              "X": 890,
+              "Y": 1929,
+              "Width": 51,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "叶",
+            "BoundingRect": {
+              "X": 944,
+              "Y": 1929,
+              "Width": 48,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "。",
+            "BoundingRect": {
+              "X": 994,
+              "Y": 1962,
+              "Width": 14,
+              "Height": 14
+            }
+          },
+          {
+            "Text": "当",
+            "BoundingRect": {
+              "X": 1044,
+              "Y": 1929,
+              "Width": 45,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "米",
+            "BoundingRect": {
+              "X": 1092,
+              "Y": 1929,
+              "Width": 50,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "哈",
+            "BoundingRect": {
+              "X": 1145,
+              "Y": 1929,
+              "Width": 48,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "尔",
+            "BoundingRect": {
+              "X": 1194,
+              "Y": 1929,
+              "Width": 48,
+              "Height": 44
+            }
+          },
+          {
+            "Text": "科",
+            "BoundingRect": {
+              "X": 1243,
+              "Y": 1926,
+              "Width": 50,
+              "Height": 52
+            }
+          },
+          {
+            "Text": "夫",
+            "BoundingRect": {
+              "X": 1294,
+              "Y": 1929,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "在",
+            "BoundingRect": {
+              "X": 1344,
+              "Y": 1926,
+              "Width": 51,
+              "Height": 50
+            }
+          },
+          {
+            "Text": "四",
+            "BoundingRect": {
+              "X": 1398,
+              "Y": 1929,
+              "Width": 45,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "月",
+            "BoundingRect": {
+              "X": 1447,
+              "Y": 1931,
+              "Width": 41,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "拍",
+            "BoundingRect": {
+              "X": 1496,
+              "Y": 1929,
+              "Width": 47,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "摄",
+            "BoundingRect": {
+              "X": 1546,
+              "Y": 1929,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "冬",
+            "BoundingRect": {
+              "X": 1597,
+              "Y": 1929,
+              "Width": 49,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "天",
+            "BoundingRect": {
+              "X": 1647,
+              "Y": 1931,
+              "Width": 50,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "的",
+            "BoundingRect": {
+              "X": 1699,
+              "Y": 1929,
+              "Width": 46,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "场",
+            "BoundingRect": {
+              "X": 1748,
+              "Y": 1929,
+              "Width": 48,
+              "Height": 47
+            }
+          }
+        ]
+      },
+      {
+        "text": "景 时 ， 几 家 莫 斯 科 的 冰 淇 淋 工 厂 会 把 成 吨 的 人 造 冰 运 到 他 的 拍 摄 现",
+        "raw_text": "景 时 ， 几 家 莫 斯 科 的 冰 淇 淋 工 厂 会 把 成 吨 的 人 造 冰 运 到 他 的 拍 摄 现",
+        "bounding_rect": {
+          "X": 288,
+          "Y": 1996,
+          "Width": 1459,
+          "Height": 52
+        },
+        "words": [
+          {
+            "Text": "景",
+            "BoundingRect": {
+              "X": 288,
+              "Y": 2001,
+              "Width": 46,
+              "Height": 44
+            }
+          },
+          {
+            "Text": "时",
+            "BoundingRect": {
+              "X": 338,
+              "Y": 1998,
+              "Width": 49,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "，",
+            "BoundingRect": {
+              "X": 393,
+              "Y": 2034,
+              "Width": 9,
+              "Height": 14
+            }
+          },
+          {
+            "Text": "几",
+            "BoundingRect": {
+              "X": 437,
+              "Y": 2001,
+              "Width": 50,
+              "Height": 44
+            }
+          },
+          {
+            "Text": "家",
+            "BoundingRect": {
+              "X": 488,
+              "Y": 1996,
+              "Width": 49,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "莫",
+            "BoundingRect": {
+              "X": 538,
+              "Y": 1996,
+              "Width": 50,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "斯",
+            "BoundingRect": {
+              "X": 589,
+              "Y": 1998,
+              "Width": 49,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "科",
+            "BoundingRect": {
+              "X": 639,
+              "Y": 1996,
+              "Width": 49,
+              "Height": 52
+            }
+          },
+          {
+            "Text": "的",
+            "BoundingRect": {
+              "X": 691,
+              "Y": 1998,
+              "Width": 46,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "冰",
+            "BoundingRect": {
+              "X": 741,
+              "Y": 1998,
+              "Width": 49,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "淇",
+            "BoundingRect": {
+              "X": 791,
+              "Y": 1998,
+              "Width": 49,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "淋",
+            "BoundingRect": {
+              "X": 841,
+              "Y": 1998,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "工",
+            "BoundingRect": {
+              "X": 891,
+              "Y": 2001,
+              "Width": 49,
+              "Height": 42
+            }
+          },
+          {
+            "Text": "厂",
+            "BoundingRect": {
+              "X": 941,
+              "Y": 2001,
+              "Width": 50,
+              "Height": 44
+            }
+          },
+          {
+            "Text": "会",
+            "BoundingRect": {
+              "X": 992,
+              "Y": 1998,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "把",
+            "BoundingRect": {
+              "X": 1042,
+              "Y": 1998,
+              "Width": 50,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "成",
+            "BoundingRect": {
+              "X": 1092,
+              "Y": 1998,
+              "Width": 50,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "吨",
+            "BoundingRect": {
+              "X": 1146,
+              "Y": 1998,
+              "Width": 46,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "的",
+            "BoundingRect": {
+              "X": 1195,
+              "Y": 1998,
+              "Width": 46,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "人",
+            "BoundingRect": {
+              "X": 1244,
+              "Y": 1998,
+              "Width": 49,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "造",
+            "BoundingRect": {
+              "X": 1294,
+              "Y": 1996,
+              "Width": 50,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "冰",
+            "BoundingRect": {
+              "X": 1346,
+              "Y": 1998,
+              "Width": 48,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "运",
+            "BoundingRect": {
+              "X": 1395,
+              "Y": 1999,
+              "Width": 50,
+              "Height": 46
+            }
+          },
+          {
+            "Text": "到",
+            "BoundingRect": {
+              "X": 1446,
+              "Y": 1998,
+              "Width": 48,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "他",
+            "BoundingRect": {
+              "X": 1496,
+              "Y": 1998,
+              "Width": 49,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "的",
+            "BoundingRect": {
+              "X": 1548,
+              "Y": 1998,
+              "Width": 46,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "拍",
+            "BoundingRect": {
+              "X": 1597,
+              "Y": 1998,
+              "Width": 47,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "摄",
+            "BoundingRect": {
+              "X": 1647,
+              "Y": 1998,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "现",
+            "BoundingRect": {
+              "X": 1697,
+              "Y": 2001,
+              "Width": 50,
+              "Height": 47
+            }
+          }
+        ]
+      },
+      {
+        "text": "从 80 年 代 中 期 开 始 ， 尼 基 塔 · 米 哈 尔 科 夫 成 为 了 苏 联 文 化 界 的 一 位 传",
+        "raw_text": "从 80 年 代 中 期 开 始 ， 尼 基 塔 · 米 哈 尔 科 夫 成 为 了 苏 联 文 化 界 的 一 位 传",
+        "bounding_rect": {
+          "X": 285,
+          "Y": 2130,
+          "Width": 1484,
+          "Height": 55
+        },
+        "words": [
+          {
+            "Text": "从",
+            "BoundingRect": {
+              "X": 285,
+              "Y": 2135,
+              "Width": 51,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "80",
+            "BoundingRect": {
+              "X": 338,
+              "Y": 2137,
+              "Width": 56,
+              "Height": 40
+            }
+          },
+          {
+            "Text": "年",
+            "BoundingRect": {
+              "X": 396,
+              "Y": 2135,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "代",
+            "BoundingRect": {
+              "X": 446,
+              "Y": 2135,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "中",
+            "BoundingRect": {
+              "X": 499,
+              "Y": 2135,
+              "Width": 44,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "期",
+            "BoundingRect": {
+              "X": 547,
+              "Y": 2135,
+              "Width": 48,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "开",
+            "BoundingRect": {
+              "X": 597,
+              "Y": 2137,
+              "Width": 50,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "始",
+            "BoundingRect": {
+              "X": 647,
+              "Y": 2135,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "，",
+            "BoundingRect": {
+              "X": 705,
+              "Y": 2171,
+              "Width": 9,
+              "Height": 14
+            }
+          },
+          {
+            "Text": "尼",
+            "BoundingRect": {
+              "X": 748,
+              "Y": 2137,
+              "Width": 50,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "基",
+            "BoundingRect": {
+              "X": 799,
+              "Y": 2135,
+              "Width": 49,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "塔",
+            "BoundingRect": {
+              "X": 849,
+              "Y": 2135,
+              "Width": 51,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "·",
+            "BoundingRect": {
+              "X": 902,
+              "Y": 2157,
+              "Width": 8,
+              "Height": 8
+            }
+          },
+          {
+            "Text": "米",
+            "BoundingRect": {
+              "X": 912,
+              "Y": 2135,
+              "Width": 50,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "哈",
+            "BoundingRect": {
+              "X": 964,
+              "Y": 2135,
+              "Width": 48,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "尔",
+            "BoundingRect": {
+              "X": 1013,
+              "Y": 2135,
+              "Width": 48,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "科",
+            "BoundingRect": {
+              "X": 1063,
+              "Y": 2133,
+              "Width": 50,
+              "Height": 51
+            }
+          },
+          {
+            "Text": "夫",
+            "BoundingRect": {
+              "X": 1113,
+              "Y": 2135,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "成",
+            "BoundingRect": {
+              "X": 1163,
+              "Y": 2135,
+              "Width": 51,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "为",
+            "BoundingRect": {
+              "X": 1215,
+              "Y": 2135,
+              "Width": 47,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "了",
+            "BoundingRect": {
+              "X": 1266,
+              "Y": 2137,
+              "Width": 46,
+              "Height": 43
+            }
+          },
+          {
+            "Text": "苏",
+            "BoundingRect": {
+              "X": 1315,
+              "Y": 2135,
+              "Width": 50,
+              "Height": 50
+            }
+          },
+          {
+            "Text": "联",
+            "BoundingRect": {
+              "X": 1366,
+              "Y": 2135,
+              "Width": 49,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "文",
+            "BoundingRect": {
+              "X": 1416,
+              "Y": 2130,
+              "Width": 50,
+              "Height": 50
+            }
+          },
+          {
+            "Text": "化",
+            "BoundingRect": {
+              "X": 1467,
+              "Y": 2135,
+              "Width": 49,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "界",
+            "BoundingRect": {
+              "X": 1517,
+              "Y": 2137,
+              "Width": 49,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "的",
+            "BoundingRect": {
+              "X": 1569,
+              "Y": 2135,
+              "Width": 47,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "一",
+            "BoundingRect": {
+              "X": 1618,
+              "Y": 2157,
+              "Width": 49,
+              "Height": 4
+            }
+          },
+          {
+            "Text": "位",
+            "BoundingRect": {
+              "X": 1668,
+              "Y": 2135,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "传",
+            "BoundingRect": {
+              "X": 1718,
+              "Y": 2135,
+              "Width": 51,
+              "Height": 47
+            }
+          }
+        ]
+      },
+      {
+        "text": "奇 人 物 。 他 成 为 了 数 白 万 俄 罗 斯 女 性 的 偶 像 。",
+        "raw_text": "奇 人 物 。 他 成 为 了 数 白 万 俄 罗 斯 女 性 的 偶 像 。",
+        "bounding_rect": {
+          "X": 286,
+          "Y": 2200,
+          "Width": 974,
+          "Height": 52
+        },
+        "words": [
+          {
+            "Text": "奇",
+            "BoundingRect": {
+              "X": 286,
+              "Y": 2202,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "人",
+            "BoundingRect": {
+              "X": 337,
+              "Y": 2202,
+              "Width": 49,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "物",
+            "BoundingRect": {
+              "X": 386,
+              "Y": 2200,
+              "Width": 49,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "。",
+            "BoundingRect": {
+              "X": 439,
+              "Y": 2236,
+              "Width": 15,
+              "Height": 13
+            }
+          },
+          {
+            "Text": "他",
+            "BoundingRect": {
+              "X": 487,
+              "Y": 2202,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "成",
+            "BoundingRect": {
+              "X": 537,
+              "Y": 2202,
+              "Width": 51,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "为",
+            "BoundingRect": {
+              "X": 590,
+              "Y": 2202,
+              "Width": 46,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "了",
+            "BoundingRect": {
+              "X": 640,
+              "Y": 2205,
+              "Width": 46,
+              "Height": 42
+            }
+          },
+          {
+            "Text": "数",
+            "BoundingRect": {
+              "X": 689,
+              "Y": 2202,
+              "Width": 50,
+              "Height": 50
+            }
+          },
+          {
+            "Text": "白",
+            "BoundingRect": {
+              "X": 740,
+              "Y": 2205,
+              "Width": 49,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "万",
+            "BoundingRect": {
+              "X": 790,
+              "Y": 2205,
+              "Width": 49,
+              "Height": 44
+            }
+          },
+          {
+            "Text": "俄",
+            "BoundingRect": {
+              "X": 840,
+              "Y": 2202,
+              "Width": 51,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "罗",
+            "BoundingRect": {
+              "X": 892,
+              "Y": 2205,
+              "Width": 46,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "斯",
+            "BoundingRect": {
+              "X": 941,
+              "Y": 2202,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "女",
+            "BoundingRect": {
+              "X": 991,
+              "Y": 2202,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "性",
+            "BoundingRect": {
+              "X": 1042,
+              "Y": 2202,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "的",
+            "BoundingRect": {
+              "X": 1094,
+              "Y": 2202,
+              "Width": 47,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "偶",
+            "BoundingRect": {
+              "X": 1143,
+              "Y": 2202,
+              "Width": 48,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "像",
+            "BoundingRect": {
+              "X": 1193,
+              "Y": 2202,
+              "Width": 49,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "。",
+            "BoundingRect": {
+              "X": 1246,
+              "Y": 2236,
+              "Width": 14,
+              "Height": 13
+            }
+          }
+        ]
+      },
+      {
+        "text": "1987 年 ， 尼 基 塔 ， 米 哈 尔 科 夫 向 公 众 展 示 了 他 的 新 片 《 黑 眼 腊 》 ， 这",
+        "raw_text": "1987 年 ， 尼 基 塔 ， 米 哈 尔 科 夫 向 公 众 展 示 了 他 的 新 片 《 黑 眼 腊 》 ， 这",
+        "bounding_rect": {
+          "X": 290,
+          "Y": 2270,
+          "Width": 1487,
+          "Height": 51
+        },
+        "words": [
+          {
+            "Text": "1987",
+            "BoundingRect": {
+              "X": 290,
+              "Y": 2274,
+              "Width": 112,
+              "Height": 40
+            }
+          },
+          {
+            "Text": "年",
+            "BoundingRect": {
+              "X": 404,
+              "Y": 2272,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "，",
+            "BoundingRect": {
+              "X": 461,
+              "Y": 2308,
+              "Width": 9,
+              "Height": 13
+            }
+          },
+          {
+            "Text": "尼",
+            "BoundingRect": {
+              "X": 505,
+              "Y": 2274,
+              "Width": 50,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "基",
+            "BoundingRect": {
+              "X": 556,
+              "Y": 2272,
+              "Width": 49,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "塔",
+            "BoundingRect": {
+              "X": 606,
+              "Y": 2272,
+              "Width": 51,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "，",
+            "BoundingRect": {
+              "X": 658,
+              "Y": 2294,
+              "Width": 8,
+              "Height": 8
+            }
+          },
+          {
+            "Text": "米",
+            "BoundingRect": {
+              "X": 669,
+              "Y": 2272,
+              "Width": 50,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "哈",
+            "BoundingRect": {
+              "X": 722,
+              "Y": 2272,
+              "Width": 47,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "尔",
+            "BoundingRect": {
+              "X": 770,
+              "Y": 2272,
+              "Width": 49,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "科",
+            "BoundingRect": {
+              "X": 820,
+              "Y": 2270,
+              "Width": 50,
+              "Height": 51
+            }
+          },
+          {
+            "Text": "夫",
+            "BoundingRect": {
+              "X": 870,
+              "Y": 2272,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "向",
+            "BoundingRect": {
+              "X": 924,
+              "Y": 2272,
+              "Width": 43,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "公",
+            "BoundingRect": {
+              "X": 972,
+              "Y": 2274,
+              "Width": 49,
+              "Height": 44
+            }
+          },
+          {
+            "Text": "众",
+            "BoundingRect": {
+              "X": 1021,
+              "Y": 2272,
+              "Width": 51,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "展",
+            "BoundingRect": {
+              "X": 1072,
+              "Y": 2274,
+              "Width": 50,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "示",
+            "BoundingRect": {
+              "X": 1123,
+              "Y": 2274,
+              "Width": 50,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "了",
+            "BoundingRect": {
+              "X": 1174,
+              "Y": 2274,
+              "Width": 46,
+              "Height": 43
+            }
+          },
+          {
+            "Text": "他",
+            "BoundingRect": {
+              "X": 1223,
+              "Y": 2272,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "的",
+            "BoundingRect": {
+              "X": 1275,
+              "Y": 2272,
+              "Width": 47,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "新",
+            "BoundingRect": {
+              "X": 1324,
+              "Y": 2270,
+              "Width": 50,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "片",
+            "BoundingRect": {
+              "X": 1376,
+              "Y": 2272,
+              "Width": 48,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "《",
+            "BoundingRect": {
+              "X": 1448,
+              "Y": 2272,
+              "Width": 25,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "黑",
+            "BoundingRect": {
+              "X": 1476,
+              "Y": 2274,
+              "Width": 49,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "眼",
+            "BoundingRect": {
+              "X": 1528,
+              "Y": 2274,
+              "Width": 47,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "腊",
+            "BoundingRect": {
+              "X": 1578,
+              "Y": 2272,
+              "Width": 48,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "》",
+            "BoundingRect": {
+              "X": 1629,
+              "Y": 2272,
+              "Width": 24,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "，",
+            "BoundingRect": {
+              "X": 1684,
+              "Y": 2308,
+              "Width": 9,
+              "Height": 13
+            }
+          },
+          {
+            "Text": "这",
+            "BoundingRect": {
+              "X": 1727,
+              "Y": 2272,
+              "Width": 50,
+              "Height": 47
+            }
+          }
+        ]
+      },
+      {
+        "text": "部 电 影 是 在 意 大 利 拍 摄 的 。 该 作 品 在 各 大 国 际 电 影 节 上 获 得 了 许 多 奖",
+        "raw_text": "部 电 影 是 在 意 大 利 拍 摄 的 。 该 作 品 在 各 大 国 际 电 影 节 上 获 得 了 许 多 奖",
+        "bounding_rect": {
+          "X": 286,
+          "Y": 2337,
+          "Width": 1512,
+          "Height": 52
+        },
+        "words": [
+          {
+            "Text": "部",
+            "BoundingRect": {
+              "X": 286,
+              "Y": 2339,
+              "Width": 50,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "电",
+            "BoundingRect": {
+              "X": 338,
+              "Y": 2337,
+              "Width": 48,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "影",
+            "BoundingRect": {
+              "X": 387,
+              "Y": 2339,
+              "Width": 49,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "是",
+            "BoundingRect": {
+              "X": 437,
+              "Y": 2341,
+              "Width": 50,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "在",
+            "BoundingRect": {
+              "X": 488,
+              "Y": 2337,
+              "Width": 50,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "意",
+            "BoundingRect": {
+              "X": 538,
+              "Y": 2339,
+              "Width": 50,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "大",
+            "BoundingRect": {
+              "X": 588,
+              "Y": 2339,
+              "Width": 51,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "利",
+            "BoundingRect": {
+              "X": 639,
+              "Y": 2339,
+              "Width": 47,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "拍",
+            "BoundingRect": {
+              "X": 690,
+              "Y": 2339,
+              "Width": 47,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "摄",
+            "BoundingRect": {
+              "X": 740,
+              "Y": 2339,
+              "Width": 49,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "的",
+            "BoundingRect": {
+              "X": 792,
+              "Y": 2339,
+              "Width": 46,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "。",
+            "BoundingRect": {
+              "X": 843,
+              "Y": 2373,
+              "Width": 14,
+              "Height": 13
+            }
+          },
+          {
+            "Text": "该",
+            "BoundingRect": {
+              "X": 890,
+              "Y": 2337,
+              "Width": 50,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "作",
+            "BoundingRect": {
+              "X": 941,
+              "Y": 2339,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "品",
+            "BoundingRect": {
+              "X": 994,
+              "Y": 2341,
+              "Width": 45,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "在",
+            "BoundingRect": {
+              "X": 1042,
+              "Y": 2337,
+              "Width": 50,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "各",
+            "BoundingRect": {
+              "X": 1092,
+              "Y": 2339,
+              "Width": 51,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "大",
+            "BoundingRect": {
+              "X": 1143,
+              "Y": 2339,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "国",
+            "BoundingRect": {
+              "X": 1196,
+              "Y": 2339,
+              "Width": 45,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "际",
+            "BoundingRect": {
+              "X": 1246,
+              "Y": 2341,
+              "Width": 47,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "电",
+            "BoundingRect": {
+              "X": 1296,
+              "Y": 2337,
+              "Width": 47,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "影",
+            "BoundingRect": {
+              "X": 1345,
+              "Y": 2339,
+              "Width": 49,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "节",
+            "BoundingRect": {
+              "X": 1395,
+              "Y": 2337,
+              "Width": 50,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "上",
+            "BoundingRect": {
+              "X": 1445,
+              "Y": 2339,
+              "Width": 50,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "获",
+            "BoundingRect": {
+              "X": 1496,
+              "Y": 2339,
+              "Width": 50,
+              "Height": 50
+            }
+          },
+          {
+            "Text": "得",
+            "BoundingRect": {
+              "X": 1546,
+              "Y": 2339,
+              "Width": 51,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "了",
+            "BoundingRect": {
+              "X": 1598,
+              "Y": 2341,
+              "Width": 45,
+              "Height": 43
+            }
+          },
+          {
+            "Text": "许",
+            "BoundingRect": {
+              "X": 1646,
+              "Y": 2339,
+              "Width": 51,
+              "Height": 50
+            }
+          },
+          {
+            "Text": "多",
+            "BoundingRect": {
+              "X": 1698,
+              "Y": 2339,
+              "Width": 47,
+              "Height": 50
+            }
+          },
+          {
+            "Text": "奖",
+            "BoundingRect": {
+              "X": 1749,
+              "Y": 2339,
+              "Width": 49,
+              "Height": 47
+            }
+          }
+        ]
+      },
+      {
+        "text": "项 。",
+        "raw_text": "项 。",
+        "bounding_rect": {
+          "X": 285,
+          "Y": 2411,
+          "Width": 68,
+          "Height": 45
+        },
+        "words": [
+          {
+            "Text": "项",
+            "BoundingRect": {
+              "X": 285,
+              "Y": 2411,
+              "Width": 51,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "。",
+            "BoundingRect": {
+              "X": 339,
+              "Y": 2442,
+              "Width": 14,
+              "Height": 14
+            }
+          }
+        ]
+      },
+      {
+        "text": "1991 年 ， 他 拍 摄 了 电 影 《 蒙 古 精 神 》 (Urga) ， 讲 述 了 一 对 生 活 在",
+        "raw_text": "1991 年 ， 他 拍 摄 了 电 影 《 蒙 古 精 神 》 (Urga) ， 讲 述 了 一 对 生 活 在",
+        "bounding_rect": {
+          "X": 290,
+          "Y": 2473,
+          "Width": 1491,
+          "Height": 57
+        },
+        "words": [
+          {
+            "Text": "1991",
+            "BoundingRect": {
+              "X": 290,
+              "Y": 2478,
+              "Width": 104,
+              "Height": 40
+            }
+          },
+          {
+            "Text": "年",
+            "BoundingRect": {
+              "X": 404,
+              "Y": 2476,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "，",
+            "BoundingRect": {
+              "X": 461,
+              "Y": 2512,
+              "Width": 9,
+              "Height": 13
+            }
+          },
+          {
+            "Text": "他",
+            "BoundingRect": {
+              "X": 504,
+              "Y": 2476,
+              "Width": 51,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "拍",
+            "BoundingRect": {
+              "X": 556,
+              "Y": 2476,
+              "Width": 47,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "摄",
+            "BoundingRect": {
+              "X": 606,
+              "Y": 2476,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "了",
+            "BoundingRect": {
+              "X": 658,
+              "Y": 2478,
+              "Width": 45,
+              "Height": 43
+            }
+          },
+          {
+            "Text": "电",
+            "BoundingRect": {
+              "X": 708,
+              "Y": 2474,
+              "Width": 48,
+              "Height": 46
+            }
+          },
+          {
+            "Text": "影",
+            "BoundingRect": {
+              "X": 757,
+              "Y": 2476,
+              "Width": 50,
+              "Height": 44
+            }
+          },
+          {
+            "Text": "《",
+            "BoundingRect": {
+              "X": 831,
+              "Y": 2476,
+              "Width": 24,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "蒙",
+            "BoundingRect": {
+              "X": 858,
+              "Y": 2474,
+              "Width": 50,
+              "Height": 51
+            }
+          },
+          {
+            "Text": "古",
+            "BoundingRect": {
+              "X": 909,
+              "Y": 2476,
+              "Width": 49,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "精",
+            "BoundingRect": {
+              "X": 958,
+              "Y": 2473,
+              "Width": 50,
+              "Height": 52
+            }
+          },
+          {
+            "Text": "神",
+            "BoundingRect": {
+              "X": 1010,
+              "Y": 2476,
+              "Width": 47,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "》",
+            "BoundingRect": {
+              "X": 1061,
+              "Y": 2476,
+              "Width": 25,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "(Urga)",
+            "BoundingRect": {
+              "X": 1142,
+              "Y": 2478,
+              "Width": 152,
+              "Height": 52
+            }
+          },
+          {
+            "Text": "，",
+            "BoundingRect": {
+              "X": 1334,
+              "Y": 2512,
+              "Width": 9,
+              "Height": 13
+            }
+          },
+          {
+            "Text": "讲",
+            "BoundingRect": {
+              "X": 1377,
+              "Y": 2476,
+              "Width": 50,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "述",
+            "BoundingRect": {
+              "X": 1428,
+              "Y": 2476,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "了",
+            "BoundingRect": {
+              "X": 1480,
+              "Y": 2478,
+              "Width": 45,
+              "Height": 43
+            }
+          },
+          {
+            "Text": "一",
+            "BoundingRect": {
+              "X": 1528,
+              "Y": 2497,
+              "Width": 51,
+              "Height": 4
+            }
+          },
+          {
+            "Text": "对",
+            "BoundingRect": {
+              "X": 1579,
+              "Y": 2476,
+              "Width": 50,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "生",
+            "BoundingRect": {
+              "X": 1630,
+              "Y": 2476,
+              "Width": 49,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "活",
+            "BoundingRect": {
+              "X": 1680,
+              "Y": 2476,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "在",
+            "BoundingRect": {
+              "X": 1730,
+              "Y": 2473,
+              "Width": 51,
+              "Height": 50
+            }
+          }
+        ]
+      },
+      {
+        "text": "草 原 上 的 蒙 古 夫 妇 的 故 事 。 该 片 获 得 了 巨 大 的 成 功 ， 被 评 为 年 度 最 佳",
+        "raw_text": "草 原 上 的 蒙 古 夫 妇 的 故 事 。 该 片 获 得 了 巨 大 的 成 功 ， 被 评 为 年 度 最 佳",
+        "bounding_rect": {
+          "X": 286,
+          "Y": 2543,
+          "Width": 1512,
+          "Height": 52
+        },
+        "words": [
+          {
+            "Text": "草",
+            "BoundingRect": {
+              "X": 286,
+              "Y": 2543,
+              "Width": 50,
+              "Height": 52
+            }
+          },
+          {
+            "Text": "原",
+            "BoundingRect": {
+              "X": 336,
+              "Y": 2548,
+              "Width": 50,
+              "Height": 42
+            }
+          },
+          {
+            "Text": "上",
+            "BoundingRect": {
+              "X": 387,
+              "Y": 2545,
+              "Width": 49,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "的",
+            "BoundingRect": {
+              "X": 439,
+              "Y": 2545,
+              "Width": 46,
+              "Height": 48
+            }
+          },
+          {
+            "Text": "蒙",
+            "BoundingRect": {
+              "X": 487,
+              "Y": 2543,
+              "Width": 51,
+              "Height": 52
+            }
+          },
+          {
+            "Text": "古",
+            "BoundingRect": {
+              "X": 538,
+              "Y": 2545,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "夫",
+            "BoundingRect": {
+              "X": 588,
+              "Y": 2545,
+              "Width": 49,
+              "Height": 48
+            }
+          },
+          {
+            "Text": "妇",
+            "BoundingRect": {
+              "X": 638,
+              "Y": 2545,
+              "Width": 48,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "的",
+            "BoundingRect": {
+              "X": 691,
+              "Y": 2545,
+              "Width": 46,
+              "Height": 48
+            }
+          },
+          {
+            "Text": "故",
+            "BoundingRect": {
+              "X": 739,
+              "Y": 2543,
+              "Width": 51,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "事",
+            "BoundingRect": {
+              "X": 790,
+              "Y": 2543,
+              "Width": 50,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "。",
+            "BoundingRect": {
+              "X": 843,
+              "Y": 2579,
+              "Width": 14,
+              "Height": 14
+            }
+          },
+          {
+            "Text": "该",
+            "BoundingRect": {
+              "X": 890,
+              "Y": 2543,
+              "Width": 51,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "片",
+            "BoundingRect": {
+              "X": 943,
+              "Y": 2545,
+              "Width": 48,
+              "Height": 48
+            }
+          },
+          {
+            "Text": "获",
+            "BoundingRect": {
+              "X": 992,
+              "Y": 2545,
+              "Width": 49,
+              "Height": 50
+            }
+          },
+          {
+            "Text": "得",
+            "BoundingRect": {
+              "X": 1042,
+              "Y": 2546,
+              "Width": 51,
+              "Height": 46
+            }
+          },
+          {
+            "Text": "了",
+            "BoundingRect": {
+              "X": 1094,
+              "Y": 2548,
+              "Width": 45,
+              "Height": 42
+            }
+          },
+          {
+            "Text": "巨",
+            "BoundingRect": {
+              "X": 1147,
+              "Y": 2548,
+              "Width": 45,
+              "Height": 42
+            }
+          },
+          {
+            "Text": "大",
+            "BoundingRect": {
+              "X": 1193,
+              "Y": 2545,
+              "Width": 50,
+              "Height": 48
+            }
+          },
+          {
+            "Text": "的",
+            "BoundingRect": {
+              "X": 1245,
+              "Y": 2545,
+              "Width": 47,
+              "Height": 48
+            }
+          },
+          {
+            "Text": "成",
+            "BoundingRect": {
+              "X": 1293,
+              "Y": 2545,
+              "Width": 51,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "功",
+            "BoundingRect": {
+              "X": 1345,
+              "Y": 2545,
+              "Width": 47,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "，",
+            "BoundingRect": {
+              "X": 1401,
+              "Y": 2581,
+              "Width": 9,
+              "Height": 14
+            }
+          },
+          {
+            "Text": "被",
+            "BoundingRect": {
+              "X": 1445,
+              "Y": 2545,
+              "Width": 50,
+              "Height": 50
+            }
+          },
+          {
+            "Text": "评",
+            "BoundingRect": {
+              "X": 1496,
+              "Y": 2546,
+              "Width": 50,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "为",
+            "BoundingRect": {
+              "X": 1547,
+              "Y": 2546,
+              "Width": 46,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "年",
+            "BoundingRect": {
+              "X": 1597,
+              "Y": 2545,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "度",
+            "BoundingRect": {
+              "X": 1646,
+              "Y": 2546,
+              "Width": 50,
+              "Height": 46
+            }
+          },
+          {
+            "Text": "最",
+            "BoundingRect": {
+              "X": 1697,
+              "Y": 2548,
+              "Width": 50,
+              "Height": 44
+            }
+          },
+          {
+            "Text": "佳",
+            "BoundingRect": {
+              "X": 1748,
+              "Y": 2545,
+              "Width": 50,
+              "Height": 47
+            }
+          }
+        ]
+      },
+      {
+        "text": "欧 洲 电 影 一 荣 获 威 尼 斯 电 影 节 奖 项 ， 并 获 得 了 提 名 \" \" （ 注 ： 文 本 在",
+        "raw_text": "欧 洲 电 影 一 荣 获 威 尼 斯 电 影 节 奖 项 ， 并 获 得 了 提 名 “ “ （ 注 ： 文 本 在",
+        "bounding_rect": {
+          "X": 288,
+          "Y": 2608,
+          "Width": 1517,
+          "Height": 56
+        },
+        "words": [
+          {
+            "Text": "欧",
+            "BoundingRect": {
+              "X": 288,
+              "Y": 2613,
+              "Width": 48,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "洲",
+            "BoundingRect": {
+              "X": 337,
+              "Y": 2613,
+              "Width": 47,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "电",
+            "BoundingRect": {
+              "X": 389,
+              "Y": 2610,
+              "Width": 47,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "影",
+            "BoundingRect": {
+              "X": 437,
+              "Y": 2613,
+              "Width": 49,
+              "Height": 44
+            }
+          },
+          {
+            "Text": "一",
+            "BoundingRect": {
+              "X": 487,
+              "Y": 2637,
+              "Width": 110,
+              "Height": 6
+            }
+          },
+          {
+            "Text": "荣",
+            "BoundingRect": {
+              "X": 597,
+              "Y": 2613,
+              "Width": 49,
+              "Height": 46
+            }
+          },
+          {
+            "Text": "获",
+            "BoundingRect": {
+              "X": 647,
+              "Y": 2613,
+              "Width": 50,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "威",
+            "BoundingRect": {
+              "X": 698,
+              "Y": 2613,
+              "Width": 49,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "尼",
+            "BoundingRect": {
+              "X": 748,
+              "Y": 2615,
+              "Width": 50,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "斯",
+            "BoundingRect": {
+              "X": 799,
+              "Y": 2613,
+              "Width": 49,
+              "Height": 46
+            }
+          },
+          {
+            "Text": "电",
+            "BoundingRect": {
+              "X": 851,
+              "Y": 2610,
+              "Width": 47,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "影",
+            "BoundingRect": {
+              "X": 899,
+              "Y": 2613,
+              "Width": 50,
+              "Height": 44
+            }
+          },
+          {
+            "Text": "节",
+            "BoundingRect": {
+              "X": 950,
+              "Y": 2610,
+              "Width": 49,
+              "Height": 50
+            }
+          },
+          {
+            "Text": "奖",
+            "BoundingRect": {
+              "X": 1001,
+              "Y": 2613,
+              "Width": 49,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "项",
+            "BoundingRect": {
+              "X": 1050,
+              "Y": 2615,
+              "Width": 50,
+              "Height": 45
+            }
+          },
+          {
+            "Text": "，",
+            "BoundingRect": {
+              "X": 1108,
+              "Y": 2649,
+              "Width": 9,
+              "Height": 13
+            }
+          },
+          {
+            "Text": "并",
+            "BoundingRect": {
+              "X": 1151,
+              "Y": 2613,
+              "Width": 49,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "获",
+            "BoundingRect": {
+              "X": 1201,
+              "Y": 2613,
+              "Width": 50,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "得",
+            "BoundingRect": {
+              "X": 1252,
+              "Y": 2613,
+              "Width": 51,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "了",
+            "BoundingRect": {
+              "X": 1304,
+              "Y": 2615,
+              "Width": 45,
+              "Height": 42
+            }
+          },
+          {
+            "Text": "提",
+            "BoundingRect": {
+              "X": 1353,
+              "Y": 2613,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "名",
+            "BoundingRect": {
+              "X": 1404,
+              "Y": 2613,
+              "Width": 44,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "“",
+            "BoundingRect": {
+              "X": 1457,
+              "Y": 2646,
+              "Width": 21,
+              "Height": 9
+            }
+          },
+          {
+            "Text": "“",
+            "BoundingRect": {
+              "X": 1483,
+              "Y": 2646,
+              "Width": 49,
+              "Height": 9
+            }
+          },
+          {
+            "Text": "（",
+            "BoundingRect": {
+              "X": 1539,
+              "Y": 2615,
+              "Width": 13,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "注",
+            "BoundingRect": {
+              "X": 1553,
+              "Y": 2610,
+              "Width": 50,
+              "Height": 50
+            }
+          },
+          {
+            "Text": "：",
+            "BoundingRect": {
+              "X": 1611,
+              "Y": 2627,
+              "Width": 9,
+              "Height": 28
+            }
+          },
+          {
+            "Text": "文",
+            "BoundingRect": {
+              "X": 1653,
+              "Y": 2608,
+              "Width": 51,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "本",
+            "BoundingRect": {
+              "X": 1704,
+              "Y": 2610,
+              "Width": 49,
+              "Height": 52
+            }
+          },
+          {
+            "Text": "在",
+            "BoundingRect": {
+              "X": 1754,
+              "Y": 2610,
+              "Width": 51,
+              "Height": 50
+            }
+          }
+        ]
+      },
+      {
+        "text": "此 处 截 断 ） 。",
+        "raw_text": "此 处 截 断 ） 。",
+        "bounding_rect": {
+          "X": 285,
+          "Y": 2680,
+          "Width": 236,
+          "Height": 54
+        },
+        "words": [
+          {
+            "Text": "此",
+            "BoundingRect": {
+              "X": 285,
+              "Y": 2680,
+              "Width": 50,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "处",
+            "BoundingRect": {
+              "X": 336,
+              "Y": 2682,
+              "Width": 50,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "截",
+            "BoundingRect": {
+              "X": 387,
+              "Y": 2682,
+              "Width": 49,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "断",
+            "BoundingRect": {
+              "X": 439,
+              "Y": 2682,
+              "Width": 48,
+              "Height": 47
+            }
+          },
+          {
+            "Text": "）",
+            "BoundingRect": {
+              "X": 488,
+              "Y": 2685,
+              "Width": 13,
+              "Height": 49
+            }
+          },
+          {
+            "Text": "。",
+            "BoundingRect": {
+              "X": 507,
+              "Y": 2716,
+              "Width": 14,
+              "Height": 13
+            }
+          }
+        ]
+      },
+      {
+        "text": "` 壬 圭 阝 才 缶 卡 亡 言 田 白 0 ． 士 ； 彐 ． 冫 ． ± 旦 ． * 闩 兰 亡 0 又 ； 五 ； 五 ： 土 · r-511i17",
+        "raw_text": "` 壬 圭 阝 才 缶 卡 亡 言 田 白 0 ． 士 ； 彐 ． 冫 ． ± 旦 ． * 闩 兰 亡 0 又 ； 五 ； 五 ： 土 · r-511i17",
+        "bounding_rect": {
+          "X": 285,
+          "Y": 2745,
+          "Width": 1386,
+          "Height": 32
+        },
+        "words": [
+          {
+            "Text": "`",
+            "BoundingRect": {
+              "X": 285,
+              "Y": 2774,
+              "Width": 3,
+              "Height": 3
+            }
+          },
+          {
+            "Text": "壬",
+            "BoundingRect": {
+              "X": 386,
+              "Y": 2752,
+              "Width": 26,
+              "Height": 25
+            }
+          },
+          {
+            "Text": "圭",
+            "BoundingRect": {
+              "X": 438,
+              "Y": 2750,
+              "Width": 27,
+              "Height": 27
+            }
+          },
+          {
+            "Text": "阝",
+            "BoundingRect": {
+              "X": 466,
+              "Y": 2752,
+              "Width": 19,
+              "Height": 25
+            }
+          },
+          {
+            "Text": "才",
+            "BoundingRect": {
+              "X": 487,
+              "Y": 2750,
+              "Width": 17,
+              "Height": 27
+            }
+          },
+          {
+            "Text": "缶",
+            "BoundingRect": {
+              "X": 538,
+              "Y": 2750,
+              "Width": 26,
+              "Height": 27
+            }
+          },
+          {
+            "Text": "卡",
+            "BoundingRect": {
+              "X": 589,
+              "Y": 2747,
+              "Width": 19,
+              "Height": 30
+            }
+          },
+          {
+            "Text": "亡",
+            "BoundingRect": {
+              "X": 639,
+              "Y": 2745,
+              "Width": 50,
+              "Height": 32
+            }
+          },
+          {
+            "Text": "言",
+            "BoundingRect": {
+              "X": 690,
+              "Y": 2747,
+              "Width": 49,
+              "Height": 30
+            }
+          },
+          {
+            "Text": "田",
+            "BoundingRect": {
+              "X": 744,
+              "Y": 2752,
+              "Width": 41,
+              "Height": 25
+            }
+          },
+          {
+            "Text": "白",
+            "BoundingRect": {
+              "X": 792,
+              "Y": 2749,
+              "Width": 20,
+              "Height": 28
+            }
+          },
+          {
+            "Text": "0",
+            "BoundingRect": {
+              "X": 813,
+              "Y": 2749,
+              "Width": 25,
+              "Height": 28
+            }
+          },
+          {
+            "Text": "．",
+            "BoundingRect": {
+              "X": 841,
+              "Y": 2768,
+              "Width": 4,
+              "Height": 4
+            }
+          },
+          {
+            "Text": "士",
+            "BoundingRect": {
+              "X": 844,
+              "Y": 2750,
+              "Width": 44,
+              "Height": 27
+            }
+          },
+          {
+            "Text": "；",
+            "BoundingRect": {
+              "X": 891,
+              "Y": 2750,
+              "Width": 13,
+              "Height": 27
+            }
+          },
+          {
+            "Text": "彐",
+            "BoundingRect": {
+              "X": 905,
+              "Y": 2752,
+              "Width": 33,
+              "Height": 25
+            }
+          },
+          {
+            "Text": "．",
+            "BoundingRect": {
+              "X": 992,
+              "Y": 2757,
+              "Width": 2,
+              "Height": 3
+            }
+          },
+          {
+            "Text": "冫",
+            "BoundingRect": {
+              "X": 1027,
+              "Y": 2749,
+              "Width": 14,
+              "Height": 28
+            }
+          },
+          {
+            "Text": "．",
+            "BoundingRect": {
+              "X": 1090,
+              "Y": 2764,
+              "Width": 2,
+              "Height": 3
+            }
+          },
+          {
+            "Text": "±",
+            "BoundingRect": {
+              "X": 1093,
+              "Y": 2750,
+              "Width": 16,
+              "Height": 27
+            }
+          },
+          {
+            "Text": "旦",
+            "BoundingRect": {
+              "X": 1108,
+              "Y": 2752,
+              "Width": 34,
+              "Height": 25
+            }
+          },
+          {
+            "Text": "．",
+            "BoundingRect": {
+              "X": 1143,
+              "Y": 2752,
+              "Width": 2,
+              "Height": 3
+            }
+          },
+          {
+            "Text": "*",
+            "BoundingRect": {
+              "X": 1194,
+              "Y": 2750,
+              "Width": 19,
+              "Height": 27
+            }
+          },
+          {
+            "Text": "闩",
+            "BoundingRect": {
+              "X": 1214,
+              "Y": 2752,
+              "Width": 28,
+              "Height": 25
+            }
+          },
+          {
+            "Text": "兰",
+            "BoundingRect": {
+              "X": 1245,
+              "Y": 2750,
+              "Width": 45,
+              "Height": 27
+            }
+          },
+          {
+            "Text": "亡",
+            "BoundingRect": {
+              "X": 1291,
+              "Y": 2749,
+              "Width": 25,
+              "Height": 28
+            }
+          },
+          {
+            "Text": "0",
+            "BoundingRect": {
+              "X": 1317,
+              "Y": 2749,
+              "Width": 25,
+              "Height": 28
+            }
+          },
+          {
+            "Text": "又",
+            "BoundingRect": {
+              "X": 1344,
+              "Y": 2750,
+              "Width": 15,
+              "Height": 27
+            }
+          },
+          {
+            "Text": "；",
+            "BoundingRect": {
+              "X": 1395,
+              "Y": 2750,
+              "Width": 13,
+              "Height": 27
+            }
+          },
+          {
+            "Text": "五",
+            "BoundingRect": {
+              "X": 1408,
+              "Y": 2752,
+              "Width": 37,
+              "Height": 23
+            }
+          },
+          {
+            "Text": "；",
+            "BoundingRect": {
+              "X": 1445,
+              "Y": 2750,
+              "Width": 13,
+              "Height": 27
+            }
+          },
+          {
+            "Text": "五",
+            "BoundingRect": {
+              "X": 1459,
+              "Y": 2752,
+              "Width": 37,
+              "Height": 23
+            }
+          },
+          {
+            "Text": "：",
+            "BoundingRect": {
+              "X": 1496,
+              "Y": 2750,
+              "Width": 13,
+              "Height": 22
+            }
+          },
+          {
+            "Text": "土",
+            "BoundingRect": {
+              "X": 1509,
+              "Y": 2749,
+              "Width": 34,
+              "Height": 28
+            }
+          },
+          {
+            "Text": "·",
+            "BoundingRect": {
+              "X": 1544,
+              "Y": 2771,
+              "Width": 2,
+              "Height": 4
+            }
+          },
+          {
+            "Text": "r-511i17",
+            "BoundingRect": {
+              "X": 1552,
+              "Y": 2750,
+              "Width": 119,
+              "Height": 27
+            }
+          }
+        ]
+      }
+    ],
+    "language": "zh-Hans-CN",
+    "line_count": 32
+  },
+  "preview": "尼 基 塔 14 岁 便 开 始 涉 足 电 影 表 演 。 18 岁 时 ， 他 在 格 奥 尔 基 ， 达 涅 利 亚 | 的 电 影 《 我 氵 曼 步 在 莫 斯 科 》 中 担 任 了 主 角 之 一 ， 并 在 片 中 演 唱 了 同 名 | 流 行 歌 曲 。 此 后 ， 年 轻 的 米 哈 尔 科 夫 立 刻 成 为 了 一 亻 立 深 受 全 国 人 民 喜 | 爱 且 非 常 著 名 的 演 员 。 | 然 而 ， 在 21 岁 时 ， 他 被 他 所 就 读 的 休 金 戏 剧 学 院 开 除 。 原 因 是 当 时 学 | 生 不 被 允 许 去 拍 电 影 ， 而 米 哈 尔 科 夫 却 多 次 违 反 了 这 一 禁 专 。 于 是 他"
+}
